@@ -14,6 +14,8 @@ urlpatterns = [
         "zonas/<int:zona_id>/zona/",
         views.zona,
         name="por_zona",
-        )
+        ),
+    # path para que funcione catalogo
+    path("dispositivos/", views.catalogo, name="catalogo")
 ]
 
