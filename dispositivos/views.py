@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from .services import cargar_dispositivos
+
 def inicio(request):
     contexto = {
     "sistema": "EcoEnergy",
@@ -38,14 +40,17 @@ def zona(request, zona_id):
 
 #def catalogo
 def catalogo(request):
-    dispositivos = [
-    {"nombre": "Medidor inteligente", "estado": "Activo"},
-    {"nombre": "Sensor de temperatura", "estado": "Activo"},
-    {"nombre": "Climatizador", "estado": "Revisión"},
-    ]
+    dispositivos = cargar_dispositivos()
+    activos = sum(
+        1 for item in dispositivos
+        if item["estado"] == "Activo"
+    )
+    contexto = {
+        "dispositivos": dispositivos,
+        "total": len(dispositivos),
+        "total_activos": activos,
+    }
     return render(
-    request,
-    "dispositivos/catalogo.html",
-    {"dispositivos": dispositivos},
+        request, "dispositivos/catalogo.html", contexto
     )
 

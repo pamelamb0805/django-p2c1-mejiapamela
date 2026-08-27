@@ -1,15 +1,40 @@
 <!-- templates/base.html -->
+{% load django_bootstrap5 %}
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<title>{% block title %}EcoEnergy{% endblock %}</title>
+{% bootstrap_css %}
+    <meta charset="utf-8">
+    <title>{% block title %}EcoEnergy{% endblock %}</title>
 </head>
 <body>
 <nav>
-<a href="{% url 'dispositivos:inicio' %}">Inicio</a>
-<a href="{% url 'dispositivos:catalogo' %}">Dispositivos</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <!-- Marca -->
+    <a class="navbar-brand" href="{% url 'dispositivos:inicio' %}">EcoEnergy</a>
+
+    <!-- Botón hamburguesa -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ecoNavbar" aria-controls="ecoNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="ecoNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dispositivos:inicio' %}">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dispositivos:catalogo' %}">Dispositivos</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>
-<main>{% block content %}{% endblock %}</main>
+
+    <main>{% block content %}{% endblock %}</main>
+    {% bootstrap_javascript %}
 </body>
+
 </html>

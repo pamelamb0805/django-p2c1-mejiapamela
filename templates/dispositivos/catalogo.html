@@ -1,13 +1,65 @@
-<!-- templates/dispositivos/catalogo.html -->
 {% extends "base.html" %}
-{% block title %}Dispositivos | EcoEnergy{% endblock %}
 {% block content %}
-<h1>Dispositivos</h1>
-<ul>
-{% for dispositivo in dispositivos %}
-<li>{{ dispositivo.nombre }} — {{ dispositivo.estado }}</li>
-{% empty %}
-<li>No existen dispositivos disponibles.</li>
-{% endfor %}
-</ul>
-{% endblock %}
+<div class="container my-4">
+
+  <!-- Resumen -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body text-center">
+          <h5 class="card-title">Total dispositivos</h5>
+          <p class="display-6">{{ total }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body text-center">
+          <h5 class="card-title">Activos</h5>
+          <p class="display-6">{{ total_activos }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="card shadow">
+    <div class="card-header bg-success text-white">
+      Catálogo de dispositivos
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Nombre</th>
+              <th>Estado</th>
+              <th>Consumo (kWh)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in dispositivos %}
+            <tr>
+              <td>{{ d.nombre }}</td>
+              <td>
+                {% if d.estado %}
+                  {% if d.estado == 'Activo' %}
+                    <span class="badge bg-success">{{ d.estado }}</span>
+                  {% else %}
+                    <span class="badge bg-secondary">{{ d.estado }}</span>
+                  {% endif %}
+                {% else %}
+                  <span class="badge bg-warning text-dark">Sin estado</span>
+                {% endif %}
+              </td>
+              <td>{{ d.consumo_kwh }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock content %}
