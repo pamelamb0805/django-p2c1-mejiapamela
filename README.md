@@ -30,11 +30,13 @@ python manage.py migrate
 python manage.py runserver
 
 
----
-
-Esto te da un README claro, breve y en inglés, con secciones básicas para que cualquier persona pueda levantar el proyecto.  
-
-¿Quieres que además te prepare una **versión extendida con badges y estructura más “open source”** (ejemplo: License, Contributing, etc.), o prefieres mantenerlo minimalista como ahora?  
-
-- [Minimal README](ca://s?q=Mantener_README_minimalista_para_proyecto_Django)  
-- [Extended README](ca://s?q=Agregar_badges_y_secciones_extra_al_README)  
+-------------------------------
+EVA 1- parte 1
+-------------------------------
+- Se utilizo la IA Claude, para el análisis de instrucciones: para evaluar que archivo debe ser modificado, o analisis de instrucciones iniciales.
+- Se creo archivos zonas.json y categorias.json
+- Registros .json:
+    - Se creo 8 registros para dispositivos.json, para atributos "nombre" y "consumo" apoyados con un promt de IA(Copilot).
+    - Se creo 3 registros para categorias.json, para atributos "nombre" y "descripcion" apoyados con un promt de IA(Copilot).
+    - Se creo 3 registros para categorias.json, para atributo "limite_kwh" apoyados con un promt de IA(Copilot).
+-1ra subida a github -actualización archivos .json, n°4--

@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "nombre": "Norte",
+        "limite_kwh": 23.0
+    },
+    {
+        "id": 2,
+        "nombre": "Centro",
+        "limite_kwh": 27.5
+    },
+
+    {
+        "id": 3,
+        "nombre": "Sur",
+        "limite_kwh": 79.5
+    }
+]

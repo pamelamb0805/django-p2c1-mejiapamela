@@ -1,14 +1,66 @@
 [
-{
-"id": 1,
-"nombre": "Medidor inteligente",
-"estado": "Activo",
-"consumo_kwh": 18.4
-},
-{
-"id": 2,
-"nombre": "Climatizador",
-"estado": "Revisión",
-"consumo_kwh": 32.7
-}
+    {
+        "id": 1,
+        "nombre": "Medidor inteligente",
+        "consumo_kwh": 18.4,
+        "zona_id": 1,
+        "categoria_id": 1 
+    },
+    {
+        "id": 2,
+        "nombre": "Climatizador",
+        "consumo_kwh": 32.7,
+        "zona_id": 2,
+        "categoria_id": 2 
+
+    },
+
+    {
+        "id": 3,
+        "nombre": "Panel solar",
+        "consumo_kwh": 0.5,
+        "zona_id": 3,
+        "categoria_id": 3 
+    },
+
+    {
+        "id": 4,
+        "nombre": "Refrigerador eficiente",
+        "consumo_kwh": 12.5,
+        "zona_id": 1,
+        "categoria_id": 4 
+    },
+
+    {
+        "id": 5,
+        "nombre": "Bombilla LED",
+        "consumo_kwh": 0.8,
+        "zona_id": 2,
+        "categoria_id": 1
+    },
+
+    {
+        "id": 6,
+        "nombre": "Calefactor inteligente",
+        "consumo_kwh": 22.9,
+        "zona_id": 3,
+        "categoria_id": 2 
+    },
+
+    {
+        "id": 7,
+        "nombre": "Cargador de vehiculo eléctrico",
+        "consumo_kwh": 65.7,
+        "zona_id": 1,
+        "categoria_id": 3 
+    },
+
+    {
+        "id": 8,
+        "nombre": "Medidor inteligente",
+        "consumo_kwh": 18.4,
+        "zona_id": 2,
+        "categoria_id": 4 
+    }
 ]
+

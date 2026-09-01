@@ -11,7 +11,7 @@ urlpatterns = [
     ),
     #crear nueva
     path(
-        "zonas/<int:zona_id>/zona/",
+        "zonas/",
         views.zona,
         name="por_zona",
         ),
@@ -19,3 +19,4 @@ urlpatterns = [
     path("dispositivos/", views.catalogo, name="catalogo")
 ]
 
+#ej: de otra aplicación : reportes

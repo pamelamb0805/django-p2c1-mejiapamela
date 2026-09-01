@@ -7,8 +7,8 @@ from .services import cargar_dispositivos
 def inicio(request):
     contexto = {
     "sistema": "EcoEnergy",
-    "mensaje": "Monitoreo energético responsable",
-    "asignatura": "Programación Back End",
+    "mensaje": "Monitoreo energetico responsable",
+    "asignatura": "Programacion Back End",
     }
     return render(
     request,
@@ -23,12 +23,11 @@ def dispositivos_zona(request, zona_id):
         "Zona no encontrada", status=404
         )
     return HttpResponse(
-        f"Dispositivos de la zona {zona_id}"
+        f"Dispositivos 7mde la zona {zona_id}"
     )
 
 #laboratorio1: crear nueva ruta --> hhtp response
-def zona(request, zona_id):
-    if zona_id != 8:
+def zona(request):
         return HttpResponse(
         "Zona no encontrada", status=200
         )
