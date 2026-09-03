@@ -51,7 +51,7 @@ def obtener_dispositivos_zona(zona_id):
 
 def calcular_resumen_zona(zona, dispositivos_de_zona):
     consumo_total = sum(d["consumo_kwh"] for d in dispositivos_de_zona)
-    estado = "ALERTA" if consumo_total > zona["limite_kwh"] else "NORMAL"
+    estado = "LIMITE SUPERADO" if consumo_total > zona["limite_kwh"] else "DENTRO DEL LIMITE"
     return {
         "consumo_total": consumo_total,
         "estado": estado,
@@ -60,3 +60,4 @@ def calcular_resumen_zona(zona, dispositivos_de_zona):
 def contar_dispositivos_zona(zona_id):
     dispositivos = cargar_dispositivos()
     return len([d for d in dispositivos if d["zona_id"] == zona_id])
+

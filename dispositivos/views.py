@@ -60,3 +60,24 @@ def zonas_detalle(request, zona_id):
         "estado": resumen["estado"],
     }
     return render(request, "dispositivos/zonas_detalle.html", contexto)
+
+c
+#Resumen consumo por zona
+def resumen_zonas(request, zona_id):
+    zona = obtener_zona(zona_id)
+    if zona is None:
+        raise Http404("Resumen de zona no encontrado")
+
+    dispositivos = obtener_dispositivos_zona(zona_id)
+    resumen_zonas = calcular_resumen_consumo_zona(zona, dispositivos)
+
+    contexto = {
+        "id" : id,
+        "zona": zona,
+        "dispositivos": dispositivos,
+        "dispositivos_total" : contar_dispositivos_zona,
+        "consumo_total": resumen["consumo_total"],
+        "estado": resumen["estado"],
+    }
+    return render(request, "dispositivos/resumen_zonas.html", contexto)
+
