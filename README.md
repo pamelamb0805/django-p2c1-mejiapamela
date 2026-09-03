@@ -29,4 +29,14 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
 
+##EVA 1
+## Rutas funcionales
+- `/` — Inicio
+- `/zonas/` — Listado de zonas
+- `/zonas/<id>/` — Detalle de zona (dispositivos, consumo, estado)
+- `/dispositivos/` — Catálogo de dispositivos
 
+## Pruebas realizadas
+- Zona con estado NORMAL y ALERTA verificadas.
+- Zona sin dispositivos (Austral) muestra mensaje correcto.
+- ID de zona inexistente devuelve 404.
