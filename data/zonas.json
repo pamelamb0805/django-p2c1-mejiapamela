@@ -14,5 +14,11 @@
         "id": 3,
         "nombre": "Sur",
         "limite_kwh": 79.5
+    },
+
+    {
+        "id": 4,
+        "nombre": "Austral",
+        "limite_kwh": 80.5
     }
 ]

@@ -9,14 +9,21 @@ urlpatterns = [
     views.dispositivos_zona,
     name="por_zona",
     ),
-    #crear nueva
-    path(
-        "zonas/",
-        views.zona,
-        name="por_zona",
-        ),
-    # path para que funcione catalogo
-    path("dispositivos/", views.catalogo, name="catalogo")
-]
 
-#ej: de otra aplicación : reportes
+    # path para que funcione catalogo
+    path(
+        "dispositivos/", views.catalogo, name="catalogo"
+        ),
+
+    #Eva1:
+    #dispositivos --> categorias
+
+    
+    path(
+        "zonas/", views.zonas_listado, name="listado"
+        ),
+    path(
+    "zonas/<int:zona_id>/", views.zonas_detalle, name="detalle"
+    )
+
+]

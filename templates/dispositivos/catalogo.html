@@ -33,14 +33,16 @@
           <thead class="table-light">
             <tr>
               <th>Nombre</th>
-              <th>Estado</th>
               <th>Consumo (kWh)</th>
+              <th>Zona</th>
+              <th>Categoría</th>
             </tr>
           </thead>
           <tbody>
             {% for d in dispositivos %}
             <tr>
               <td>{{ d.nombre }}</td>
+               <!--
               <td>
                 {% if d.estado %}
                   {% if d.estado == 'Activo' %}
@@ -51,8 +53,12 @@
                 {% else %}
                   <span class="badge bg-warning text-dark">Sin estado</span>
                 {% endif %}
-              </td>
+              </td>  continuacion eva 1-->
+              
               <td>{{ d.consumo_kwh }}</td>
+              #continuacion eva1 ???
+              <td>{{ d.zona }}</td>
+              <td>{{ d.categoria }}</td>
             </tr>
             {% endfor %}
           </tbody>

@@ -5,13 +5,13 @@
         "descripcion": "Dispositivos que registran y monitorean el consumo energético, como medidores inteligentes"
     },
     {
-        "id": 1,
+        "id": 2,
         "nombre": "Climatización y calefacción",
         "descripcion": "Equipos destinados a regular la temperatura y confort ambiental, como climatizadores y calefactores"
     },
 
     {
-        "id": 1,
+        "id": 3,
         "nombre": "Eficiencia y energías renovables",
         "descripcion": "Dispositivos que optimizan el uso de energía o generan energia limpia, como paneles solares y cargadores de vehículos eléctricos"
     }

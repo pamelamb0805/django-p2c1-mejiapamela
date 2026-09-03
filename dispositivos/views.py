@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
-from .services import cargar_dispositivos
+from .services import (cargar_dispositivos, cargar_categorias, cargar_zonas, obtener_zona, obtener_dispositivos_zona,calcular_resumen_zona,contar_dispositivos_zona)
 
 def inicio(request):
     contexto = {
@@ -16,7 +16,7 @@ def inicio(request):
     contexto,
     )
 
-# dispositivos/views.py --> usaba hhttp Response
+# dispositivos/views.py --> usaba http Response
 def dispositivos_zona(request, zona_id):
     if zona_id != 3:
         return HttpResponse(
@@ -26,30 +26,37 @@ def dispositivos_zona(request, zona_id):
         f"Dispositivos 7mde la zona {zona_id}"
     )
 
-#laboratorio1: crear nueva ruta --> hhtp response
-def zona(request):
-        return HttpResponse(
-        "Zona no encontrada", status=200
-        )
-    return HttpResponse(
-        f"zona {zona_id}"
-    )
+#EVA1
+def zonas_listado(request):
+    zonas = cargar_zonas()
+    zonas_conteo = []
+    for zona in zonas:
+        zona_info = dict(zona)
+        zona_info["cantidad_dispositivos"] = contar_dispositivos_zona(zona["id"])
+        zonas_conteo.append(zona_info)
 
-#laboratorio 2: con los def if zona_id usando el template.
+    contexto = {
+        "zonas": zonas_conteo
+    }
+    return render(request, "dispositivos/zonas_listado.html", contexto)
 
-#def catalogo
 def catalogo(request):
     dispositivos = cargar_dispositivos()
-    activos = sum(
-        1 for item in dispositivos
-        if item["estado"] == "Activo"
-    )
-    contexto = {
-        "dispositivos": dispositivos,
-        "total": len(dispositivos),
-        "total_activos": activos,
-    }
-    return render(
-        request, "dispositivos/catalogo.html", contexto
-    )
+    contexto = {"dispositivos": dispositivos}
+    return render(request, "dispositivos/catalogo.html", contexto)
 
+def zonas_detalle(request, zona_id):
+    zona = obtener_zona(zona_id)
+    if zona is None:
+        raise Http404("Zona no encontrada")
+
+    dispositivos = obtener_dispositivos_zona(zona_id)
+    resumen = calcular_resumen_zona(zona, dispositivos)
+
+    contexto = {
+        "zona": zona,
+        "dispositivos": dispositivos,
+        "consumo_total": resumen["consumo_total"],
+        "estado": resumen["estado"],
+    }
+    return render(request, "dispositivos/zonas_detalle.html", contexto)
