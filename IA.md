@@ -15,7 +15,10 @@ EVA 1- parte 1
     - Revisión y generación codigos de archivos (Enfoque: corrección): 
         - services.py: obtener_zona y obtener_dispositivos_zona.
         - urls.py: zonas listado y detalle.
-        - views.py: zonas_lisyado y zonas_detalle
+        - views.py: zonas_listado y zonas_detalle
     - Generación de código desde 0: prompt: respetando la arquitectura, uso de boostrap5 y template:
     - zonas_listado.html
     - zonas_detalle.html
+
+
+    
