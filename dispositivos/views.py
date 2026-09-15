@@ -61,7 +61,7 @@ def zonas_detalle(request, zona_id):
     }
     return render(request, "dispositivos/zonas_detalle.html", contexto)
 
-c
+
 #Resumen consumo por zona
 def resumen_zonas(request, zona_id):
     zona = obtener_zona(zona_id)
