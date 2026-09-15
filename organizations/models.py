@@ -18,6 +18,25 @@ class Zone(BaseModel):
     ) 
     name = models.CharField(max_lenght=120)
     limit_kwh= models.DecimalField(max_digits=10, decimal_places=2)
+    
 
     def __str__(self):
-    return f"{self.name} ({self.organization.name})"
+        return f"{self.name} ({self.organization.name})"
+
+    
+#Creación de la tabla departamento -- Alexander
+class Department(BaseModel):
+    Organization = models.ForeignKey(
+            Organization,
+            on_delete=models.PROTECT,
+            related_name="departments",
+    )
+    department_id = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=150)
+    description = models.CharField(max_length=500, blank=False, null=False)
+    status = models.BooleanField(default=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    
