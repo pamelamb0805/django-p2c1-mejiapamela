@@ -8,10 +8,3 @@ class Device(BaseModel):
         on_delete=models.PROTECT,
         related_name="devices",
     )
-    zone = models.ForeignKey(
-        "organizations.Zone",
-        on_delete=models.PROTECT,
-        related_name="devices",
-    )
-    name = models.CharField(max_length=120)
-    serial_number = models.CharField(max_length=80, unique=True)
