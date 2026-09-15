@@ -16,8 +16,10 @@ class Zone(BaseModel):
         on_delete=models.PROTECT,
         related_name="zones",
     ) 
-    name = models.CharField(max_lenght=120)
-    limit_kwh= models.DecimalField(max_digits=10, decimal_places=2)
+    name = models.CharField(max_length=120)
+    serial_number = models.CharField(max_length=80, unique=True)
+    description = models.CharField(max_length=, unique=True)
+    status = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.name} ({self.organization.name})"
