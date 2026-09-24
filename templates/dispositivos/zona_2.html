@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold text-dark mb-1">
+                <i class="bi bi-geo-alt-fill text-success me-2"></i>
+                Detalle de la Zona
+            </h2>
+
+            <p class="text-muted mb-0">
+                Información y dispositivos asociados
+            </p>
+
+        </div>
+
+        {% if zona.estado == "ALERTA" %}
+
+            <span class="badge bg-danger fs-6 px-3 py-2">
+                ALERTA
+            </span>
+
+        {% else %}
+
+            <span class="badge bg-success fs-6 px-3 py-2">
+                NORMAL
+            </span>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Información de la zona -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body p-4">
+
+            <div class="row align-items-center">
+
+                <!-- Nombre -->
+
+                <div class="col-md-6">
+
+                    <h3 class="fw-bold mb-1">
+                        {{ zona.nombre }}
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Información de consumo energético
+                    </p>
+
+                </div>
+
+
+                <!-- Métricas -->
+
+                <div class="col-md-6 mt-3 mt-md-0">
+
+                    <div class="row g-3">
+
+                        <!-- Límite -->
+
+                        <div class="col-sm-4">
+
+                            <div class="bg-light rounded-3 p-3 text-center">
+
+                                <i class="bi bi-speedometer2 text-success fs-4"></i>
+
+                                <small class="d-block text-muted mt-1">
+                                    Límite
+                                </small>
+
+                                <strong>
+                                    {{ zona.limite_kwh }} kWh
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Consumo -->
+
+                        <div class="col-sm-4">
+
+                            <div class="bg-light rounded-3 p-3 text-center">
+
+                                <i class="bi bi-lightning-charge-fill text-warning fs-4"></i>
+
+                                <small class="d-block text-muted mt-1">
+                                    Consumo total
+                                </small>
+
+                                <strong>
+                                    {{ zona.consumo_total }} kWh
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Dispositivos -->
+
+                        <div class="col-sm-4">
+
+                            <div class="bg-light rounded-3 p-3 text-center">
+
+                                <i class="bi bi-cpu-fill text-primary fs-4"></i>
+
+                                <small class="d-block text-muted mt-1">
+                                    Dispositivos
+                                </small>
+
+                                <strong>
+                                    {{ zona.total_dispositivos }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Estado -->
+
+    {% if zona.estado == "ALERTA" %}
+
+        <div class="alert alert-danger d-flex align-items-center shadow-sm rounded-3 mb-4">
+
+            <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+
+            <div>
+
+                <strong>Alerta de consumo</strong>
+
+                <br>
+
+                El consumo total de la zona supera el límite establecido.
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-success d-flex align-items-center shadow-sm rounded-3 mb-4">
+
+            <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+
+            <div>
+
+                <strong>Consumo normal</strong>
+
+                <br>
+
+                El consumo total de la zona se encuentra dentro del límite establecido.
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- Categorías -->
+
+    <h4 class="fw-bold mb-3">
+
+        <i class="bi bi-grid-3x3-gap-fill text-primary me-2"></i>
+
+        Dispositivos por categoría
+
+    </h4>
+
+
+    {% for categoria in zona.categorias %}
+
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+            <!-- Cabecera de categoría -->
+
+            <div class="card-header bg-white border-0 p-4">
+
+                <div class="d-flex align-items-start">
+
+                    <div class="bg-primary text-white rounded-3 p-3 me-3">
+
+                        <i class="bi bi-cpu-fill fs-4"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+                            {{ categoria.nombre }}
+                        </h5>
+
+                        <p class="text-muted mb-0">
+                            {{ categoria.descripcion }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Dispositivos -->
+
+            <div class="card-body pt-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th class="px-3">
+                                    Dispositivo
+                                </th>
+
+                                <th>
+                                    Consumo
+                                </th>
+
+                                <th>
+                                    Estado
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for dispositivo in categoria.dispositivos %}
+
+                                <tr>
+
+                                    <!-- Nombre -->
+
+                                    <td class="px-3">
+
+                                        <div class="fw-semibold">
+                                            {{ dispositivo.nombre }}
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- Consumo -->
+
+                                    <td>
+
+                                        <strong>
+                                            {{ dispositivo.consumo_kwh }} kWh
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- Estado -->
+
+                                    <td>
+
+                                        {% if dispositivo.estado == "Activo" %}
+
+                                            <span class="badge bg-success">
+
+                                                <i class="bi bi-check-circle me-1"></i>
+
+                                                Activo
+
+                                            </span>
+
+                                        {% elif dispositivo.estado == "Revisión" %}
+
+                                            <span class="badge bg-warning text-dark">
+
+                                                <i class="bi bi-exclamation-circle me-1"></i>
+
+                                                Revisión
+
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-secondary">
+
+                                                <i class="bi bi-dash-circle me-1"></i>
+
+                                                Inactivo
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="alert alert-info text-center">
+
+            <i class="bi bi-info-circle fs-3"></i>
+
+            <p class="mb-0 mt-2">
+                Esta zona no tiene dispositivos registrados.
+            </p>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

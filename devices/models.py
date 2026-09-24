@@ -1,9 +1,10 @@
+from django.conf import settings
 from django.db import models
 from core.models import BaseModel
+
 # Create your models here.
 
-#Modelo catalogo --Pamela
-
+# Modelo catalogo --Pamela
 class Catalog(BaseModel):
     catalog_id = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=150)
@@ -13,8 +14,7 @@ class Catalog(BaseModel):
     def __str__(self):
         return self.name
 
-#Modelo producto --Pamela
-
+# Modelo producto --Pamela
 class Product(BaseModel):
     product_id = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=150)
@@ -25,7 +25,7 @@ class Product(BaseModel):
     sku = models.CharField(max_length=100, unique=True)
 
     catalog = models.ForeignKey(
-        "Catalog",
+        Catalog,
         on_delete=models.PROTECT,
         related_name="products"
     )
@@ -33,7 +33,7 @@ class Product(BaseModel):
     def __str__(self):
         return self.name
 
-#Modelo device --Pamela
+# Modelo device --Pamela
 class Device(BaseModel):
     device_id = models.CharField(max_length=50, unique=True)
     internal_name = models.CharField(max_length=150)
@@ -43,7 +43,7 @@ class Device(BaseModel):
     status = models.CharField(max_length=50, blank=True, null=True)
 
     product = models.ForeignKey(
-        "Product",
+        Product,
         on_delete=models.PROTECT,
         related_name="devices"
     )
@@ -57,8 +57,7 @@ class Device(BaseModel):
         return self.internal_name
 
 
-#Modelo Measurement --Pamela
-
+# Modelo Measurement --Pamela
 class Measurement(BaseModel):
     measurement_id = models.CharField(max_length=50, unique=True)
     value = models.DecimalField(max_digits=12, decimal_places=4)
@@ -68,7 +67,7 @@ class Measurement(BaseModel):
     origin = models.CharField(max_length=50)
 
     device = models.ForeignKey(
-        "devices.Device",
+        Device,
         on_delete=models.PROTECT,
         related_name="measurements"
     )
@@ -85,8 +84,7 @@ class Measurement(BaseModel):
         return self.measurement_id
 
 
-#Modelo alert_rule --Pamela
-
+# Modelo alert_rule --Pamela
 class AlertRule(BaseModel):
     alert_rule_id = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=150)
@@ -97,7 +95,7 @@ class AlertRule(BaseModel):
     status = models.CharField(max_length=50, blank=True, null=True)
 
     product = models.ForeignKey(
-        "devices.Product",
+        Product,
         on_delete=models.PROTECT,
         related_name="alert_rules"
     )
@@ -105,8 +103,8 @@ class AlertRule(BaseModel):
     def __str__(self):
         return self.name
 
-#Modelo alert_event --Pamela
 
+# Modelo alert_event --Pamela
 class AlertEvent(BaseModel):
     alert_event_id = models.CharField(max_length=50, unique=True)
     min_limit_snapshot = models.DecimalField(max_digits=12, decimal_places=4, blank=True, null=True)
@@ -131,17 +129,17 @@ class AlertEvent(BaseModel):
         null=True
     )
     measurement = models.ForeignKey(
-        "measurements.Measurement",
+        Measurement,
         on_delete=models.PROTECT,
         related_name="alert_events"
     )
     device = models.ForeignKey(
-        "devices.Device",
+        Device,
         on_delete=models.PROTECT,
         related_name="alert_events"
     )
     alert_rule = models.ForeignKey(
-        "AlertRule",
+        AlertRule,
         on_delete=models.PROTECT,
         related_name="alert_events"
     )
@@ -150,24 +148,23 @@ class AlertEvent(BaseModel):
         return self.alert_event_id
 
 
-# Creación de la tabla Organization -- Alexander
-# Falta creaciones de foreigKey
+# Modelo MaintenanceRequest
 class MaintenanceRequest(BaseModel):
     maintenance_request_id = models.CharField(max_length=50, unique=True)
-    type = models.CharField(max_length=100, blank=True, null=True)
+    request_type = models.CharField(max_length=100, blank=True, null=True)
     reason = models.CharField(max_length=255, blank=True, null=True)
     priority = models.CharField(max_length=50, blank=True, null=True)
     status = models.CharField(max_length=50, blank=True, null=True)
     scheduled_date = models.DateTimeField(blank=True, null=True)
     actual_date = models.DateTimeField(blank=True, null=True)
     diagnosis = models.TextField(blank=True, null=True)
-    actions_text = models.TextField(blank=True, null=True) # actions_taken según diagrama
+    actions_text = models.TextField(blank=True, null=True)
     observations = models.TextField(blank=True, null=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     closed_at = models.DateTimeField(blank=True, null=True)
     
     device = models.ForeignKey(
-        "Device",
+        Device,
         on_delete=models.PROTECT,
         related_name="maintenance_requests",
         blank=True,
@@ -178,8 +175,7 @@ class MaintenanceRequest(BaseModel):
         on_delete=models.PROTECT,
         related_name="maintenance_requests"
     )
-    #fk que faltaban --Pamela
-        request_by = models.ForeignKey(
+    request_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
         related_name="requested_maintenance_requests"
@@ -191,10 +187,12 @@ class MaintenanceRequest(BaseModel):
         blank=True,
         null=True
     )
+
     def __str__(self):
         return self.maintenance_request_id
 
-# Creación de la tabla Organization -- Alexander
+
+# Modelo History
 class History(BaseModel):
     history_id = models.CharField(max_length=50, unique=True)
     start_date = models.DateTimeField(blank=True, null=True)
@@ -202,11 +200,10 @@ class History(BaseModel):
     reason = models.CharField(max_length=255, blank=True, null=True)
 
     device = models.ForeignKey(
-        "Device",
+        Device,
         on_delete=models.PROTECT,
         related_name="histories"
     )
-    
     zone = models.ForeignKey(
         "zones.Zone",
         on_delete=models.PROTECT,

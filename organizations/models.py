@@ -8,7 +8,7 @@ class Organization(BaseModel):
     legal_name = models.CharField(max_length=150)
     comercial_name = models.CharField(max_length=150, blank=True, null=True)
     contact = models.CharField(max_length=150, blank=True, null=True)
-    emai = models.EmailField(max_length=254)
+    email = models.EmailField(max_length=254)  # <--- Corregido el error tipográfico 'emai' por 'email'
     tax = models.CharField(max_length=50)
     status = models.BooleanField(default=True, blank=True, null=True)
 
@@ -22,7 +22,7 @@ class User(BaseModel):
     username = models.CharField(max_length=150)
     rut = models.CharField(max_length=20)
     phone = models.CharField(max_length=30, blank=True, null=True)
-    email = models.EmailField(max_length=254)
+    email = models.EmailField(max_length=254)  #
     address = models.CharField(max_length=255, blank=True, null=True)
     role = models.CharField(max_length=50)
     status = models.BooleanField(default=True, blank=True, null=True)
@@ -57,7 +57,7 @@ class Department(BaseModel):
         related_name="departments"
     )
     user = models.ForeignKey(
-        "User",
+        User,
         on_delete=models.PROTECT,
         related_name="user_departments",  # Evita colisión de nombres inversos
         blank=True,
@@ -81,7 +81,7 @@ class Zone(BaseModel):
         related_name="zones"
     )
     department = models.ForeignKey(
-        "Department",
+        Department,
         on_delete=models.PROTECT,
         related_name="zones",
         blank=True,
