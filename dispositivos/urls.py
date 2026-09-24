@@ -1,28 +1,16 @@
-
 from django.urls import path
 from . import views
+
 app_name = "dispositivos"
+
 urlpatterns = [
     path("", views.inicio, name="inicio"),
-    path(
-    "zonas/<int:zona_id>/dispositivos/",
-    views.dispositivos_zona,
-    name="por_zona",
-    ),
 
-    # path para que funcione catalogo
-    path(
-        "dispositivos/", views.catalogo, name="catalogo"
-        ),
+    path("dispositivos/", views.catalogo, name="catalogo"),
 
-    #Eva1:
-    #dispositivos --> categorias
-
+    path("zonas/", views.zonas, name="zonas"),
     
-    path(
-        "zonas/", views.zonas_listado, name="listado"
-        ),
-    path("zonas/<int:zona_id>/", views.zonas_detalle, name="detalle"),
+    path("zonas/<int:zona_id>/", views.zona_id, name="zona_id"),
 
-    path("zonas/<int:zona_id>/", views.resumen_zonas, name="resumen_zonas")
+    path("resumen_zonas/", views.resumen_datos, name="resumen _zonas",)
 ]

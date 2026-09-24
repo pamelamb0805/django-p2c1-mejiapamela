@@ -1,8 +1,187 @@
-<!-- templates/dispositivos/inicio.html -->
 {% extends "base.html" %}
+
 {% block title %}Inicio | EcoEnergy{% endblock %}
+
 {% block content %}
-<h1>{{ sistema }}</h1>
-<p>{{ mensaje }}</p>
-<p>Curso: {{ asignatura }}</p>
+
+<div class="container py-5">
+
+<!-- HERO PRINCIPAL -->
+<div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+    <!-- Banner Superior -->
+    <div class="p-4 p-md-5 text-white"
+         style="background: linear-gradient(135deg, #0f5132 0%, #198754 60%, #20c997 100%);">
+
+        <div class="row align-items-center">
+
+            <!-- Información principal -->
+            <div class="col-md-8">
+
+                <!-- Etiqueta -->
+                <div class="d-inline-flex align-items-center gap-2
+                            bg-white rounded-pill px-3 py-2 mb-3
+                            text-dark border border-secondary border-opacity-25
+                            small shadow-sm">
+
+                    <i class="bi bi-tree-fill text-success"></i>
+
+                    <span class="fw-medium">
+                        Energía Sustentable
+                    </span>
+
+                </div>
+
+                <!-- Título -->
+                <h1 class="display-5 fw-bold mb-3">
+                    {{ sistema }}
+                </h1>
+
+                <!-- Mensaje -->
+                <p class="lead text-white-50 mb-0 fs-5">
+                    {{ mensaje }}
+                </p>
+
+            </div>
+
+            <!-- Icono decorativo -->
+            <div class="col-md-4 text-center text-md-end
+                        mt-4 mt-md-0 d-none d-md-block">
+
+                <i class="bi bi-lightning-charge-fill
+                          display-1 text-white opacity-25">
+                </i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACCESOS PRINCIPALES -->
+    <div class="card-body p-4 p-md-5 bg-white">
+
+        <div class="row g-4">
+
+            <!-- ========================= -->
+            <!-- CATÁLOGO DE ZONAS -->
+            <!-- ========================= -->
+
+            <div class="col-md-6">
+
+                <div class="border rounded-4 p-4 h-100">
+
+                    <!-- Icono + título -->
+                    <div class="d-flex align-items-center gap-3 mb-3">
+
+                        <div class="rounded-circle bg-success bg-opacity-10
+                                    text-success p-3
+                                    d-flex align-items-center justify-content-center"
+                             style="width: 50px; height: 50px;">
+
+                            <i class="bi bi-buildings-fill fs-4"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span class="text-muted small text-uppercase fw-bold">
+                                Organización
+                            </span>
+
+                            <h5 class="mb-0 fw-semibold">
+                                Catálogo de Zonas
+                            </h5>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Descripción -->
+                    <p class="text-muted mb-4">
+                        Consulta las zonas de consumo energético
+                        y accede a los dispositivos asociados a cada una.
+                    </p>
+
+                    <!-- Botón -->
+                    <a href="{% url 'dispositivos:zonas' %}"
+                       class="btn btn-success rounded-pill px-4
+                              d-inline-flex align-items-center gap-2">
+
+                        <i class="bi bi-buildings-fill"></i>
+
+                        Ver Zonas
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- TODOS LOS DISPOSITIVOS -->
+            <!-- ========================= -->
+
+            <div class="col-md-6">
+
+                <div class="border rounded-4 p-4 h-100">
+
+                    <!-- Icono + título -->
+                    <div class="d-flex align-items-center gap-3 mb-3">
+
+                        <div class="rounded-circle bg-success bg-opacity-10
+                                    text-success p-3
+                                    d-flex align-items-center justify-content-center"
+                             style="width: 50px; height: 50px;">
+
+                            <i class="bi bi-cpu-fill fs-4"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span class="text-muted small text-uppercase fw-bold">
+                                Equipamiento
+                            </span>
+
+                            <h5 class="mb-0 fw-semibold">
+                                Todos los Dispositivos
+                            </h5>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Descripción -->
+                    <p class="text-muted mb-4">
+                        Consulta todos los dispositivos registrados
+                        en las diferentes zonas de consumo energético.
+                    </p>
+
+                    <!-- Botón -->
+                    <a href="{% url 'dispositivos:catalogo' %}"
+                       class="btn btn-success rounded-pill px-4
+                              d-inline-flex align-items-center gap-2">
+
+                        <i class="bi bi-cpu-fill"></i>
+
+                        Ver Dispositivos
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
 {% endblock %}

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Catálogo de Zonas | EcoEnergy{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- ================= ENCABEZADO ================= -->
+    <div class="row align-items-center mb-5">
+        <div class="col-md-8">
+            <h1 class="fw-bold text-success mb-2">
+                <i class="bi bi-geo-alt-fill me-2"></i>Catálogo de Zonas
+            </h1>
+            <p class="text-muted fs-5 mb-0">
+                Administración de zonas y dispositivos del sistema EcoEnergy.
+            </p>
+        </div>
+
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <div class="card border-0 shadow-sm bg-success text-white d-inline-block">
+                <div class="card-body px-4 py-3 text-center">
+                    <small class="text-white-50">Zonas registradas</small>
+                    <h2 class="fw-bold mb-0">{{ total }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= LISTA DE ZONAS ================= -->
+    <div class="row g-4">
+
+        {% for zona in zonas %}
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card border-0 shadow-sm h-100 rounded-4">
+
+                <!-- Barra superior verde -->
+                <div class="bg-success rounded-top-4 p-3 text-white">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-white text-success rounded-circle d-flex align-items-center justify-content-center me-3"
+                             style="width:55px;height:55px;">
+                            <i class="bi bi-geo-alt-fill fs-3"></i>
+                        </div>
+
+                        <div>
+                            <h5 class="fw-bold mb-0">{{ zona.nombre }}</h5>
+                            <small>ID Zona #{{ zona.id }}</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenido -->
+                <div class="card-body">
+
+                    <div class="mb-3 p-3 rounded-3 bg-light border">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">
+                                <i class="bi bi-lightning-charge-fill text-warning me-2"></i>
+                                Límite de consumo
+                            </span>
+
+                            <span class="fw-bold text-success">
+                                {{ zona.limite_kwh }} kWh
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 p-3 rounded-3 bg-light border">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">
+                                <i class="bi bi-cpu-fill text-primary me-2"></i>
+                                Dispositivos asociados
+                            </span>
+
+                            <span class="badge bg-primary rounded-pill fs-6 px-3">
+                                {{ zona.total_dispositivos }}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-white border-0 pb-4">
+                    <a href="{% url 'dispositivos:zona_id' zona.id %}"
+                       class="btn btn-success w-100 rounded-pill fw-semibold">
+                        <i class="bi bi-eye-fill me-2"></i>
+                        Ver dispositivos
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-info-circle-fill text-info display-3 mb-3"></i>
+
+                    <h4 class="fw-bold">No existen zonas disponibles.</h4>
+
+                    <p class="text-muted mb-0">
+                        No se encontraron registros de zonas territoriales configuradas en el sistema.
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock %}
