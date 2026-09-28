@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+#from decouple? import config
 
 #cargar load_dotenv
 
@@ -24,8 +25,8 @@ load_dotenv(BASE_DIR / ".env")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g7%1w)8e6x5($b&=^j!9p)tsn4)4$#m_uwe3k&t%9l_)!4anmu'
+# Error de clave secreta corregida -->Pm
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -145,9 +146,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+#Cambio Panel Django a español --> Pm
+LANGUAGE_CODE = 'es-cl' 
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santiago'
 
 USE_I18N = True
 
