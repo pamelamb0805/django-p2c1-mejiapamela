@@ -8,11 +8,11 @@ from core.models import BaseModel
 #Eva2 verbose_name y return --> esp -> pm
 class Catalog(BaseModel):
     catalog_id = models.CharField(max_length=50, unique=True, verbose_name="Código de catálogo")
-    name = models.CharField(max_length=150,verbose_name="Nombre")
+    name = models.CharField(max_length=150, verbose_name="Nombre")
     description = models.TextField(blank=True, null=True, verbose_name="Descripción")
     status = models.CharField(max_length=50, blank=True, null=True, verbose_name="Estado")
 
-class Meta:
+    class Meta:
         verbose_name = "Catálogo"
         verbose_name_plural = "Catálogos"
         ordering = ["name"]
@@ -26,7 +26,8 @@ class Product(BaseModel):
     product_id = models.CharField(max_length=50, unique=True, verbose_name="Código de producto")
     name = models.CharField(max_length=150, verbose_name="Nombre")
     description = models.TextField(blank=True, null=True, verbose_name="Descripción")
-    kwh = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, "Consumo (kWh)")
+    # CORREGIDO: Se agregó "verbose_name=" que faltaba
+    kwh = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Consumo (kWh)")
     manufacter = models.CharField(max_length=150, blank=True, null=True, verbose_name="Fabricante")
     model = models.CharField(max_length=150, blank=True, null=True, verbose_name="Modelo")
     sku = models.CharField(max_length=100, unique=True, verbose_name="SKU")
@@ -48,7 +49,7 @@ class Product(BaseModel):
 # Modelo device --Pamela
 #Eva2 verbose_name y return --> esp -> pm
 class Device(BaseModel):
-    device_id = models.CharField(max_length=50, unique=True,verbose_name="Código de dispositivo")
+    device_id = models.CharField(max_length=50, unique=True, verbose_name="Código de dispositivo")
     internal_name = models.CharField(max_length=150, verbose_name="Nombre interno")
     description = models.TextField(blank=True, null=True, verbose_name="Descripción")
     reference_power = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Potencia de referencia (kW)")
@@ -62,7 +63,7 @@ class Device(BaseModel):
         verbose_name="Producto"
     )
     zone = models.ForeignKey(
-        "zones.Zone",
+        "organizations.Zone",
         on_delete=models.PROTECT,
         related_name="devices",
         verbose_name="Zona"
@@ -80,7 +81,7 @@ class Device(BaseModel):
 class Measurement(BaseModel):
     measurement_id = models.CharField(max_length=50, unique=True, verbose_name="Código de medición")
     value = models.DecimalField(max_digits=12, decimal_places=4, verbose_name="Valor")
-    unit = models.CharField(max_length=50,verbose_name="Unidad de medida")
+    unit = models.CharField(max_length=50, verbose_name="Unidad de medida")
     datetime = models.DateTimeField(verbose_name="Fecha y hora de lectura")
     status = models.CharField(max_length=50, blank=True, null=True, verbose_name="Estado")
     origin = models.CharField(max_length=50, verbose_name="Origen")
@@ -108,7 +109,6 @@ class Measurement(BaseModel):
 
     def __str__(self):
         return f"{self.measurement_id} ({self.value} {self.unit})"
-
 
 
 # Modelo alert_rule --Pamela
@@ -201,7 +201,7 @@ class MaintenanceRequest(BaseModel):
     reason = models.CharField(max_length=255, blank=True, null=True, verbose_name="Motivo")
     priority = models.CharField(max_length=50, blank=True, null=True, verbose_name="Prioridad")
     status = models.CharField(max_length=50, blank=True, null=True, verbose_name="Estado")
-    scheduled_date = models.DateTimeField(blank=True, null=True,verbose_name="Fecha programada")
+    scheduled_date = models.DateTimeField(blank=True, null=True, verbose_name="Fecha programada")
     actual_date = models.DateTimeField(blank=True, null=True, verbose_name="Fecha real de ejecución")
     diagnosis = models.TextField(blank=True, null=True, verbose_name="Diagnóstico")
     actions_text = models.TextField(blank=True, null=True, verbose_name="Acciones realizadas")
@@ -247,7 +247,6 @@ class MaintenanceRequest(BaseModel):
         return f"Solicitud {self.maintenance_request_id} ({self.priority or 'Sin prioridad'})"
 
 
-
 # Modelo History
 #Eva2 verbose_name y return --> esp -> pm
 class History(BaseModel):
@@ -263,7 +262,7 @@ class History(BaseModel):
         verbose_name="Dispositivo"
     )
     zone = models.ForeignKey(
-        "zones.Zone",
+        "organizations.Zone",
         on_delete=models.PROTECT,
         related_name="histories",
         blank=True,
