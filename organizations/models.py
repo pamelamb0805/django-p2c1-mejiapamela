@@ -1,9 +1,7 @@
 from django.db import models
 from core.models import BaseModel
-# Create your models here.
 
 # Creación de la tabla Organization -- Alexander
-#Eva2 verbose_name y return --> esp -> pm
 class Organization(BaseModel):
     organization_id = models.CharField(max_length=50, unique=True, verbose_name="Código de organización")
     legal_name = models.CharField(max_length=150, verbose_name="Razón social")
@@ -22,7 +20,6 @@ class Organization(BaseModel):
         return f"{self.tax} - {self.legal_name}"
 
 # Creación de la tabla User -- Alexander
-#Eva2 verbose_name y return --> esp -> pm
 class User(BaseModel):
     user_id = models.CharField(max_length=50, unique=True, verbose_name="Código de usuario")
     username = models.CharField(max_length=150, verbose_name="Nombre de usuario")
@@ -56,7 +53,6 @@ class User(BaseModel):
         return f"{self.username} ({self.rut})"
 
 # Creación de la tabla Department -- Alexander
-#Eva2 verbose_name y return --> esp -> pm
 class Department(BaseModel):
     department_id = models.CharField(max_length=50, unique=True, verbose_name="Código de departamento")
     name = models.CharField(max_length=150, verbose_name="Nombre del departamento")
@@ -87,7 +83,6 @@ class Department(BaseModel):
         return f"{self.name} ({self.organization.legal_name if self.organization else 'Sin org'})"
 
 # Creación de la tabla Zone -- Alexander
-#Eva2 verbose_name y return --> esp -> pm
 class Zone(BaseModel):
     zone_id = models.CharField(max_length=50, unique=True, verbose_name="Código de zona")
     name = models.CharField(max_length=150, verbose_name="Nombre de la zona")

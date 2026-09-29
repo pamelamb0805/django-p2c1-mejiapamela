@@ -117,7 +117,7 @@ def catalogo(request):
     
     activos = sum(
         1 for item in dispositivos
-        if item["estado"] == "Activo"
+        if item.get("estado") == "Activo"
     )
     
     contexto = {
@@ -127,8 +127,8 @@ def catalogo(request):
     }
     
     return render(
-    request, "dispositivos/catalogo.html", contexto
-)
+        request, "dispositivos/catalogo.html", contexto
+    )
 
 
 def resumen_datos(request):

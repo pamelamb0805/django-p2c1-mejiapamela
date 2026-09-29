@@ -86,6 +86,8 @@ class AlertRuleAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at", "deleted_at")
     ordering = ("name",)
 
+# CORREGIDO: Se agregó @admin.register(AlertEvent) que faltaba
+@admin.register(AlertEvent)
 class AlertEventAdmin(admin.ModelAdmin):
 # columnas,navegacion jerarquica por fecha de creación, filtros, campos de busqueda, optimizacion sql, campos de auditoria solo lectura, orden descendente
     list_display = (
@@ -136,7 +138,7 @@ class MaintenanceRequestAdmin(admin.ModelAdmin):
         "reason",
         "diagnosis",
         "device__internal_name",
-        "organization__name",
+        "organization__legal_name",  # CORREGIDO: cambiado de __name a __legal_name según el modelo Organization
     )
     list_select_related = (
         "device",
@@ -169,4 +171,4 @@ class HistoryAdmin(admin.ModelAdmin):
     )
     list_select_related = ("device", "zone")
     readonly_fields = ("created_at", "updated_at", "deleted_at")
-    ordering = ("-start_date",)   
+    ordering = ("-start_date",)

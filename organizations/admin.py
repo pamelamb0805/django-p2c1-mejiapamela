@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import Organization, User, Department, Zone
-# Register your models here.
 
 # Personalizar visualización filtros y busquedas- ppt 3 --> pm
 @admin.register(Organization)
