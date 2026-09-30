@@ -25,7 +25,7 @@ load_dotenv(BASE_DIR / ".env")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
-# Error de clave secreta corregida -->Pm
+# Error de clave |secreta corregida -->Pm
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "organizations",
     "devices",
     "core",
-
+    #creacion perfiles y roles - EVA2 - PM
+    "accounts"
 ]
 
 MIDDLEWARE = [
@@ -83,26 +84,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
-"""
-if DB_ENGINE == "sqlite":
-    DATABASES = {"default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / os.getenv(
-        "DB_NAME", "db.sqlite3"
-        ),
-    }}
-elif DB_ENGINE == "mysql":
-    DATABASES = {"default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST", "127.0.0.1"),
-        "PORT": os.getenv("DB_PORT", "3306"),
-    }}
-else:
-    raise ValueError("DB_ENGINE debe ser sqlite o mysql")
-"""
+
 DB_ENGINE = os.getenv("DB_ENGINE", "sqlite").lower()
 
 

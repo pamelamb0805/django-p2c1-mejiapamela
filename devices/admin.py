@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Catalog, Product, Device, Measurement, AlertRule, AlertEvent, MaintenanceRequest, History
+from django.contrib import admin, messages
+from django.utils import timezone
 
 # Personalizar visualización filtros y busquedas- ppt 3 --> pm
 @admin.register(Catalog)
@@ -20,6 +22,23 @@ class ProductAdmin(admin.ModelAdmin):
     list_select_related = ("catalog",)
     readonly_fields = ("created_at", "updated_at", "deleted_at")
     ordering = ("name",)
+
+#
+@admin.action(
+    description="Archivar dispositivos seleccionados",
+    #Hace visible la accion solo a admin, no al operador
+    permissions=["change"],
+)
+def archive_devices(modeladmin, request, queryset):
+    updated = queryset.filter(
+        #deleted_at queda marcada con fecha actual, NO BORRA REGISTRO
+        deleted_at__isnull=True
+    ).update(deleted_at=timezone.now())
+    modeladmin.message_user(
+        request,
+        f"{updated} dispositivo(s) archivado(s).",
+        level=messages.SUCCESS,
+    )
 
 @admin.register(Device)
 class DeviceAdmin(admin.ModelAdmin):
@@ -43,6 +62,8 @@ class DeviceAdmin(admin.ModelAdmin):
     list_select_related = ("product", "zone")
     readonly_fields = ("created_at", "updated_at", "deleted_at")
     ordering = ("internal_name",)
+    #Accion adicional Usuario Admin
+    actions = [archive_devices]
 
 @admin.register(Measurement)
 class MeasurementAdmin(admin.ModelAdmin):
