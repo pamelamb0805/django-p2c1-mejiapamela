@@ -1,0 +1,320 @@
+[
+{
+  "model": "auth.group",
+  "pk": 1,
+  "fields": {
+    "name": "Operador",
+    "permissions": [
+      [
+        "change_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "view_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "view_device",
+        "devices",
+        "device"
+      ],
+      [
+        "add_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "view_measurement",
+        "devices",
+        "measurement"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$eXt42n3cURBYdYQ7QP98UT$zFl3CE0GKpo80ikZzna6ZKU1FYWm5cELoiRlcLVGcto=",
+    "last_login": "2026-09-30T12:24:23Z",
+    "is_superuser": true,
+    "username": "ROOT",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-30T12:23:44Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$FZCTSgJn3vqhJkayYFQ8aR$6grqLaHIGLDCMq4TNo4E/2W6eaqbENvoZbO2N4qvR9Q=",
+    "last_login": "2026-09-30T19:31:50.632Z",
+    "is_superuser": false,
+    "username": "operador_norte",
+    "first_name": "Juan",
+    "last_name": "Perez",
+    "email": "juan.perez@ecoenergy.cl",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-30T18:25:35Z",
+    "groups": [
+      [
+        "Operador"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$Riu21RanwjRwdbk4JFucL1$iITIx8L1mttL09FHnWqDhHS5od7RloySoYp3iXhzOmI=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "operador_sur",
+    "first_name": "Carlos",
+    "last_name": "Perez",
+    "email": "carlos.perez@ecoenergy.cl",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-30T18:27:16Z",
+    "groups": [
+      [
+        "Operador"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "organizations.organization",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T16:16:02.085Z",
+    "updated_at": "2026-09-30T16:16:02.085Z",
+    "deleted_at": null,
+    "organization_id": "ORG-001",
+    "legal_name": "EcoEnergy Norte SpA",
+    "comercial_name": "EcoEnergy Norte",
+    "contact": null,
+    "email": "norte@ecoenergy.test",
+    "tax": "76.111.111-1",
+    "status": true
+  }
+},
+{
+  "model": "organizations.organization",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T16:16:53.495Z",
+    "updated_at": "2026-09-30T16:16:53.495Z",
+    "deleted_at": null,
+    "organization_id": "ORG-002",
+    "legal_name": "EcoEnergy Sur SpA",
+    "comercial_name": "EcoEnergy Sur",
+    "contact": null,
+    "email": "sur@ecoenergy.test",
+    "tax": "76.222.222-2",
+    "status": true
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T16:24:08.389Z",
+    "updated_at": "2026-09-30T16:24:08.389Z",
+    "deleted_at": null,
+    "department_id": "DEP-N01",
+    "name": "Operaciones Norte",
+    "description": "EcoEnergy Norte",
+    "status": true,
+    "organization": 1,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T16:24:31.979Z",
+    "updated_at": "2026-09-30T16:24:31.979Z",
+    "deleted_at": null,
+    "department_id": "DEP-S01",
+    "name": "Operaciones Sur",
+    "description": "EcoEnergy Sur",
+    "status": true,
+    "organization": 2,
+    "user": null
+  }
+},
+{
+  "model": "organizations.zone",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T19:22:24.986Z",
+    "updated_at": "2026-09-30T19:22:24.986Z",
+    "deleted_at": null,
+    "zone_id": "ZON-N01",
+    "name": "Zona norte",
+    "description": null,
+    "status": true,
+    "organization": 1,
+    "department": 1
+  }
+},
+{
+  "model": "organizations.zone",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T19:22:45.175Z",
+    "updated_at": "2026-09-30T19:22:45.175Z",
+    "deleted_at": null,
+    "zone_id": "ZON-S01",
+    "name": "Zona Sur",
+    "description": null,
+    "status": true,
+    "organization": 2,
+    "department": 2
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T19:27:02.232Z",
+    "updated_at": "2026-09-30T19:27:02.232Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-001",
+    "name": "Medidores de energ�a",
+    "description": "Medidores inteligentes de consumo el�ctrico para monitoreo en instalaciones industriales y comerciales.",
+    "status": "activo"
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T19:28:19.042Z",
+    "updated_at": "2026-09-30T19:28:19.042Z",
+    "deleted_at": null,
+    "product_id": "PRD-001",
+    "name": "Medidor trif�sico iEM3155",
+    "description": "Medidor de energ�a trif�sico con comunicaci�n Modbus, para monitoreo de consumo por sector.",
+    "kwh": "0.24",
+    "manufacter": "Schneider Electric",
+    "model": "iEM3155",
+    "sku": "A9MEM3155",
+    "catalog": 1
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T19:29:03.586Z",
+    "updated_at": "2026-09-30T19:29:03.586Z",
+    "deleted_at": null,
+    "product_id": "PRD-002",
+    "name": "Analizador de red PAC3200",
+    "description": "Analizador de red multifunci�n para medir potencia, energ�a y calidad de suministro.",
+    "kwh": "0.36",
+    "manufacter": "Siemens",
+    "model": "SENTRON PAC3200",
+    "sku": "7KM2200-2EA30-1JA1",
+    "catalog": 1
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T19:55:42.877Z",
+    "updated_at": "2026-09-30T19:55:42.877Z",
+    "deleted_at": null,
+    "device_id": "DEV-N-001",
+    "internal_name": "Medidor Bodega Norte",
+    "description": "Medidor de consumo bodega norte",
+    "reference_power": "5.50",
+    "serial_number": "SN-N-001",
+    "status": "activo",
+    "product": 1,
+    "zone": 1
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T19:58:17.628Z",
+    "updated_at": "2026-09-30T19:58:17.628Z",
+    "deleted_at": null,
+    "device_id": "DEV-S-001",
+    "internal_name": "Medidor Bodega Sur",
+    "description": "Medidor de consumo bodega sur",
+    "reference_power": "5.50",
+    "serial_number": "SN-S-001",
+    "status": "activo",
+    "product": 2,
+    "zone": 2
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-09-30T19:59:13.815Z",
+    "updated_at": "2026-09-30T19:59:13.815Z",
+    "deleted_at": "2026-09-30T20:01:04.683Z",
+    "device_id": "DEV-N-002",
+    "internal_name": "Medidor Prueba Norte",
+    "description": "Medidor de prueba para archivado",
+    "reference_power": "5.50",
+    "serial_number": "SN-N-002",
+    "status": "activo",
+    "product": 1,
+    "zone": 1
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T18:38:34.079Z",
+    "updated_at": "2026-09-30T18:38:34.079Z",
+    "deleted_at": null,
+    "user": [
+      "operador_norte"
+    ],
+    "organization": 1,
+    "department": 1,
+    "employee_code": "EMP-001",
+    "phone": ""
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T18:38:55.386Z",
+    "updated_at": "2026-09-30T18:38:55.387Z",
+    "deleted_at": null,
+    "user": [
+      "operador_sur"
+    ],
+    "organization": 2,
+    "department": 2,
+    "employee_code": "EMP-002",
+    "phone": ""
+  }
+}
+]
