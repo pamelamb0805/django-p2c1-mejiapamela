@@ -16,29 +16,28 @@ class CatalogAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
 # columnas, filtros, campos de busqueda, optimizacion sql, campos de auditoria solo lectura, orden predeterminado
-    list_display = ("sku", "name", "catalog", "manufacter", "kwh", "created_at")
-    list_filter = ("catalog", "manufacter", "created_at")
+    list_display = ("sku", "name", "catalog", "manufacturer", "kwh", "created_at")
+    list_filter = ("catalog", "manufacturer", "created_at")
     search_fields = ("sku", "product_id", "name", "catalog__name")
     list_select_related = ("catalog",)
     readonly_fields = ("created_at", "updated_at", "deleted_at")
     ordering = ("name",)
 
-#
+# correccion eva2-n3 -- accion "eliminar" + marcar dispositivos(no viene por defecto en django)
 @admin.action(
-    description="Archivar dispositivos seleccionados",
-    #Hace visible la accion solo a admin, no al operador
+    description="Marcar dispositivos en mantenimiento",
+    # Solo la ve quien tiene permiso de modificar (no el operador)
     permissions=["change"],
 )
-def archive_devices(modeladmin, request, queryset):
-    updated = queryset.filter(
-        #deleted_at queda marcada con fecha actual, NO BORRA REGISTRO
-        deleted_at__isnull=True
-    ).update(deleted_at=timezone.now())
+def mark_in_maintenance(modeladmin, request, queryset):
+    now = timezone.now()
+    updated = queryset.update(status="mantenimiento", updated_at=now)
     modeladmin.message_user(
         request,
-        f"{updated} dispositivo(s) archivado(s).",
+        f"{updated} dispositivo(s) marcado(s) en mantenimiento.",
         level=messages.SUCCESS,
     )
+
 
 @admin.register(Device)
 class DeviceAdmin(admin.ModelAdmin):
@@ -62,8 +61,30 @@ class DeviceAdmin(admin.ModelAdmin):
     list_select_related = ("product", "zone")
     readonly_fields = ("created_at", "updated_at", "deleted_at")
     ordering = ("internal_name",)
-    #Accion adicional Usuario Admin
-    actions = [archive_devices]
+    # Acción adicional propia; "Eliminar seleccionados" de Django se mantiene
+    actions = [mark_in_maintenance]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        # Los eliminados lógicamente no se muestran
+        qs = qs.filter(deleted_at__isnull=True)
+        if request.user.is_superuser:
+            return qs
+        profile = getattr(request.user, "profile", None)
+        # Sin perfil u organización: no ve nada
+        if profile is None or profile.organization_id is None:
+            return qs.none()
+        return qs.filter(zone__organization=profile.organization)
+
+    def delete_queryset(self, request, queryset):
+        # "Eliminar seleccionados": borrado lógico, no físico
+        now = timezone.now()
+        queryset.update(deleted_at=now, updated_at=now)
+
+    def delete_model(self, request, obj):
+        # Botón "Eliminar" dentro del formulario de un dispositivo
+        obj.deleted_at = timezone.now()
+        obj.save(update_fields=["deleted_at", "updated_at"])
 
 @admin.register(Measurement)
 class MeasurementAdmin(admin.ModelAdmin):
@@ -77,7 +98,7 @@ class MeasurementAdmin(admin.ModelAdmin):
         "origin",
         "status",
     )
-    date_hierarchy = "datetime"
+    #date_hierarchy = "datetime"
     list_filter = ("unit", "origin", "status", "device")
     search_fields = (
         "measurement_id",
@@ -88,6 +109,31 @@ class MeasurementAdmin(admin.ModelAdmin):
     list_select_related = ("device", "user")
     readonly_fields = ("created_at", "updated_at", "deleted_at")
     ordering = ("-datetime",)
+
+    #Scoping --EVA2 -- PM
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request).filter(deleted_at__isnull=True)
+        if request.user.is_superuser:
+            return qs
+        profile = getattr(request.user, "profile", None)
+        if profile is None or profile.organization_id is None:
+            return qs.none()
+        return qs.filter(device__zone__organization=profile.organization)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        # El selector de dispositivo solo ofrece los de su organización
+        if db_field.name == "device" and not request.user.is_superuser:
+            profile = getattr(request.user, "profile", None)
+            if profile is None or profile.organization_id is None:
+                kwargs["queryset"] = Device.objects.none()
+            else:
+                kwargs["queryset"] = Device.objects.filter(
+                    zone__organization=profile.organization,
+                    deleted_at__isnull=True,
+                )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    
 
 @admin.register(AlertRule)
 class AlertRuleAdmin(admin.ModelAdmin):
@@ -107,6 +153,17 @@ class AlertRuleAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at", "deleted_at")
     ordering = ("name",)
 
+    #Scoping --EVA2 -- PM
+    def get_queryset(self, request):
+        qs = super().get_queryset(request).filter(deleted_at__isnull=True)
+        if request.user.is_superuser:
+            return qs
+        profile = getattr(request.user, "profile", None)
+        if profile is None or profile.organization_id is None:
+            return qs.none()
+        return qs.filter(device__zone__organization=profile.organization)
+
+
 # CORREGIDO: Se agregó @admin.register(AlertEvent) que faltaba
 @admin.register(AlertEvent)
 class AlertEventAdmin(admin.ModelAdmin):
@@ -120,7 +177,7 @@ class AlertEventAdmin(admin.ModelAdmin):
         "resolved_by",
         "created_at",
     )
-    date_hierarchy = "created_at"
+    #date_hierarchy = "created_at"
     list_filter = ("status", "device", "alert_rule", "created_at")
     search_fields = (
         "alert_event_id",
@@ -152,7 +209,7 @@ class MaintenanceRequestAdmin(admin.ModelAdmin):
         "assigned_to",
         "scheduled_date",
     )
-    date_hierarchy = "scheduled_date"
+    #date_hierarchy = "scheduled_date"
     list_filter = ("priority", "status", "request_type", "organization")
     search_fields = (
         "maintenance_request_id",
@@ -181,7 +238,7 @@ class HistoryAdmin(admin.ModelAdmin):
         "end_date",
         "reason",
     )
-    date_hierarchy = "start_date"
+    #date_hierarchy = "start_date"
     list_filter = ("zone", "device", "start_date")
     search_fields = (
         "history_id",

@@ -28,7 +28,7 @@ class Product(BaseModel):
     description = models.TextField(blank=True, null=True, verbose_name="Descripción")
     # CORREGIDO: Se agregó "verbose_name=" que faltaba
     kwh = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Consumo (kWh)")
-    manufacter = models.CharField(max_length=150, blank=True, null=True, verbose_name="Fabricante")
+    manufacturer = models.CharField(max_length=150, blank=True, null=True, verbose_name="Fabricante")
     model = models.CharField(max_length=150, blank=True, null=True, verbose_name="Modelo")
     sku = models.CharField(max_length=100, unique=True, verbose_name="SKU")
 

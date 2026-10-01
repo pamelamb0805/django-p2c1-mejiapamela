@@ -56,7 +56,7 @@
   "pk": 2,
   "fields": {
     "password": "pbkdf2_sha256$1500000$FZCTSgJn3vqhJkayYFQ8aR$6grqLaHIGLDCMq4TNo4E/2W6eaqbENvoZbO2N4qvR9Q=",
-    "last_login": "2026-09-30T19:31:50.632Z",
+    "last_login": "2026-10-01T00:00:31.834Z",
     "is_superuser": false,
     "username": "operador_norte",
     "first_name": "Juan",
@@ -195,8 +195,8 @@
     "updated_at": "2026-09-30T19:27:02.232Z",
     "deleted_at": null,
     "catalog_id": "CAT-001",
-    "name": "Medidores de energï¿½a",
-    "description": "Medidores inteligentes de consumo elï¿½ctrico para monitoreo en instalaciones industriales y comerciales.",
+    "name": "Medidores de energía",
+    "description": "Medidores inteligentes de consumo eléctrico para monitoreo en instalaciones industriales y comerciales.",
     "status": "activo"
   }
 },
@@ -208,10 +208,10 @@
     "updated_at": "2026-09-30T19:28:19.042Z",
     "deleted_at": null,
     "product_id": "PRD-001",
-    "name": "Medidor trifï¿½sico iEM3155",
-    "description": "Medidor de energï¿½a trifï¿½sico con comunicaciï¿½n Modbus, para monitoreo de consumo por sector.",
+    "name": "Medidor trifásico iEM3155",
+    "description": "Medidor de energía trifásico con comunicación Modbus, para monitoreo de consumo por sector.",
     "kwh": "0.24",
-    "manufacter": "Schneider Electric",
+    "manufacturer": "Schneider Electric",
     "model": "iEM3155",
     "sku": "A9MEM3155",
     "catalog": 1
@@ -226,9 +226,9 @@
     "deleted_at": null,
     "product_id": "PRD-002",
     "name": "Analizador de red PAC3200",
-    "description": "Analizador de red multifunciï¿½n para medir potencia, energï¿½a y calidad de suministro.",
+    "description": "Analizador de red multifunción para medir potencia, energía y calidad de suministro.",
     "kwh": "0.36",
-    "manufacter": "Siemens",
+    "manufacturer": "Siemens",
     "model": "SENTRON PAC3200",
     "sku": "7KM2200-2EA30-1JA1",
     "catalog": 1
@@ -239,14 +239,14 @@
   "pk": 1,
   "fields": {
     "created_at": "2026-09-30T19:55:42.877Z",
-    "updated_at": "2026-09-30T19:55:42.877Z",
+    "updated_at": "2026-10-01T00:43:18.557Z",
     "deleted_at": null,
     "device_id": "DEV-N-001",
     "internal_name": "Medidor Bodega Norte",
     "description": "Medidor de consumo bodega norte",
     "reference_power": "5.50",
     "serial_number": "SN-N-001",
-    "status": "activo",
+    "status": "mantenimiento",
     "product": 1,
     "zone": 1
   }
@@ -283,6 +283,80 @@
     "status": "activo",
     "product": 1,
     "zone": 1
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 4,
+  "fields": {
+    "created_at": "2026-10-01T00:30:37.814Z",
+    "updated_at": "2026-10-01T00:35:10.877Z",
+    "deleted_at": "2026-10-01T00:35:10.877Z",
+    "device_id": "DEV-N-003",
+    "internal_name": "Medidor Prueba 2",
+    "description": "",
+    "reference_power": "50.00",
+    "serial_number": "SN-N-003",
+    "status": "activo",
+    "product": 2,
+    "zone": 2
+  }
+},
+{
+  "model": "devices.measurement",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-10-01T02:37:48.431Z",
+    "updated_at": "2026-10-01T02:37:48.431Z",
+    "deleted_at": null,
+    "measurement_id": "MED-N-001",
+    "value": "125.4000",
+    "unit": "kWh",
+    "datetime": "2026-10-01T02:37:45Z",
+    "status": "activo",
+    "origin": "manual",
+    "device": 1,
+    "user": [
+      "operador_norte"
+    ]
+  }
+},
+{
+  "model": "devices.measurement",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-10-01T02:39:00.720Z",
+    "updated_at": "2026-10-01T02:39:00.720Z",
+    "deleted_at": null,
+    "measurement_id": "MED-S-001",
+    "value": "98.7500",
+    "unit": "kWh",
+    "datetime": "2026-10-01T02:38:33Z",
+    "status": "activo",
+    "origin": "manual",
+    "device": 2,
+    "user": [
+      "operador_sur"
+    ]
+  }
+},
+{
+  "model": "devices.measurement",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-10-01T02:40:08.971Z",
+    "updated_at": "2026-10-01T02:40:08.971Z",
+    "deleted_at": null,
+    "measurement_id": "MED-S-002",
+    "value": "98.7500",
+    "unit": "kWh",
+    "datetime": "2026-10-01T02:38:33Z",
+    "status": "activo",
+    "origin": "manual",
+    "device": 2,
+    "user": [
+      "operador_sur"
+    ]
   }
 },
 {
