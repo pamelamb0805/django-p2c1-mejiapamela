@@ -19,6 +19,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include('dispositivos.urls'))
+    path("", include('dispositivos.urls')),
+    #correccion eva2-n3
+    path("devices/", include("devices.urls"))
 ]
 

@@ -1,6 +1,12 @@
 from django.contrib import admin
 from .models import Organization, User, Department, Zone
 
+#inline(clase auxiliar)
+class DepartmentInline(admin.TabularInline):
+    model = Department
+    extra = 0
+    show_change_link = True
+    exclude = ("created_at", "updated_at", "deleted_at")
 # Personalizar visualización filtros y busquedas- ppt 3 --> pm
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
@@ -24,6 +30,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     )
     readonly_fields = ("created_at", "updated_at", "deleted_at")
     ordering = ("legal_name",)
+    inlines = [DepartmentInline]
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):

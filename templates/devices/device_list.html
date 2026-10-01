@@ -1,0 +1,51 @@
+<!--Página con la lista y el botón  -->
+<!--correccion eva2-n3-->
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Dispositivos</h1>
+
+{% if messages %}
+  {% for message in messages %}
+    <p>{{ message }}</p>
+  {% endfor %}
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+  <table>
+    <thead>
+      <tr>
+        {% if can_archive %}<th></th>{% endif %}
+        <th>Código</th>
+        <th>Nombre interno</th>
+        <th>Producto</th>
+        <th>Zona</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for device in devices %}
+      <tr>
+        {% if can_archive %}
+          <td><input type="checkbox" name="devices" value="{{ device.pk }}"></td>
+        {% endif %}
+        <td>{{ device.device_id }}</td>
+        <td>{{ device.internal_name }}</td>
+        <td>{{ device.product }}</td>
+        <td>{{ device.zone }}</td>
+        <td>{{ device.status }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6">No hay dispositivos disponibles.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if can_archive %}
+    <button type="submit">Archivar seleccionados</button>
+  {% endif %}
+</form>
+{% endblock %}
+
