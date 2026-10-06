@@ -16,7 +16,10 @@ from pathlib import Path
 
 #cargar load_dotenv
 
-
+# PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "dashboard"
+LOGOUT_REDIRECT_URL = "login"
                       
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,7 +52,10 @@ INSTALLED_APPS = [
     "devices",
     "core",
     #creacion perfiles y roles - EVA2 - PM
-    "accounts"
+    "accounts",
+    # PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
+    "django.contrib.sessions",
+    "django.contrib.messages",
 ]
 
 MIDDLEWARE = [
@@ -60,6 +66,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+
 ]
 
 ROOT_URLCONF = 'config.urls'
