@@ -1,51 +1,60 @@
-<!--Página con la lista y el botón  -->
-<!--correccion eva2-n3-->
-
+{# Listado de dispositivos. Los botones se ocultan con perms (solo mejora la UX; la seguridad real está en la vista). #}
+{# Clase 7 - Alexander #}
 {% extends "base.html" %}
+{% block title %}Dispositivos | EcoEnergy{% endblock %}
 
 {% block content %}
-<h1>Dispositivos</h1>
+<div class="container py-4">
+  <h1 class="h3 mb-3">Dispositivos</h1>
 
-{% if messages %}
+  {# Mensajes de éxito/error (archivar). Si tu compañero los pone en base.html, borra este bloque para no duplicarlos. #}
   {% for message in messages %}
-    <p>{{ message }}</p>
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
+      {{ message }}
+    </div>
   {% endfor %}
-{% endif %}
 
-<form method="post">
-  {% csrf_token %}
-  <table>
-    <thead>
-      <tr>
-        {% if can_archive %}<th></th>{% endif %}
-        <th>Código</th>
-        <th>Nombre interno</th>
-        <th>Producto</th>
-        <th>Zona</th>
-        <th>Estado</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for device in devices %}
-      <tr>
-        {% if can_archive %}
-          <td><input type="checkbox" name="devices" value="{{ device.pk }}"></td>
-        {% endif %}
-        <td>{{ device.device_id }}</td>
-        <td>{{ device.internal_name }}</td>
-        <td>{{ device.product }}</td>
-        <td>{{ device.zone }}</td>
-        <td>{{ device.status }}</td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="6">No hay dispositivos disponibles.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <form method="post">
+    {% csrf_token %}
+    <table class="table table-sm table-striped align-middle">
+      <thead>
+        <tr>
+          {# La columna de checkbox solo existe si el usuario tiene permiso change_device #}
+          {% if perms.devices.change_device %}<th></th>{% endif %}
+          <th>Código</th>
+          <th>Nombre interno</th>
+          <th>Producto</th>
+          <th>Zona</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for device in devices %}
+        <tr>
+          {% if perms.devices.change_device %}
+            <td><input type="checkbox" name="devices" value="{{ device.pk }}"></td>
+          {% endif %}
+          <td>{{ device.device_id }}</td>
+          <td>{{ device.internal_name }}</td>
+          <td>{{ device.product }}</td>
+          <td>{{ device.zone }}</td>
+          <td>{{ device.status|default:"-" }}</td>
+          <td class="text-end">
+            {# Enlace al detalle: vista protegida por pk con scoping (get_object_or_404) #}
+            <a href="{% url 'devices:device_detail' device.pk %}" class="btn btn-sm btn-outline-secondary">Ver</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7">No hay dispositivos disponibles.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
-  {% if can_archive %}
-    <button type="submit">Archivar seleccionados</button>
-  {% endif %}
-</form>
+    {# Botón visible solo con permiso change_device; la vista también lo valida (PermissionDenied) #}
+    {% if perms.devices.change_device %}
+      <button type="submit" class="btn btn-warning">Archivar seleccionados</button>
+    {% endif %}
+  </form>
+</div>
 {% endblock %}
-

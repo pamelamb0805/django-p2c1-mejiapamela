@@ -19,8 +19,11 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include('dispositivos.urls')),
     #correccion eva2-n3
     path("devices/", include("devices.urls"))
 ]
+
+#linea que le dice a Django que cuando una vista lance PermissionDenied use la vista creada en core/views.py
+#Clase 7 -Alexander
+handler403 = "core.views.permission_denied_view"
 

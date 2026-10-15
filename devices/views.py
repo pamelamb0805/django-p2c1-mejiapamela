@@ -1,17 +1,15 @@
-#correccion eva2-n3
-from django.shortcuts import render
-
-# Create your views here.
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from .forms import ArchiveDevicesForm
 from .models import Device
 
-
+# Scoping: devuelve solo los dispositivos activos de la organización del usuario.
+# Sin perfil u organización no ve nada. El superuser ve todo.
+# Clase 7 - Alexander
 def get_visible_devices(user):
     """Dispositivos activos que el usuario puede ver (scoping por organización)."""
     qs = Device.objects.filter(deleted_at__isnull=True).select_related(
@@ -26,6 +24,8 @@ def get_visible_devices(user):
     return qs.filter(zone__organization=profile.organization)
 
 
+# Listado protegido: exige login (login_required) y permiso view_device (raise_exception=True -> 403).
+# Clase 7 - Alexander
 @login_required
 @permission_required("devices.view_device", raise_exception=True)
 def device_list(request):
@@ -51,3 +51,14 @@ def device_list(request):
         "devices/device_list.html",
         {"devices": devices, "can_archive": can_archive},
     )
+
+
+# Operación por pk protegida: busca el dispositivo DENTRO del ámbito del usuario con get_object_or_404.
+# Si pertenece a otra organización responde 404.
+# Clase 7 - Alexander
+@login_required
+@permission_required("devices.view_device", raise_exception=True)
+def device_detail(request, pk):
+    # Se busca DENTRO del ámbito del usuario, no primero por pk
+    device = get_object_or_404(get_visible_devices(request.user), pk=pk)
+    return render(request, "devices/device_detail.html", {"device": device})

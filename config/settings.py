@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/6.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
+
 import os
 from dotenv import load_dotenv
 from pathlib import Path
@@ -16,13 +17,9 @@ from pathlib import Path
 
 #cargar load_dotenv
 
-# PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
-LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "dashboard"
-LOGOUT_REDIRECT_URL = "login"
-                      
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 load_dotenv(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
@@ -31,7 +28,7 @@ load_dotenv(BASE_DIR / ".env")
 # Error de clave |secreta corregida -->Pm
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -46,16 +43,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "dispositivos",
+
+
     "django_bootstrap5",
     "organizations",
     "devices",
     "core",
+
     #creacion perfiles y roles - EVA2 - PM
     "accounts",
-    # PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
-    "django.contrib.sessions",
-    "django.contrib.messages",
 ]
 
 MIDDLEWARE = [
@@ -66,14 +62,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
 
+    # PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
 ]
 
+
 ROOT_URLCONF = 'config.urls'
+
 
 TEMPLATES = [
     {
@@ -89,6 +84,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -121,6 +117,8 @@ elif DB_ENGINE == "mysql":
 
 else:
     raise ValueError("DB_ENGINE debe ser sqlite o mysql")
+
+
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
 
@@ -144,7 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
 
 #Cambio Panel Django a español --> Pm
-LANGUAGE_CODE = 'es-cl' 
+LANGUAGE_CODE = 'es-cl'
 
 TIME_ZONE = 'America/Santiago'
 
@@ -159,11 +157,14 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
+# PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
+
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "dashboard"
+LOGOUT_REDIRECT_URL = "login"
+
+
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
