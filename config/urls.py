@@ -1,26 +1,21 @@
-"""
-URL configuration for config project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth.urls
+
+#?? flujo paso 1 ppt1 u2
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include('dispositivos.urls')),
-    #correccion eva2-n3
-    path("devices/", include("devices.urls"))
+    #U3 PPT-6 -Autenticacion sesion -PM 
+    #path logig, logout, u otras por agregar. (Rutas por defecto)
+    #ruta por defecto accounts
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("devices/", include("devices.urls")),
+    path("organization/", include("organization.urls")),
+    path("login/", include("login.urls")),
+    path("recover_password/", include("recover.urls")),
+    path("dashboard/", include("dashboard.urls"))
 ]
+
+
 

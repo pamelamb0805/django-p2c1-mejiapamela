@@ -8,4 +8,8 @@ app_name = "devices"
 
 urlpatterns = [
     path("", views.device_list, name="device_list"),
+    path("zones/", views.zone_list, name="zone_list"),
+    path("zones/<int:zone_id>/", views.zone_detail, name="zone_detail"),
+
+    
 ]

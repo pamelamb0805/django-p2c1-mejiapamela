@@ -12,13 +12,15 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
-#from decouple? import config
+from django.contrib.messages import constants as msg
 
 #cargar load_dotenv
 
-# PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
+# PPT Unidad2 Clase6
+# Destinos flujos de acceso --> Login --> PM
+#FALTA MODIFICARLOS PASO2 - PP1 -U2
 LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "dashboard"
+LOGIN_REDIRECT_URL = "dashboard: dashboard"
 LOGOUT_REDIRECT_URL = "login"
                       
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,16 +48,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "dispositivos",
     "django_bootstrap5",
     "organizations",
     "devices",
     "core",
     #creacion perfiles y roles - EVA2 - PM
     "accounts",
-    # PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
+    # PPT Unidad2 Clase6
+    #verificaciones minimas
     "django.contrib.sessions",
     "django.contrib.messages",
+    "dashboards"
 ]
 
 MIDDLEWARE = [
@@ -66,10 +69,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # PPT Unidad2 Clase6 -Agregación de los destinos de flujo de acceso:
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
 
 ]
 
@@ -162,8 +161,34 @@ STATIC_URL = 'static/'
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
+#MAILERS = {
+#    'default': {
+#        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+#    },
+#}
+
+# Configuraciones de mensajes (message framework)
+MESSAGE_TAGS = {
+    msg.DEBUG: 'secondary',
+    msg.INFO: 'info',
+    msg.SUCCESS: 'success',
+    msg.WARNING: 'warning',
+    msg.ERROR: 'danger',
+# Bootstrap usa 'danger'
 }
+
+#recuperacion correo backend ---ppt 1 u 2
+#EMAIL_BACKEND = (
+#"django.core.mail.backends."
+#"console.EmailBackend"
+#)
+DEFAULT_FROM_EMAIL = (
+"noreply@proyecto.local"
+)
+#estructura email backend
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = os.getenv("EMAIL_HOST", "")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "2525"))
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"

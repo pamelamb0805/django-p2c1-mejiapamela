@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio · EcoEnergy{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="h3 mb-3">Hola, {{ user.get_full_name|default:user.username }}</h1>
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <h2 class="h6 text-muted">Organización</h2>
+        <p class="mb-0 fs-5">{% if organization %}{{ organization.legal_name }}{% else %}Administración de plataforma{% endif %}</p>
+      </div></div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <h2 class="h6 text-muted">Sesión</h2>
+        <p class="mb-2">Visitas en esta sesión: <strong>{{ visits }}</strong></p>
+        <p class="mb-2">Modo: <strong>{{ mode }}</strong></p>
+        <form method="post" action="{% url 'dashboard:remember_preference' %}">
+          {% csrf_token %}
+          <button class="btn btn-sm btn-outline-secondary" type="submit">Guardar modo compacto</button>
+        </form>
+      </div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
