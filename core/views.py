@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+def home_view(request):
+    """Vista para la página de inicio que usa el home.html global de la estructura."""
+    return render(request, 'home.html')

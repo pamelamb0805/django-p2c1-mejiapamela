@@ -1,15 +1,38 @@
 #correccion eva2-n3
-from django.shortcuts import render
-
-# Create your views here.
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils import timezone
-
+from django.shortcuts import render
 from .forms import ArchiveDevicesForm
 from .models import Device
+from organizations.models import Zone
+
+
+def zone_list(request):
+    # Obtiene todas las zonas desde la aplicación organizations
+    zones = Zone.objects.all()
+    return render(request, 'devices/zone_list.html', {'zones': zones})
+
+
+def zone_detail(request, pk):
+    zone = get_object_or_404(Zone, pk=pk)
+    devices = Device.objects.filter(zone=zone) if hasattr(Device, 'zone') else []
+    
+    # Cálculo de consumo para la vista de detalle
+    total_kwh = sum(getattr(d, 'kwh', 0) for d in devices)
+    limit = getattr(zone, 'limit_kwh', 0)
+    status = "ALERTA" if total_kwh > limit else "NORMAL"
+    
+    context = {
+        'zone': zone,
+        'devices': devices,
+        'total_kwh': total_kwh,
+        'count': len(devices),
+        'status': status,
+    }
+    return render(request, 'devices/zone_detail.html', context)
 
 
 def get_visible_devices(user):
@@ -51,3 +74,24 @@ def device_list(request):
         "devices/device_list.html",
         {"devices": devices, "can_archive": can_archive},
     )
+
+@login_required
+def indicators_view(request):
+    """Vista de indicadores de consumo requerida por el dashboard."""
+    profile = getattr(request.user, "profile", None)
+    
+    if request.user.is_superuser:
+        devices = Device.objects.filter(deleted_at__isnull=True)
+    elif profile and profile.organization:
+        devices = Device.objects.filter(zone__organization=profile.organization, deleted_at__isnull=True)
+    else:
+        devices = Device.objects.none()
+
+    # Cálculo básico de consumo total
+    total_consumption = sum(getattr(d, 'kwh', 0) for d in devices)
+
+    context = {
+        'devices': devices,
+        'total_consumption': total_consumption,
+    }
+    return render(request, 'devices/indicators.html', context)

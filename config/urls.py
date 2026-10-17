@@ -1,21 +1,16 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth.urls
-
-#?? flujo paso 1 ppt1 u2
+from django.contrib.auth import views as auth_views
+from core.views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #U3 PPT-6 -Autenticacion sesion -PM 
-    #path logig, logout, u otras por agregar. (Rutas por defecto)
-    #ruta por defecto accounts
-    path("accounts/", include("django.contrib.auth.urls")),
-    path("devices/", include("devices.urls")),
-    path("organization/", include("organization.urls")),
-    path("login/", include("login.urls")),
-    path("recover_password/", include("recover.urls")),
-    path("dashboard/", include("dashboard.urls"))
+    path('', home_view, name='home'),
+    # Cambiado 'accounts-custom/' por 'accounts/'
+    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('devices/', include('devices.urls')),
+    path('organizations/', include('organizations.urls')),
+    path('dashboard/', include('dashboard.urls')),
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
 ]
-
-
 
