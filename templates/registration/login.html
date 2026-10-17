@@ -55,6 +55,9 @@
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
         <h1>Iniciar Sesión</h1>
+        {% if form.errors %}
+          <div class="alert alert-danger">Usuario o contraseña incorrectos.</div>
+        {% endif %}
         <hr>
 
         <label for="username"><b>Correo o Usuario</b></label>

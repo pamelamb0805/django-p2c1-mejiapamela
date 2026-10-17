@@ -95,3 +95,7 @@ def indicators_view(request):
         'total_consumption': total_consumption,
     }
     return render(request, 'devices/indicators.html', context)
+
+def maintenance_list(request):
+    requests = MaintenanceRequest.objects.filter(deleted_at__isnull=True)
+    return render(request, 'devices/maintenance_list.html', {'requests': requests})

@@ -28,15 +28,15 @@
     <div class="col-md-2 bg-dark text-white p-3 vh-100">
       <h5 class="mb-4">Menú</h5>
       <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link text-white" href="#">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'dashboard:dashboard' %}">Inicio</a></li>
         
         {% if es_administrador %}
         <li class="nav-item"><a class="nav-link text-white" href="{% url 'accounts:user_list' %}">Usuarios</a></li>
         {% endif %}
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'organizations:organization' %}">Organizaciones</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'organizations:organization_list' %}">Organizaciones</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="{% url 'organizations:zone_list' %}">Zonas</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'dispositivos' %}">Dispositivos</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="{% url 'devices_maintenance_list' %}">Mantenimiento</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'devices:device_list' %}">Dispositivos</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'devices:maintenance_list' %}">Mantenimiento</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="{% url 'devices:measurement_list' %}">Mediciones</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="{% url 'devices:alert_list' %}">Alertas</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="#">Reportes</a></li>
@@ -63,16 +63,17 @@
             {% endif %}
 
             {% if es_administrador %}
-              <a href="{% url 'frm_usuarios' %}" class="btn btn-primary">Gestionar usuarios</a>
+              <!-- CORREGIDO: Apunta a accounts:user_list en lugar de frm_usuarios que no existe -->
+              <a href="{% url 'accounts:user_list' %}" class="btn btn-primary">Gestionar usuarios</a>
             {% endif %}
           </div>
         </div>
       </div>
 
       {# ------------------------------------------------------------------ #}
-      {# Tarjetas según permisos, en orden de rol:                           #}
+      {# Tarjetas según permisos, en orden de rol:                          #}
       {# 1 Administrador de plataforma · 2 Administrador de organización ·   #}
-      {# 3 Jefatura · 4 Operador · 5 Auditor / lector                        #}
+      {# 3 Jefatura · 4 Operador · 5 Auditor / lector                       #}
       {# ------------------------------------------------------------------ #}
 
       {# 1 · ADMINISTRADOR DE PLATAFORMA (solo superusuario) #}

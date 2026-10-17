@@ -174,6 +174,7 @@ DEFAULT_FROM_EMAIL = (
 )
 #estructura email backend
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+AUTHENTICATION_BACKENDS = ["accounts.backends.EmailOrUsernameBackend"]
 EMAIL_HOST = os.getenv("EMAIL_HOST", "")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", "2525"))
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
