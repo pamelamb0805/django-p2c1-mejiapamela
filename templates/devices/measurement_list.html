@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mediciones - EcoEnergy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+    <a href="{% url 'dashboard:dashboard' %}" class="btn btn-secondary mb-3">← Volver al Dashboard</a>
+    <h2>Mediciones Energéticas</h2>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Dispositivo</th>
+                <th>Valor</th>
+                <th>Unidad</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in measurements %}
+            <tr>
+                <td>{{ m.measurement_id }}</td>
+                <td>{{ m.device.internal_name }}</td>
+                <td>{{ m.value }}</td>
+                <td>{{ m.unit }}</td>
+                <td>{{ m.datetime }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">No hay mediciones registradas.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

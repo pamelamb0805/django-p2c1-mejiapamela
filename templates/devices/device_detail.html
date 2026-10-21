@@ -1,0 +1,147 @@
+{# Detalle de un dispositivo; la vista lo busca con get_object_or_404 dentro del ámbito del usuario. #}
+{# Clase 7 - Alexander #}
+
+{% extends "base.html" %}
+
+{% block title %}{{ device.internal_name }}{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+  <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <p class="text-muted mb-1">Detalle del dispositivo</p>
+      <h1 class="h3 fw-bold mb-0">{{ device.internal_name }}</h1>
+    </div>
+
+    <a href="{% url 'devices:device_list' %}" class="btn btn-outline-secondary">
+      ← Volver
+    </a>
+  </div>
+
+  <!-- Tarjeta principal -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+
+      <!-- Identificación -->
+      <div class="d-flex align-items-center mb-4">
+
+        <div class="bg-primary bg-opacity-10 rounded-3 p-3 me-3">
+          <span class="fs-3">🖥️</span>
+        </div>
+
+        <div>
+          <h2 class="h5 fw-bold mb-1">
+            {{ device.internal_name }}
+          </h2>
+
+          <small class="text-muted">
+            Código: {{ device.device_id }}
+          </small>
+        </div>
+
+      </div>
+
+      <!-- Datos del dispositivo -->
+      <div class="row g-3">
+
+        <!-- Producto -->
+        <div class="col-md-6">
+          <div class="border rounded-3 p-3 h-100">
+            <small class="text-muted d-block mb-1">
+              Producto
+            </small>
+
+            <span class="fw-semibold">
+              {{ device.product|default:"-" }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Zona -->
+        <div class="col-md-6">
+          <div class="border rounded-3 p-3 h-100">
+            <small class="text-muted d-block mb-1">
+              Zona
+            </small>
+
+            <span class="fw-semibold">
+              {{ device.zone|default:"-" }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Estado -->
+        <div class="col-md-6">
+          <div class="border rounded-3 p-3 h-100">
+            <small class="text-muted d-block mb-1">
+              Estado
+            </small>
+
+            {% if device.status %}
+              <span class="badge bg-success-subtle text-success-emphasis px-3 py-2">
+                {{ device.status }}
+              </span>
+            {% else %}
+              <span class="text-muted">
+                -
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Número de serie -->
+        <div class="col-md-6">
+          <div class="border rounded-3 p-3 h-100">
+            <small class="text-muted d-block mb-1">
+              N° de serie
+            </small>
+
+            <span class="fw-semibold">
+              {{ device.serial_number|default:"-" }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="col-12">
+          <div class="border rounded-3 p-3">
+
+            <small class="text-muted d-block mb-2">
+              Descripción
+            </small>
+
+            <p class="mb-0">
+              {{ device.description|default:"Sin descripción disponible." }}
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Identificador -->
+  <div class="card border-0 shadow-sm">
+
+    <div class="card-body p-4">
+
+      <small class="text-muted d-block mb-1">
+        Identificador del dispositivo
+      </small>
+
+      <span class="font-monospace fw-semibold">
+        {{ device.device_id }}
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

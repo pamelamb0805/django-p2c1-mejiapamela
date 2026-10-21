@@ -1,41 +1,59 @@
-<!--Página con la lista y el botón  -->
-<!--correccion eva2-n3-->
-
+{# Listado + CRUD: botones Nuevo/Editar/Eliminar según perms, modal incluido y SweetAlert2 para confirmar la eliminación. #}
+{# Clase 8 - Alexander #}
 {% extends "base.html" %}
+{% block title %}Dispositivos | EcoEnergy{% endblock %}
 
 {% block content %}
-<h1>Dispositivos</h1>
+<div class="container py-4">
 
-{% if messages %}
-  {% for message in messages %}
-    <p>{{ message }}</p>
-  {% endfor %}
-{% endif %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Dispositivos</h1>
+    {# Botón Nuevo: visible solo con permiso add_device (la vista también lo valida) #}
+    {% if perms.devices.add_device %}
+      <a href="{% url 'devices:device_create' %}" class="btn btn-primary">Nuevo dispositivo</a>
+    {% endif %}
+  </div>
 
-<form method="post">
-  {% csrf_token %}
-  <table>
+  <table class="table table-sm table-striped align-middle">
     <thead>
       <tr>
-        {% if can_archive %}<th></th>{% endif %}
         <th>Código</th>
         <th>Nombre interno</th>
         <th>Producto</th>
         <th>Zona</th>
         <th>Estado</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       {% for device in devices %}
       <tr>
-        {% if can_archive %}
-          <td><input type="checkbox" name="devices" value="{{ device.pk }}"></td>
-        {% endif %}
         <td>{{ device.device_id }}</td>
         <td>{{ device.internal_name }}</td>
         <td>{{ device.product }}</td>
         <td>{{ device.zone }}</td>
-        <td>{{ device.status }}</td>
+        <td>{{ device.status|default:"-" }}</td>
+        <td class="text-end">
+          <a href="{% url 'devices:device_detail' device.pk %}" class="btn btn-sm btn-outline-secondary">Ver</a>
+
+          {# Botón Editar: visible solo con permiso change_device #}
+          {% if perms.devices.change_device %}
+            <a href="{% url 'devices:device_update' device.pk %}" class="btn btn-sm btn-outline-primary">Editar</a>
+          {% endif %}
+
+          {# Botón Eliminar: visible solo con permiso delete_device #}
+          {% if perms.devices.delete_device %}
+            {# Formulario oculto: SweetAlert2 solo pregunta; el POST con CSRF lo recibe DeviceDeleteView. #}
+            <form id="delete-form-{{ device.pk }}" method="post"
+                  action="{% url 'devices:device_delete' device.pk %}" class="d-none">
+              {% csrf_token %}
+            </form>
+            <button type="button" class="btn btn-sm btn-outline-danger"
+                    onclick="confirmDelete('{{ device.pk }}', '{{ device.internal_name|escapejs }}')">
+              Eliminar
+            </button>
+          {% endif %}
+        </td>
       </tr>
       {% empty %}
       <tr><td colspan="6">No hay dispositivos disponibles.</td></tr>
@@ -43,9 +61,38 @@
     </tbody>
   </table>
 
-  {% if can_archive %}
-    <button type="submit">Archivar seleccionados</button>
-  {% endif %}
-</form>
-{% endblock %}
+</div>
 
+{# Modal reutilizable: solo se incluye cuando la vista (Create/Update) entrega un form #}
+{% if form %}
+  {% include "devices/_device_form_modal.html" %}
+{% endif %}
+
+{# SweetAlert2: confirma la eliminación antes de enviar el formulario. Django decide si se elimina. #}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function confirmDelete(id, name) {
+    Swal.fire({
+      title: "¿Eliminar registro?",
+      text: name,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar"
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        document.getElementById("delete-form-" + id).submit();
+      }
+    });
+  }
+</script>
+
+{# Abre el modal automáticamente en Crear, Editar o cuando el formulario vuelve con errores. #}
+{% if open_modal %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    new bootstrap.Modal(document.getElementById("deviceModal")).show();
+  });
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ zone.name }} · EcoEnergy{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <a href="{% url 'devices:zone_list' %}" class="text-decoration-none">&larr; Volver a zonas</a>
+
+  <div class="d-flex align-items-center gap-3 mt-2 mb-3">
+    <h1 class="h3 mb-0">Zona {{ zone.name }}</h1>
+    {% if status == "ALERTA" %}
+      <span class="badge text-bg-danger">{{ status }}</span>
+    {% else %}
+      <span class="badge text-bg-success">{{ status }}</span>
+    {% endif %}
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm"><div class="card-body">
+        <div class="text-muted small">Consumo total</div>
+        <div class="fs-4">{{ total_kwh }} kWh</div>
+      </div></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm"><div class="card-body">
+        <div class="text-muted small">Límite</div>
+        <div class="fs-4">{{ zone.limit_kwh }} kWh</div>
+      </div></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm"><div class="card-body">
+        <div class="text-muted small">Dispositivos</div>
+        <div class="fs-4">{{ count }}</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped align-middle bg-white shadow-sm">
+      <thead class="table-dark">
+        <tr><th scope="col">Dispositivo</th><th scope="col">Categoría</th><th scope="col" class="text-end">Consumo (kWh)</th></tr>
+      </thead>
+      <tbody>
+        {% for device in devices %}
+        <tr>
+          <td>{{ device.name }}</td>
+          <td>{{ device.category_name }}</td>
+          <td class="text-end">{{ device.kwh }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" class="text-center text-muted py-4">Esta zona no tiene dispositivos registrados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

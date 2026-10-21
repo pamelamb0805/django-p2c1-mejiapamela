@@ -26,7 +26,9 @@ class UserProfile(BaseModel):
         blank=True,
     )
     employee_code = models.CharField(max_length=30, unique=True)
+    rut = models.CharField(max_length=12, unique=True, null=True, blank=True)
     phone = models.CharField(max_length=20, blank=True)
+    address = models.CharField(max_length=255, blank=True)
 
         # ... campos anteriores ...
         #clean (ppt4) ---> valida pertenencia entre organizacion --> departamento
@@ -43,6 +45,7 @@ class UserProfile(BaseModel):
                 "a la organización seleccionada."
             )
         })
+
 
     def __str__(self):
         return f"{self.user.username} · {self.organization}"
