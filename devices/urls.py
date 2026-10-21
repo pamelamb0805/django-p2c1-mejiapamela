@@ -1,15 +1,15 @@
-#	Ruta de la lista de dispositivos
-#correccion eva2-n3
 from django.urls import path
 
 from . import views
 
 app_name = "devices"
 
-
+# Rutas del CRUD de dispositivos: listar, crear, editar y eliminar.
+# Clase 8 - Alexander
 urlpatterns = [
-    path("", views.device_list, name="device_list"),
-    # Ruta de detalle de un dispositivo por pk (operación protegida con scoping).
-    # Clase 7 - Alexander
+    path("", views.DeviceListView.as_view(), name="device_list"),
+    path("new/", views.DeviceCreateView.as_view(), name="device_create"),
     path("<int:pk>/", views.device_detail, name="device_detail"),
+    path("<int:pk>/edit/", views.DeviceUpdateView.as_view(), name="device_update"),
+    path("<int:pk>/delete/", views.DeviceDeleteView.as_view(), name="device_delete"),
 ]

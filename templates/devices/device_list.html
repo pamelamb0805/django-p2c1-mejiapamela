@@ -1,60 +1,115 @@
-{# Listado de dispositivos. Los botones se ocultan con perms (solo mejora la UX; la seguridad real está en la vista). #}
-{# Clase 7 - Alexander #}
+{# Listado + CRUD: botones Nuevo/Editar/Eliminar según perms, modal incluido y SweetAlert2 para confirmar y avisar. #}
+{# Clase 8 - Alexander #}
 {% extends "base.html" %}
 {% block title %}Dispositivos | EcoEnergy{% endblock %}
 
 {% block content %}
 <div class="container py-4">
-  <h1 class="h3 mb-3">Dispositivos</h1>
 
-  {# Mensajes de éxito/error (archivar). Si tu compañero los pone en base.html, borra este bloque para no duplicarlos. #}
-  {% for message in messages %}
-    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
-      {{ message }}
-    </div>
-  {% endfor %}
-
-  <form method="post">
-    {% csrf_token %}
-    <table class="table table-sm table-striped align-middle">
-      <thead>
-        <tr>
-          {# La columna de checkbox solo existe si el usuario tiene permiso change_device #}
-          {% if perms.devices.change_device %}<th></th>{% endif %}
-          <th>Código</th>
-          <th>Nombre interno</th>
-          <th>Producto</th>
-          <th>Zona</th>
-          <th>Estado</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for device in devices %}
-        <tr>
-          {% if perms.devices.change_device %}
-            <td><input type="checkbox" name="devices" value="{{ device.pk }}"></td>
-          {% endif %}
-          <td>{{ device.device_id }}</td>
-          <td>{{ device.internal_name }}</td>
-          <td>{{ device.product }}</td>
-          <td>{{ device.zone }}</td>
-          <td>{{ device.status|default:"-" }}</td>
-          <td class="text-end">
-            {# Enlace al detalle: vista protegida por pk con scoping (get_object_or_404) #}
-            <a href="{% url 'devices:device_detail' device.pk %}" class="btn btn-sm btn-outline-secondary">Ver</a>
-          </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="7">No hay dispositivos disponibles.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    {# Botón visible solo con permiso change_device; la vista también lo valida (PermissionDenied) #}
-    {% if perms.devices.change_device %}
-      <button type="submit" class="btn btn-warning">Archivar seleccionados</button>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Dispositivos</h1>
+    {# Botón Nuevo: visible solo con permiso add_device (la vista también lo valida) #}
+    {% if perms.devices.add_device %}
+      <a href="{% url 'devices:device_create' %}" class="btn btn-primary">Nuevo dispositivo</a>
     {% endif %}
-  </form>
+  </div>
+
+  <table class="table table-sm table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre interno</th>
+        <th>Producto</th>
+        <th>Zona</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for device in devices %}
+      <tr>
+        <td>{{ device.device_id }}</td>
+        <td>{{ device.internal_name }}</td>
+        <td>{{ device.product }}</td>
+        <td>{{ device.zone }}</td>
+        <td>{{ device.status|default:"-" }}</td>
+        <td class="text-end">
+          <a href="{% url 'devices:device_detail' device.pk %}" class="btn btn-sm btn-outline-secondary">Ver</a>
+
+          {# Botón Editar: visible solo con permiso change_device #}
+          {% if perms.devices.change_device %}
+            <a href="{% url 'devices:device_update' device.pk %}" class="btn btn-sm btn-outline-primary">Editar</a>
+          {% endif %}
+
+          {# Botón Eliminar: visible solo con permiso delete_device #}
+          {% if perms.devices.delete_device %}
+            {# Formulario oculto: SweetAlert2 solo pregunta; el POST con CSRF lo recibe DeviceDeleteView. #}
+            <form id="delete-form-{{ device.pk }}" method="post"
+                  action="{% url 'devices:device_delete' device.pk %}" class="d-none">
+              {% csrf_token %}
+            </form>
+            <button type="button" class="btn btn-sm btn-outline-danger"
+                    onclick="confirmDelete('{{ device.pk }}', '{{ device.internal_name|escapejs }}')">
+              Eliminar
+            </button>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6">No hay dispositivos disponibles.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
 </div>
+
+{# Modal reutilizable: solo se incluye cuando la vista (Create/Update) entrega un form #}
+{% if form %}
+  {% include "devices/_device_form_modal.html" %}
+{% endif %}
+
+{# SweetAlert2: confirma la eliminación antes de enviar el formulario. Django decide si se elimina. #}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function confirmDelete(id, name) {
+    Swal.fire({
+      title: "¿Eliminar registro?",
+      text: name,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar"
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        document.getElementById("delete-form-" + id).submit();
+      }
+    });
+  }
+</script>
+
+{# Mensajes de Django (crear, editar, eliminar): se guardan en atributos data- y SweetAlert2 los muestra. #}
+{% for message in messages %}
+  <div class="django-message d-none" data-level="{{ message.tags }}" data-text="{{ message }}"></div>
+{% endfor %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".django-message").forEach(function (el) {
+      Swal.fire({
+        icon: el.dataset.level === "error" ? "error" : "success",
+        text: el.dataset.text,
+        timer: 2000,
+        showConfirmButton: false
+      });
+    });
+  });
+</script>
+
+{# Abre el modal automáticamente en Crear, Editar o cuando el formulario vuelve con errores. #}
+{% if open_modal %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    new bootstrap.Modal(document.getElementById("deviceModal")).show();
+  });
+</script>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,30 @@
+<div class="modal fade" id="deviceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {% if object %}Editar dispositivo{% else %}Nuevo dispositivo{% endif %}
+          </h5>
+        </div>
+        <div class="modal-body">
+          {{ form.non_field_errors }}
+          {% for field in form %}
+            <div class="mb-3">
+              {{ field.label_tag }}
+              {{ field }}
+              {% for error in field.errors %}
+                <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+        <div class="modal-footer">
+          <a href="{% url 'devices:device_list' %}" class="btn btn-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
