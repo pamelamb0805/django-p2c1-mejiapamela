@@ -12,4 +12,9 @@ urlpatterns = [
     path("<int:pk>/", views.device_detail, name="device_detail"),
     path("<int:pk>/edit/", views.DeviceUpdateView.as_view(), name="device_update"),
     path("<int:pk>/delete/", views.DeviceDeleteView.as_view(), name="device_delete"),
+
+    # Rutas de zonas y mantenimiento (clase 6 - compañera)
+    path("zones/", views.zone_list, name="zone_list"),
+    path("zones/<int:pk>/", views.zone_detail, name="zone_detail"),
+    path("maintenance/", views.maintenance_list, name="maintenance_list"),
 ]

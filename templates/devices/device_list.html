@@ -1,4 +1,4 @@
-{# Listado + CRUD: botones Nuevo/Editar/Eliminar según perms, modal incluido y SweetAlert2 para confirmar y avisar. #}
+{# Listado + CRUD: botones Nuevo/Editar/Eliminar según perms, modal incluido y SweetAlert2 para confirmar la eliminación. #}
 {# Clase 8 - Alexander #}
 {% extends "base.html" %}
 {% block title %}Dispositivos | EcoEnergy{% endblock %}
@@ -85,23 +85,6 @@
       }
     });
   }
-</script>
-
-{# Mensajes de Django (crear, editar, eliminar): se guardan en atributos data- y SweetAlert2 los muestra. #}
-{% for message in messages %}
-  <div class="django-message d-none" data-level="{{ message.tags }}" data-text="{{ message }}"></div>
-{% endfor %}
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".django-message").forEach(function (el) {
-      Swal.fire({
-        icon: el.dataset.level === "error" ? "error" : "success",
-        text: el.dataset.text,
-        timer: 2000,
-        showConfirmButton: false
-      });
-    });
-  });
 </script>
 
 {# Abre el modal automáticamente en Crear, Editar o cuando el formulario vuelve con errores. #}

@@ -11,7 +11,9 @@ from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from .forms import DeviceForm
-from .models import Device
+from organizations.models import Zone
+
+from .models import Device, MaintenanceRequest
 
 
 def get_visible_devices(user):
@@ -120,3 +122,61 @@ class DeviceDeleteView(DeviceAccessMixin, DeleteView):
         self.object.save(update_fields=["deleted_at", "updated_at"])
         messages.success(self.request, "Dispositivo eliminado correctamente.")
         return HttpResponseRedirect(self.get_success_url())
+
+
+# ---------- Clase 6 (compañera): zonas, indicadores y mantenimiento ----------
+@login_required
+def zone_list(request):
+    # Obtiene todas las zonas desde la aplicación organizations
+    zones = Zone.objects.all()
+    return render(request, "devices/zone_list.html", {"zones": zones})
+
+
+@login_required
+def zone_detail(request, pk):
+    zone = get_object_or_404(Zone, pk=pk)
+    devices = Device.objects.filter(zone=zone) if hasattr(Device, "zone") else []
+
+    # Cálculo de consumo para la vista de detalle
+    total_kwh = sum(getattr(d, "kwh", 0) for d in devices)
+    limit = getattr(zone, "limit_kwh", 0)
+    status = "ALERTA" if total_kwh > limit else "NORMAL"
+
+    context = {
+        "zone": zone,
+        "devices": devices,
+        "total_kwh": total_kwh,
+        "count": len(devices),
+        "status": status,
+    }
+    return render(request, "devices/zone_detail.html", context)
+
+
+@login_required
+def indicators_view(request):
+    """Vista de indicadores de consumo requerida por el dashboard."""
+    profile = getattr(request.user, "profile", None)
+
+    if request.user.is_superuser:
+        devices = Device.objects.filter(deleted_at__isnull=True)
+    elif profile and profile.organization:
+        devices = Device.objects.filter(
+            zone__organization=profile.organization, deleted_at__isnull=True
+        )
+    else:
+        devices = Device.objects.none()
+
+    # Cálculo básico de consumo total
+    total_consumption = sum(getattr(d, "kwh", 0) for d in devices)
+
+    context = {
+        "devices": devices,
+        "total_consumption": total_consumption,
+    }
+    return render(request, "devices/indicators.html", context)
+
+
+@login_required
+def maintenance_list(request):
+    requests = MaintenanceRequest.objects.filter(deleted_at__isnull=True)
+    return render(request, "devices/maintenance_list.html", {"requests": requests})
