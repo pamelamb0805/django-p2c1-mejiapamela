@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from organizations.models import Zone
-from .models import Device
+from .models import Device, Measurement, Alert, History
 
 
 class ArchiveDevicesForm(forms.Form):
@@ -95,3 +95,33 @@ class DeviceForm(forms.ModelForm):
         if exists:
             raise ValidationError("Ya existe un dispositivo con ese número de serie.")
         return serial
+
+
+#def Measurement --> preentrega eva3
+class MeasurementForm(forms.ModelForm):
+    class Meta:
+        #def Registro Formulario
+        def __init__(self, *args, user=None, **kwargs):
+            if user is not None:
+                from .views import get_user_devices
+                self.fields['device'].queryset = get_user_devices(user) 
+            for field in self.fields.values():
+                field.widget.attrs.setdefault({'class': 'form-control'})
+            self.fields["datetime"].widget = forms.DateTimeInput(
+                attrs={"class": "form-control", "type": "datetime-local",}
+            )
+        model = Measurement
+        fields = [
+            "measurement_id",
+            "value",
+            "unit",
+            "datetime",
+            "status",
+            "origin",
+            "device"
+        ]
+        widgets = {
+            "device": forms.Select(attrs={"class": "form-select"}),
+            "value": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
+            "timestamp": forms.DateTimeInput(attrs={"class": "form-control", "type": "datetime-local"}),
+        }

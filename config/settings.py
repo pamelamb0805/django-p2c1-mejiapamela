@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     "django.contrib.sessions",
     "django.contrib.messages",
+    "daphne",
+    "channels",
+    "websocket",
     'django.contrib.staticfiles',
     "django_bootstrap5",
     "organizations",
@@ -75,9 +78,17 @@ TEMPLATES = [
         },
     },
 ]
-
+#chat asgi 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+ASGI_APPLICATION = "config.asgi.application"
+
+CHANNEL_LAYERS = {
+"default": {
+"BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+ALLOWED_HOSTS = ["127.0.0.1", "localhost",]
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases

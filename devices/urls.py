@@ -17,4 +17,8 @@ urlpatterns = [
     path("zones/", views.zone_list, name="zone_list"),
     path("zones/<int:pk>/", views.zone_detail, name="zone_detail"),
     path("maintenance/", views.maintenance_list, name="maintenance_list"),
+    path("measurements/", views.measurement_list, name="measurement_list"),
+    path("measurements/new/", views.measurement_create, name="measurement_create"),
+    path("alerts/", views.alert_list, name="alert_list"),
+    path("history/", views.history_list, name="history_list"),
 ]

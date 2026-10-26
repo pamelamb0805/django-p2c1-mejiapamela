@@ -4,8 +4,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
@@ -14,7 +15,10 @@ from .forms import DeviceForm
 from organizations.models import Zone
 
 from .models import Device, MaintenanceRequest
-
+#revisar importacion alert
+from django.db.models import Q
+from .forms import DeviceForm, MeasurementForm
+from .models import AlertEvent, Device, History, MaintenanceRequest, Measurement
 
 def get_visible_devices(user):
     """Dispositivos activos que el usuario puede ver (scoping por organización)."""
@@ -180,3 +184,45 @@ def indicators_view(request):
 def maintenance_list(request):
     requests = MaintenanceRequest.objects.filter(deleted_at__isnull=True)
     return render(request, "devices/maintenance_list.html", {"requests": requests})
+
+#pre entrega eva 3 --> vistas
+@login_required
+@permission_required("devices.view_measurement", raise_exception=True)
+def measurement_list(request):
+    measurements = Measurement.objects.filter(
+        deleted_at__isnull=True,
+        device__in=get_visible_devices(request.user),
+    ).select_related("device")
+    return render(request, "devices/measurement_list.html", {"measurements": measurements})
+
+
+@login_required
+@permission_required("devices.add_measurement", raise_exception=True)
+def measurement_create(request):
+    form = MeasurementForm(request.POST or None, user=request.user)
+    if request.method == "POST" and form.is_valid():
+        measurement = form.save(commit=False)
+        measurement.user = request.user
+        measurement.save()
+        messages.success(request, "Medición registrada correctamente.")
+        return redirect("devices:measurement_list")
+    return render(request, "devices/measurement_form.html", {"form": form})
+
+
+@login_required
+@permission_required("devices.view_alertevent", raise_exception=True)
+def alert_list(request):
+    alerts = AlertEvent.objects.filter(
+        deleted_at__isnull=True,
+        device__in=get_visible_devices(request.user),
+    ).select_related("device")
+    return render(request, "devices/alert_list.html", {"alerts": alerts})
+
+
+@login_required
+def history_list(request):
+    history = History.objects.filter(
+        deleted_at__isnull=True,
+        device__in=get_visible_devices(request.user),
+    ).select_related("device")
+    return render(request, "devices/history_list.html", {"history": history})
