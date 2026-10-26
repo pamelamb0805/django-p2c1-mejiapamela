@@ -4,13 +4,11 @@ from . import views
 app_name = "organizations"
 
 urlpatterns = [
-    # Listado de organizaciones (para el Administrador de plataforma)
-    path('', views.organization_list, name='organization_list'),
-    
-    # Detalle, creación y actualización de organizaciones (RF-01)
-    path('create/', views.organization_create, name='organization_create'),
-    path('<int:pk>/', views.organization_detail, name='organization_detail'),
-    path('<int:pk>/update/', views.organization_update, name='organization_update'),
+    # URLS CRUD Organozaciones --> preentrega eva 3 - PM
+    path('', views.OrganizationListView.as_view(), name='organization_list'),
+    path('new/', views.OrganizationCreateView.as_view(), name='organization_create'),
+    path('<int:pk>/edit/', views.OrganizationUpdateView.as_view(), name='organization_update'),
+    path('<int:pk>/delete/', views.OrganizationDeleteView.as_view(), name='organization_delete'),
     
     # Departamentos o unidades internas de la organización (RF-02)
     path('departments/', views.department_list, name='department_list'),

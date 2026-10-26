@@ -84,7 +84,7 @@
         {% include "dashboard/_card.html" with icon="bi-shield-lock-fill" title="Panel de administración" text="Django Admin: usuarios, grupos y permisos." url=admin_url %}
         
         {% if perms.organizations.view_organization %}
-          {% url 'admin:organizations_organization_changelist' as organizations_url %}
+          {% url 'organizations:organization_list' as organizations_url %}
           {% include "dashboard/_card.html" with icon="bi-buildings-fill" title="Organizaciones cliente" text="Empresas cliente y su estado." url=organizations_url %}
         {% endif %}
         
@@ -146,10 +146,6 @@
           {% include "dashboard/_card.html" with icon="bi-speedometer2" title="Mediciones" text="Lecturas por dispositivo y período." url=measurements_url %}
         {% endif %}
         
-        {% if perms.devices.add_measurement %}
-          {% url 'devices:measurement_create' as new_measurement_url %}
-          {% include "dashboard/_card.html" with icon="bi-plus-circle-fill" title="Registrar medición" text="Ingreso manual de una lectura." url=new_measurement_url %}
-        {% endif %}
         
         {% if perms.devices.view_alertevent %}
           {% url 'devices:alert_list' as alerts_url %}
