@@ -16,7 +16,9 @@ from organizations.models import Zone
 
 from .models import Device, MaintenanceRequest
 #revisar importacion alert
+from urllib.parse import urlencode
 from django.db.models import Q
+from django.core.paginator import Paginator
 from .forms import DeviceForm, MeasurementForm
 from .models import AlertEvent, Device, History, MaintenanceRequest, Measurement
 
@@ -67,9 +69,10 @@ class DeviceAccessMixin(LoginRequiredMixin, PermissionRequiredMixin):
 
 # Mixin para Create y Update: pasa el usuario al formulario, entrega el listado detrás del modal
 # y envía open_modal=True para abrir el modal automáticamente.
-# Clase 8 - Alexander
+# Clase 8 - Alexander --> actualizacion preentrega eva 3 --> PM
+
 class DeviceFormPageMixin:
-    """Create/Update: mismo listado detrás del modal, modal abierto, zonas acotadas."""
+    """Comparte el listado y abre el modal de crear o editar."""
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -78,16 +81,112 @@ class DeviceFormPageMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["devices"] = get_visible_devices(self.request.user)
+
+        dispositivos = get_visible_devices(self.request.user)
+
+        context["devices"] = dispositivos
+        context["zonas"] = Zone.objects.filter(
+            pk__in=dispositivos.values("zone_id"),
+            deleted_at__isnull=True,
+        ).distinct().order_by("name")
+
+        context["estados"] = (
+            dispositivos.exclude(status__isnull=True)
+            .exclude(status__exact="")
+            .values_list("status", flat=True)
+            .distinct()
+            .order_by("status")
+        )
+
+        context["buscar"] = self.request.GET.get("buscar", "")
+        context["estado_seleccionado"] = self.request.GET.get(
+            "estado", ""
+        )
+        context["zona_seleccionada"] = self.request.GET.get("zona", "")
         context["open_modal"] = True
+
         return context
+
 
 # Listado (ListView): exige el permiso view_device.
 # Clase 8 - Alexander
+
 class DeviceListView(DeviceAccessMixin, ListView):
     permission_required = "devices.view_device"
     template_name = "devices/device_list.html"
     context_object_name = "devices"
+    paginate_by = 10
+
+    def get_queryset(self):
+        # Solo dispositivos activos y autorizados para el usuario.
+        queryset = get_visible_devices(self.request.user)
+
+        # Buscador general.
+        buscar = self.request.GET.get("buscar", "").strip()
+        if buscar:
+            queryset = queryset.filter(
+                Q(device_id__icontains=buscar)
+                | Q(internal_name__icontains=buscar)
+                | Q(serial_number__icontains=buscar)
+                | Q(product__name__icontains=buscar)
+                | Q(product__sku__icontains=buscar)
+            )
+
+        # Filtro por estado.
+        estado = self.request.GET.get("estado", "").strip()
+        if estado:
+            queryset = queryset.filter(status__iexact=estado)
+
+        # Filtro por zona.
+        zona = self.request.GET.get("zona", "").strip()
+        if zona.isdigit():
+            queryset = queryset.filter(zone_id=int(zona))
+
+        return queryset.select_related(
+            "product", "zone", "zone__organization"
+        ).order_by("internal_name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Las zonas disponibles respetan el ámbito de acceso del usuario.
+        dispositivos_visibles = get_visible_devices(self.request.user)
+
+        context["zonas"] = (
+            Zone.objects.filter(
+                pk__in=dispositivos_visibles.values("zone_id"),
+                deleted_at__isnull=True,
+            )
+            .distinct()
+            .order_by("name")
+        )
+
+        # Mantener los valores seleccionados en los controles.
+        context["buscar"] = self.request.GET.get("buscar", "")
+        context["estado_seleccionado"] = self.request.GET.get(
+            "estado", ""
+        )
+        context["zona_seleccionada"] = self.request.GET.get("zona", "")
+
+        # Construir enlaces de paginación conservando los filtros.
+        parametros = self.request.GET.copy()
+        parametros.pop("page", None)
+        query_string = urlencode(parametros, doseq=True)
+
+        context["query_string"] = (
+            f"&{query_string}" if query_string else ""
+        )
+
+        context["estados"] = (
+            dispositivos_visibles.exclude(status__isnull=True)
+            .exclude(status__exact="")
+            .values_list("status", flat=True)
+            .distinct()
+            .order_by("status")
+        )
+
+        return context
+
 
 # Crear (CreateView): exige add_device y reutiliza DeviceForm y el mismo template del listado (modal).
 # Clase 8 - Alexander

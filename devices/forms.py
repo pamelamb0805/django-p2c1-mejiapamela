@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from organizations.models import Zone
-from .models import Device, Measurement, Alert, History
+from .models import Device, Measurement, History, AlertEvent, AlertRule, MaintenanceRequest
 
 
 class ArchiveDevicesForm(forms.Form):
@@ -46,17 +46,33 @@ class DeviceForm(forms.ModelForm):
         }
 
     # Recibe el usuario para que el selector de zona solo muestre zonas de su organización.
-    # Clase 8 - Alexander
+    # Clase 8 - Alexander - corrección preentrega eva 3 --> PM
+    
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Los productos eliminados lógicamente no se pueden seleccionar.
+        self.fields["product"].queryset = (
+            self.fields["product"].queryset.filter(
+                deleted_at__isnull=True
+            )
+        )
+
+        # Solo zonas activas que el usuario tenga autorizadas.
         zones = Zone.objects.filter(deleted_at__isnull=True)
+
         if user is not None and not user.is_superuser:
             profile = getattr(user, "profile", None)
-            if profile is None:
+
+            if profile is None or not profile.organization_id:
                 zones = zones.none()
             else:
-                zones = zones.filter(organization=profile.organization)
+                zones = zones.filter(
+                    organization_id=profile.organization_id
+                )
+
         self.fields["zone"].queryset = zones
+
 
     # Validación del campo internal_name: quita espacios y exige mínimo 3 caracteres.
     # Clase 8 - Alexander
@@ -95,6 +111,20 @@ class DeviceForm(forms.ModelForm):
         if exists:
             raise ValidationError("Ya existe un dispositivo con ese número de serie.")
         return serial
+
+    def clean(self):
+        cleaned_data = super().clean()
+        zone = cleaned_data.get("zone")
+
+        if zone and self.fields["zone"].queryset.filter(
+            pk=zone.pk
+        ).exists() is False:
+            self.add_error(
+                "zone",
+                "La zona seleccionada no está autorizada."
+            )
+
+        return cleaned_data
 
 
 #def Measurement --> preentrega eva3
