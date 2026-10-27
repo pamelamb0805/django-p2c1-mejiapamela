@@ -88,10 +88,16 @@
           {% include "dashboard/_card.html" with icon="bi-buildings-fill" title="Organizaciones cliente" text="Empresas cliente y su estado." url=organizations_url %}
         {% endif %}
         
-        {% if perms.devices.view_product %}
-          {% url 'admin:devices_product_changelist' as catalog_url %}
-          {% include "dashboard/_card.html" with icon="bi-journal-bookmark-fill" title="Catálogo global" text="Categorías y productos de EcoEnergy." url=catalog_url %}
+        {% if perms.devices.view_catalog %}
+          {% url 'devices:category_list' as catalog_url %}
+          {% include "dashboard/_card.html" with icon="bi-journal-bookmark-fill" title="Catálogo global" text="Categorías de equipos energéticos del catálogo global." url=catalog_url %}
         {% endif %}
+
+        {% if perms.devices.view_product %}
+          {% url 'devices:product_list' as products_url %}
+          {% include "dashboard/_card.html" with icon="bi-box-seam-fill" title="Productos" text="Productos del catálogo global por categoría." url=products_url %}
+        {% endif %}
+        
       </div>
       {% endif %}
 

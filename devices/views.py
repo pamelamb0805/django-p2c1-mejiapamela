@@ -10,11 +10,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
-
-from .forms import DeviceForm
 from organizations.models import Zone
 
-from .models import Device, MaintenanceRequest
+from django.db.models import Count, Sum
+from .forms import CategoryForm, DeviceForm, MeasurementForm, ProductForm
+from .models import AlertEvent, Catalog, Product, AlertRule, Device, History, MaintenanceRequest, Measurement
 #revisar importacion alert
 from urllib.parse import urlencode
 from django.db.models import Q
@@ -235,8 +235,253 @@ class DeviceDeleteView(DeviceAccessMixin, DeleteView):
         messages.success(self.request, "Dispositivo eliminado correctamente.")
         return HttpResponseRedirect(self.get_success_url())
 
+#preentrega eva 3 PM --> CRUD Categorias
+# ---------- CRUD de Categorías (modelo Catalog) ----------
+def get_visible_categories(user):
+    """Categorías activas. Son globales, el acceso se controla por permisos."""
+    return Catalog.objects.filter(deleted_at__isnull=True)
 
-# ---------- Clase 6 (compañera): zonas, indicadores y mantenimiento ----------
+
+class CategoryAccessMixin(LoginRequiredMixin, PermissionRequiredMixin):
+    raise_exception = True
+
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return redirect_to_login(
+                self.request.get_full_path(),
+                self.get_login_url(),
+                self.get_redirect_field_name(),
+            )
+        raise PermissionDenied
+
+    def get_queryset(self):
+        return get_visible_categories(self.request.user)
+
+
+class CategoryFormPageMixin:
+    """Comparte el listado y abre el modal de crear o editar."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categorias = get_visible_categories(self.request.user)
+
+        context["categories"] = categorias.annotate(
+            products_count=Count("products", filter=Q(products__deleted_at__isnull=True))
+        ).order_by("name")
+        context["estados"] = (
+            categorias.exclude(status__isnull=True)
+            .exclude(status__exact="")
+            .values_list("status", flat=True)
+            .distinct()
+            .order_by("status")
+        )
+        context["buscar"] = self.request.GET.get("buscar", "")
+        context["estado_seleccionado"] = self.request.GET.get("estado", "")
+        context["open_modal"] = True
+        return context
+
+
+class CategoryListView(CategoryAccessMixin, ListView):
+    permission_required = "devices.view_catalog"
+    template_name = "devices/category_list.html"
+    context_object_name = "categories"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = get_visible_categories(self.request.user)
+
+        buscar = self.request.GET.get("buscar", "").strip()
+        if buscar:
+            queryset = queryset.filter(
+                Q(catalog_id__icontains=buscar)
+                | Q(name__icontains=buscar)
+                | Q(description__icontains=buscar)
+            )
+
+        estado = self.request.GET.get("estado", "").strip()
+        if estado:
+            queryset = queryset.filter(status__iexact=estado)
+
+        return queryset.annotate(
+            products_count=Count("products", filter=Q(products__deleted_at__isnull=True))
+        ).order_by("name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categorias_visibles = get_visible_categories(self.request.user)
+
+        context["buscar"] = self.request.GET.get("buscar", "")
+        context["estado_seleccionado"] = self.request.GET.get("estado", "")
+
+        parametros = self.request.GET.copy()
+        parametros.pop("page", None)
+        query_string = urlencode(parametros, doseq=True)
+        context["query_string"] = f"&{query_string}" if query_string else ""
+
+        context["estados"] = (
+            categorias_visibles.exclude(status__isnull=True)
+            .exclude(status__exact="")
+            .values_list("status", flat=True)
+            .distinct()
+            .order_by("status")
+        )
+        return context
+
+
+class CategoryCreateView(CategoryAccessMixin, SuccessMessageMixin, CategoryFormPageMixin, CreateView):
+    permission_required = ("devices.view_catalog", "devices.add_catalog")
+    model = Catalog
+    form_class = CategoryForm
+    template_name = "devices/category_list.html"
+    success_url = reverse_lazy("devices:category_list")
+    success_message = "Categoría creada correctamente."
+
+
+class CategoryUpdateView(CategoryAccessMixin, SuccessMessageMixin, CategoryFormPageMixin, UpdateView):
+    permission_required = ("devices.view_catalog", "devices.change_catalog")
+    model = Catalog
+    form_class = CategoryForm
+    template_name = "devices/category_list.html"
+    success_url = reverse_lazy("devices:category_list")
+    success_message = "Categoría actualizada correctamente."
+
+
+class CategoryDeleteView(CategoryAccessMixin, DeleteView):
+    permission_required = "devices.delete_catalog"
+    model = Catalog
+    template_name = "devices/category_confirm_delete.html"
+    success_url = reverse_lazy("devices:category_list")
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+
+        # No se elimina una categoría que todavía tiene productos activos.
+        if self.object.products.filter(deleted_at__isnull=True).exists():
+            messages.error(
+                self.request,
+                "No se puede eliminar la categoría porque tiene productos asociados.",
+            )
+            return HttpResponseRedirect(self.get_success_url())
+
+        self.object.deleted_at = timezone.now()
+        self.object.save(update_fields=["deleted_at", "updated_at"])
+        messages.success(self.request, "Categoría eliminada correctamente.")
+        return HttpResponseRedirect(self.get_success_url())
+
+
+# ---------- CRUD de Productos ----------
+def get_visible_products(user):
+    """Productos activos. Son globales, el acceso se controla por permisos."""
+    return Product.objects.filter(deleted_at__isnull=True).select_related("catalog")
+
+
+class ProductAccessMixin(CategoryAccessMixin):
+    def get_queryset(self):
+        return get_visible_products(self.request.user)
+
+
+def _product_filter_context(request):
+    productos = get_visible_products(request.user)
+    return {
+        "categorias": Catalog.objects.filter(
+            pk__in=productos.values("catalog_id"), deleted_at__isnull=True
+        ).order_by("name"),
+        "buscar": request.GET.get("buscar", ""),
+        "categoria_seleccionada": request.GET.get("categoria", ""),
+    }
+
+
+class ProductFormPageMixin:
+    """Comparte el listado y abre el modal de crear o editar."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["products"] = get_visible_products(self.request.user).order_by("name")
+        context.update(_product_filter_context(self.request))
+        context["open_modal"] = True
+        return context
+
+
+class ProductListView(ProductAccessMixin, ListView):
+    permission_required = "devices.view_product"
+    template_name = "devices/product_list.html"
+    context_object_name = "products"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = get_visible_products(self.request.user)
+
+        buscar = self.request.GET.get("buscar", "").strip()
+        if buscar:
+            queryset = queryset.filter(
+                Q(product_id__icontains=buscar)
+                | Q(sku__icontains=buscar)
+                | Q(name__icontains=buscar)
+                | Q(manufacturer__icontains=buscar)
+                | Q(model__icontains=buscar)
+            )
+
+        categoria = self.request.GET.get("categoria", "").strip()
+        if categoria.isdigit():
+            queryset = queryset.filter(catalog_id=int(categoria))
+
+        return queryset.order_by("name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(_product_filter_context(self.request))
+
+        parametros = self.request.GET.copy()
+        parametros.pop("page", None)
+        query_string = urlencode(parametros, doseq=True)
+        context["query_string"] = f"&{query_string}" if query_string else ""
+        return context
+
+
+class ProductCreateView(ProductAccessMixin, SuccessMessageMixin, ProductFormPageMixin, CreateView):
+    permission_required = ("devices.view_product", "devices.add_product")
+    model = Product
+    form_class = ProductForm
+    template_name = "devices/product_list.html"
+    success_url = reverse_lazy("devices:product_list")
+    success_message = "Producto creado correctamente."
+
+
+class ProductUpdateView(ProductAccessMixin, SuccessMessageMixin, ProductFormPageMixin, UpdateView):
+    permission_required = ("devices.view_product", "devices.change_product")
+    model = Product
+    form_class = ProductForm
+    template_name = "devices/product_list.html"
+    success_url = reverse_lazy("devices:product_list")
+    success_message = "Producto actualizado correctamente."
+
+
+class ProductDeleteView(ProductAccessMixin, DeleteView):
+    permission_required = "devices.delete_product"
+    model = Product
+    template_name = "devices/product_confirm_delete.html"
+    success_url = reverse_lazy("devices:product_list")
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+
+        en_uso = (
+            self.object.devices.filter(deleted_at__isnull=True).exists()
+            or self.object.alert_rules.filter(deleted_at__isnull=True).exists()
+        )
+        if en_uso:
+            messages.error(
+                self.request,
+                "No se puede eliminar el producto porque está asociado a dispositivos o reglas de alerta.",
+            )
+            return HttpResponseRedirect(self.get_success_url())
+
+        self.object.deleted_at = timezone.now()
+        self.object.save(update_fields=["deleted_at", "updated_at"])
+        messages.success(self.request, "Producto eliminado correctamente.")
+        return HttpResponseRedirect(self.get_success_url())
+    
+# ---------- Clase 6 (PM): zonas, indicadores y mantenimiento ----------
 @login_required
 def zone_list(request):
     # Obtiene todas las zonas desde la aplicación organizations
@@ -263,27 +508,35 @@ def zone_detail(request, pk):
     }
     return render(request, "devices/zone_detail.html", context)
 
-
+#preentrega eva 3 PM --> def indicadores de consumo
 @login_required
+@permission_required("devices.view_measurement", raise_exception=True)
 def indicators_view(request):
-    """Vista de indicadores de consumo requerida por el dashboard."""
-    profile = getattr(request.user, "profile", None)
+    """Indicadores de consumo: resumen y totales de mediciones por zona y producto."""
+    dispositivos = get_visible_devices(request.user)
+    mediciones = Measurement.objects.filter(
+        deleted_at__isnull=True, device__in=dispositivos
+    )
 
-    if request.user.is_superuser:
-        devices = Device.objects.filter(deleted_at__isnull=True)
-    elif profile and profile.organization:
-        devices = Device.objects.filter(
-            zone__organization=profile.organization, deleted_at__isnull=True
-        )
-    else:
-        devices = Device.objects.none()
-
-    # Cálculo básico de consumo total
-    total_consumption = sum(getattr(d, "kwh", 0) for d in devices)
+    por_zona = (
+        mediciones.values("device__zone__name", "unit")
+        .annotate(total=Sum("value"), lecturas=Count("id"))
+        .order_by("device__zone__name", "unit")
+    )
+    por_producto = (
+        mediciones.values("device__product__name", "unit")
+        .annotate(total=Sum("value"), lecturas=Count("id"))
+        .order_by("-total")[:10]
+    )
 
     context = {
-        "devices": devices,
-        "total_consumption": total_consumption,
+        "total_dispositivos": dispositivos.count(),
+        "total_mediciones": mediciones.count(),
+        "total_alertas": AlertEvent.objects.filter(
+            deleted_at__isnull=True, device__in=dispositivos
+        ).count(),
+        "por_zona": por_zona,
+        "por_producto": por_producto,
     }
     return render(request, "devices/indicators.html", context)
 

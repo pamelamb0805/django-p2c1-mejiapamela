@@ -3,8 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 from organizations.models import Zone
-from .models import Catalog, Device, Measurement, History, AlertEvent, AlertRule, MaintenanceRequest
-
+from .models import Catalog, Product, Device, Measurement, History, AlertEvent, AlertRule, MaintenanceRequest
 class ArchiveDevicesForm(forms.Form):
     """Valida que los dispositivos elegidos pertenezcan al ámbito del usuario."""
 
@@ -125,8 +124,98 @@ class DeviceForm(forms.ModelForm):
             )
 
         return cleaned_data
+#clases formulario categoria y producto - preentrega eva3 --> PM 
+# ModelForm de Categoría (modelo Catalog): se reutiliza para Crear y Editar.
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Catalog
+        fields = ["catalog_id", "name", "description", "status"]
+        widgets = {
+            "catalog_id": forms.TextInput(attrs={"class": "form-control"}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
+            "status": forms.TextInput(attrs={"class": "form-control"}),
+        }
+
+    def clean_name(self):
+        name = self.cleaned_data["name"].strip()
+        if len(name) < 3:
+            raise ValidationError("Ingrese al menos 3 caracteres.")
+        return name
+
+    def clean_catalog_id(self):
+        catalog_id = self.cleaned_data["catalog_id"].strip()
+        exists = (
+            Catalog.objects.filter(catalog_id__iexact=catalog_id)
+            .exclude(pk=self.instance.pk)
+            .exists()
+        )
+        if exists:
+            raise ValidationError("Ya existe una categoría con ese código.")
+        return catalog_id
 
 
+# ModelForm de Producto: se reutiliza para Crear y Editar.
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = [
+            "product_id", "name", "description", "kwh",
+            "manufacturer", "model", "sku", "catalog",
+        ]
+        labels = {"catalog": "Categoría"}
+        widgets = {
+            "product_id": forms.TextInput(attrs={"class": "form-control"}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
+            "kwh": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
+            "manufacturer": forms.TextInput(attrs={"class": "form-control"}),
+            "model": forms.TextInput(attrs={"class": "form-control"}),
+            "sku": forms.TextInput(attrs={"class": "form-control"}),
+            "catalog": forms.Select(attrs={"class": "form-select"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Las categorías eliminadas lógicamente no se pueden seleccionar.
+        self.fields["catalog"].queryset = Catalog.objects.filter(
+            deleted_at__isnull=True
+        ).order_by("name")
+
+    def clean_name(self):
+        name = self.cleaned_data["name"].strip()
+        if len(name) < 3:
+            raise ValidationError("Ingrese al menos 3 caracteres.")
+        return name
+
+    def clean_product_id(self):
+        product_id = self.cleaned_data["product_id"].strip()
+        exists = (
+            Product.objects.filter(product_id__iexact=product_id)
+            .exclude(pk=self.instance.pk)
+            .exists()
+        )
+        if exists:
+            raise ValidationError("Ya existe un producto con ese código.")
+        return product_id
+
+    def clean_sku(self):
+        sku = self.cleaned_data["sku"].strip()
+        exists = (
+            Product.objects.filter(sku__iexact=sku)
+            .exclude(pk=self.instance.pk)
+            .exists()
+        )
+        if exists:
+            raise ValidationError("Ya existe un producto con ese SKU.")
+        return sku
+
+    def clean_kwh(self):
+        kwh = self.cleaned_data.get("kwh")
+        if kwh is not None and kwh < 0:
+            raise ValidationError("El consumo no puede ser negativo.")
+        return kwh
+    
 #def Measurement --> preentrega eva3 --> PM
 # ModelForm de Measurement: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
 class MeasurementForm(forms.ModelForm):

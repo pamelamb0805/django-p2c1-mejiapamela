@@ -14,15 +14,21 @@ urlpatterns = [
     path("<int:pk>/delete/", views.DeviceDeleteView.as_view(), name="device_delete"),
 
     # CRUD de Categorías (modelo Catalog) ---> preentrega eva3 PM
-    path("catalogs/", views.CatalogListView.as_view(), name="catalog_list"),
-    path("catalogs/new/", views.CatalogCreateView.as_view(), name="catalog_create"),
-    path("catalogs/<int:pk>/edit/", views.CatalogUpdateView.as_view(), name="catalog_update"),
-    path("catalogs/<int:pk>/delete/", views.CatalogDeleteView.as_view(), name="catalog_delete"),
+    path("categories/", views.CategoryListView.as_view(), name="category_list"),
+    path("categories/new/", views.CategoryCreateView.as_view(), name="category_create"),
+    path("categories/<int:pk>/edit/", views.CategoryUpdateView.as_view(), name="category_update"),
+    path("categories/<int:pk>/delete/", views.CategoryDeleteView.as_view(), name="category_delete"),
 
+    # CRUD de Productos (modelo Product) ---> preentrega eva3 PM
+        path("products/", views.ProductListView.as_view(), name="product_list"),
+    path("products/new/", views.ProductCreateView.as_view(), name="product_create"),
+    path("products/<int:pk>/edit/", views.ProductUpdateView.as_view(), name="product_update"),
+    path("products/<int:pk>/delete/", views.ProductDeleteView.as_view(), name="product_delete"),
+    
     # Rutas de zonas y mantenimiento (clase 6 - PM)
     path("zones/", views.zone_list, name="zone_list"),
     path("zones/<int:pk>/", views.zone_detail, name="zone_detail"),
-    
+
     # CRUD de Mantenimiento (modelo MaintenanceRequest) ---> preentrega eva3 PM
     path("maintenance/", views.MaintenanceListView.as_view(), name="maintenance_list"),
     path("maintenance/new/", views.MaintenanceCreateView.as_view(), name="maintenance_create"),
