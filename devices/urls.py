@@ -22,7 +22,12 @@ urlpatterns = [
     # Rutas de zonas y mantenimiento (clase 6 - PM)
     path("zones/", views.zone_list, name="zone_list"),
     path("zones/<int:pk>/", views.zone_detail, name="zone_detail"),
-    path("maintenance/", views.maintenance_list, name="maintenance_list"),
+    
+    # CRUD de Mantenimiento (modelo MaintenanceRequest) ---> preentrega eva3 PM
+    path("maintenance/", views.MaintenanceListView.as_view(), name="maintenance_list"),
+    path("maintenance/new/", views.MaintenanceCreateView.as_view(), name="maintenance_create"),
+    path("maintenance/<int:pk>/edit/", views.MaintenanceUpdateView.as_view(), name="maintenance_update"),
+    path("maintenance/<int:pk>/delete/", views.MaintenanceDeleteView.as_view(), name="maintenance_delete"),
 
     # CRUD de Mediciones ---> preentrega eva3 PM
     path("measurements/", views.MeasurementListView.as_view(), name="measurement_list"),
@@ -35,6 +40,6 @@ urlpatterns = [
     path("alerts/new/", views.AlertCreateView.as_view(), name="alert_create"),
     path("alerts/<int:pk>/edit/", views.AlertUpdateView.as_view(), name="alert_update"),
     path("alerts/<int:pk>/delete/", views.AlertDeleteView.as_view(), name="alert_delete"),
-    
+
     path("history/", views.history_list, name="history_list"),
 ]

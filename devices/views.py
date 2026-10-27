@@ -19,7 +19,16 @@ from .models import Device, MaintenanceRequest
 from urllib.parse import urlencode
 from django.db.models import Q
 from django.core.paginator import Paginator
-from .forms import ALERT_STATUS_CHOICES, AlertEventForm, CatalogForm, DeviceForm, MeasurementForm
+from .forms import (
+    ALERT_STATUS_CHOICES,
+    MAINTENANCE_PRIORITY_CHOICES,
+    MAINTENANCE_STATUS_CHOICES,
+    AlertEventForm,
+    CatalogForm,
+    DeviceForm,
+    MaintenanceRequestForm,
+    MeasurementForm,
+)
 from .models import AlertEvent, AlertRule, Catalog, Device, History, MaintenanceRequest, Measurement
 
 def get_visible_devices(user):
@@ -277,12 +286,6 @@ def indicators_view(request):
         "total_consumption": total_consumption,
     }
     return render(request, "devices/indicators.html", context)
-
-
-@login_required
-def maintenance_list(request):
-    requests = MaintenanceRequest.objects.filter(deleted_at__isnull=True)
-    return render(request, "devices/maintenance_list.html", {"requests": requests})
 
 #pre entrega eva 3 PM --> vistas measurement-mediciones
 # ---------- CRUD de Mediciones (basado en el CRUD de Dispositivos) ----------
@@ -737,4 +740,176 @@ class CatalogDeleteView(CatalogAccessMixin, DeleteView):
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
         messages.success(self.request, "Categoría eliminada correctamente.")
+        return HttpResponseRedirect(self.get_success_url())
+
+#preentrega eva 3 --> PM -- CRUD MANTENIMIENTO
+# ---------- CRUD de Mantenimiento (modelo MaintenanceRequest, basado en el CRUD de Dispositivos) ----------
+def get_visible_maintenance(user):
+    """Solicitudes activas de la organización del usuario (el superusuario ve todas)."""
+    qs = MaintenanceRequest.objects.filter(deleted_at__isnull=True).select_related(
+        "device", "device__zone", "organization", "request_by", "assigned_to"
+    )
+    if user.is_superuser:
+        return qs
+    profile = getattr(user, "profile", None)
+    # Sin perfil u organización: no ve nada (nunca acceso global por error)
+    if profile is None or profile.organization_id is None:
+        return qs.none()
+    return qs.filter(organization_id=profile.organization_id)
+
+
+# Login + permiso (hereda de DeviceAccessMixin) y consultas limitadas al ámbito del usuario.
+class MaintenanceAccessMixin(DeviceAccessMixin):
+    def get_queryset(self):
+        return get_visible_maintenance(self.request.user)
+
+
+# Opciones de los filtros del listado: estados y prioridades controlados.
+def get_maintenance_filter_options(user):
+    return {
+        "estados": MAINTENANCE_STATUS_CHOICES,
+        "prioridades": MAINTENANCE_PRIORITY_CHOICES,
+    }
+
+
+# Mixin de Create y Update: el servidor decide la organización, quién solicita y la fecha de cierre.
+class MaintenanceServerFieldsMixin:
+    def form_valid(self, form):
+        solicitud = form.instance
+
+        # La organización sale del dispositivo elegido (ya filtrado al ámbito del usuario).
+        solicitud.organization = form.cleaned_data["device"].zone.organization
+
+        # Quién solicita se guarda solo al crear.
+        if solicitud.pk is None:
+            solicitud.request_by = self.request.user
+
+        # RN-14: la fecha de cierre la pone el servidor al pasar a "cerrada".
+        if form.cleaned_data["status"] == "cerrada":
+            if solicitud.closed_at is None:
+                solicitud.closed_at = timezone.now()
+        else:
+            solicitud.closed_at = None  # si se reabre, se limpia el cierre
+
+        return super().form_valid(form)
+
+
+# Mixin para Create y Update: pasa el usuario al formulario, entrega el listado (paginado)
+# detrás del modal y envía open_modal=True para abrir el modal automáticamente.
+class MaintenanceFormPageMixin:
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        page_obj = Paginator(
+            get_visible_maintenance(self.request.user).order_by("-created_at"), 10
+        ).get_page(self.request.GET.get("page"))
+
+        context["maintenance_requests"] = page_obj.object_list
+        context["page_obj"] = page_obj
+        context["is_paginated"] = page_obj.has_other_pages()
+        context.update(get_maintenance_filter_options(self.request.user))
+        context["buscar"] = ""
+        context["estado_seleccionado"] = ""
+        context["prioridad_seleccionada"] = ""
+        context["query_string"] = ""
+        context["open_modal"] = True
+        return context
+
+
+# Listado (ListView): exige view_maintenancerequest. Incluye buscador, dos filtros y paginación.
+class MaintenanceListView(MaintenanceAccessMixin, ListView):
+    permission_required = "devices.view_maintenancerequest"
+    template_name = "devices/maintenance_list.html"
+    context_object_name = "maintenance_requests"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = get_visible_maintenance(self.request.user)
+
+        # Buscador general.
+        buscar = self.request.GET.get("buscar", "").strip()
+        if buscar:
+            queryset = queryset.filter(
+                Q(maintenance_request_id__icontains=buscar)
+                | Q(device__device_id__icontains=buscar)
+                | Q(device__internal_name__icontains=buscar)
+                | Q(reason__icontains=buscar)
+                | Q(request_type__icontains=buscar)
+                | Q(assigned_to__username__icontains=buscar)
+            )
+
+        # Filtro por estado.
+        estado = self.request.GET.get("estado", "").strip()
+        if estado:
+            queryset = queryset.filter(status__iexact=estado)
+
+        # Filtro por prioridad.
+        prioridad = self.request.GET.get("prioridad", "").strip()
+        if prioridad:
+            queryset = queryset.filter(priority__iexact=prioridad)
+
+        return queryset.order_by("-created_at")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Mantener los valores seleccionados en los controles.
+        context["buscar"] = self.request.GET.get("buscar", "")
+        context["estado_seleccionado"] = self.request.GET.get("estado", "")
+        context["prioridad_seleccionada"] = self.request.GET.get("prioridad", "")
+        context.update(get_maintenance_filter_options(self.request.user))
+
+        # Construir enlaces de paginación conservando los filtros.
+        parametros = self.request.GET.copy()
+        parametros.pop("page", None)
+        query_string = urlencode(parametros, doseq=True)
+        context["query_string"] = f"&{query_string}" if query_string else ""
+
+        return context
+
+
+# Crear (CreateView): exige add_maintenancerequest.
+class MaintenanceCreateView(MaintenanceAccessMixin, SuccessMessageMixin, MaintenanceServerFieldsMixin, MaintenanceFormPageMixin, CreateView):
+    permission_required = ("devices.view_maintenancerequest", "devices.add_maintenancerequest")
+    model = MaintenanceRequest
+    form_class = MaintenanceRequestForm
+    template_name = "devices/maintenance_list.html"
+    success_url = reverse_lazy("devices:maintenance_list")
+    success_message = "Solicitud de mantenimiento registrada correctamente."
+
+
+# Editar (UpdateView): exige change_maintenancerequest. Aquí se asigna, se programa y se cierra.
+class MaintenanceUpdateView(MaintenanceAccessMixin, SuccessMessageMixin, MaintenanceServerFieldsMixin, MaintenanceFormPageMixin, UpdateView):
+    permission_required = ("devices.view_maintenancerequest", "devices.change_maintenancerequest")
+    model = MaintenanceRequest
+    form_class = MaintenanceRequestForm
+    template_name = "devices/maintenance_list.html"
+    success_url = reverse_lazy("devices:maintenance_list")
+    success_message = "Solicitud de mantenimiento actualizada correctamente."
+
+
+# Eliminar (DeleteView): exige delete_maintenancerequest y recibe un POST con CSRF desde SweetAlert2.
+class MaintenanceDeleteView(MaintenanceAccessMixin, DeleteView):
+    permission_required = "devices.delete_maintenancerequest"
+    model = MaintenanceRequest
+    http_method_names = ["post"]  # solo POST: la confirmación la hace SweetAlert2
+    success_url = reverse_lazy("devices:maintenance_list")
+
+    # Borrado lógico. Una solicitud cerrada es parte del historial (RF-29) y no se elimina.
+    def form_valid(self, form):
+        self.object = self.get_object()
+        if (self.object.status or "").lower() == "cerrada":
+            messages.error(
+                self.request,
+                "No se puede eliminar una solicitud cerrada: queda como historial de mantenimiento.",
+            )
+            return HttpResponseRedirect(self.get_success_url())
+        self.object.deleted_at = timezone.now()
+        self.object.save(update_fields=["deleted_at", "updated_at"])
+        messages.success(self.request, "Solicitud de mantenimiento eliminada correctamente.")
         return HttpResponseRedirect(self.get_success_url())

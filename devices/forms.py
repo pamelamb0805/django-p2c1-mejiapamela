@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 from organizations.models import Zone
@@ -283,4 +284,148 @@ class AlertEventForm(forms.ModelForm):
         if minimo is not None and maximo is not None and minimo > maximo:
             self.add_error("max_limit_snapshot", "El límite máximo no puede ser menor que el mínimo.")
 
+        return cleaned
+
+
+#preentrega eva3 - PM Formulario Mantenimiento
+# Opciones controladas: se usan en el formulario y en los filtros del listado.
+MAINTENANCE_TYPE_CHOICES = [
+    ("preventivo", "Preventivo"),
+    ("correctivo", "Correctivo"),
+]
+MAINTENANCE_PRIORITY_CHOICES = [
+    ("baja", "Baja"),
+    ("media", "Media"),
+    ("alta", "Alta"),
+    ("crítica", "Crítica"),
+]
+MAINTENANCE_STATUS_CHOICES = [
+    ("pendiente", "Pendiente"),
+    ("en proceso", "En proceso"),
+    ("cerrada", "Cerrada"),
+]
+
+
+# ModelForm de MaintenanceRequest: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
+# La organización, quién la solicita y la fecha de cierre las decide el servidor, no el formulario.
+class MaintenanceRequestForm(forms.ModelForm):
+    request_type = forms.ChoiceField(
+        choices=MAINTENANCE_TYPE_CHOICES,
+        label="Tipo de solicitud",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+    priority = forms.ChoiceField(
+        choices=MAINTENANCE_PRIORITY_CHOICES,
+        initial="media",
+        label="Prioridad",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+    status = forms.ChoiceField(
+        choices=MAINTENANCE_STATUS_CHOICES,
+        initial="pendiente",
+        label="Estado",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+    # RF-26: toda solicitud se asocia a un dispositivo.
+    device = forms.ModelChoiceField(
+        queryset=Device.objects.none(),
+        label="Dispositivo",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
+    class Meta:
+        model = MaintenanceRequest
+        fields = [
+            "maintenance_request_id",
+            "request_type",
+            "reason",
+            "priority",
+            "status",
+            "device",
+            "assigned_to",
+            "scheduled_date",
+            "actual_date",
+            "diagnosis",
+            "actions_text",
+            "observations",
+            "cost",
+        ]
+        widgets = {
+            "maintenance_request_id": forms.TextInput(attrs={"class": "form-control"}),
+            "reason": forms.TextInput(attrs={"class": "form-control"}),
+            "assigned_to": forms.Select(attrs={"class": "form-select"}),
+            # format: para que al editar el campo datetime-local muestre el valor guardado.
+            "scheduled_date": forms.DateTimeInput(
+                format="%Y-%m-%dT%H:%M",
+                attrs={"class": "form-control", "type": "datetime-local"},
+            ),
+            "actual_date": forms.DateTimeInput(
+                format="%Y-%m-%dT%H:%M",
+                attrs={"class": "form-control", "type": "datetime-local"},
+            ),
+            "diagnosis": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
+            "actions_text": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
+            "observations": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
+            "cost": forms.NumberInput(attrs={"class": "form-control", "step": "0.01", "min": "0"}),
+        }
+        help_texts = {
+            "diagnosis": "Obligatorio para cerrar la solicitud.",
+            "actions_text": "Obligatorio para cerrar la solicitud.",
+            "actual_date": "Obligatoria para cerrar la solicitud.",
+        }
+
+    # Recibe el usuario para que dispositivos y responsables sean solo los de su ámbito.
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["assigned_to"].required = False
+        self.fields["assigned_to"].label_from_instance = (
+            lambda u: u.get_full_name() or u.username
+        )
+        if user is not None:
+            from .views import get_visible_devices  # import local: evita import circular
+            self.fields["device"].queryset = get_visible_devices(user)
+
+            # RF-27: solo usuarios activos de la misma organización (RN-03 / RF-08).
+            responsables = get_user_model().objects.filter(
+                is_active=True, profile__isnull=False
+            )
+            if not user.is_superuser:
+                profile = getattr(user, "profile", None)
+                if profile is None or profile.organization_id is None:
+                    responsables = responsables.none()
+                else:
+                    responsables = responsables.filter(
+                        profile__organization_id=profile.organization_id
+                    )
+            self.fields["assigned_to"].queryset = responsables.order_by("username")
+
+    # El código es único en la base de datos (incluye eliminadas lógicas).
+    def clean_maintenance_request_id(self):
+        code = self.cleaned_data["maintenance_request_id"].strip()
+        exists = (
+            MaintenanceRequest.objects.filter(maintenance_request_id__iexact=code)
+            .exclude(pk=self.instance.pk)
+            .exists()
+        )
+        if exists:
+            raise ValidationError("Ya existe una solicitud con ese código.")
+        return code
+
+    # Un costo no puede ser negativo.
+    def clean_cost(self):
+        cost = self.cleaned_data.get("cost")
+        if cost is not None and cost < 0:
+            raise ValidationError("El costo no puede ser negativo.")
+        return cost
+
+    # RN-14 / RF-28: para cerrar se exige fecha real y el resultado de la intervención.
+    def clean(self):
+        cleaned = super().clean()
+        if cleaned.get("status") == "cerrada":
+            if not cleaned.get("actual_date"):
+                self.add_error("actual_date", "Indica la fecha real de ejecución para cerrar la solicitud.")
+            if not (cleaned.get("diagnosis") or "").strip():
+                self.add_error("diagnosis", "Indica el diagnóstico para cerrar la solicitud.")
+            if not (cleaned.get("actions_text") or "").strip():
+                self.add_error("actions_text", "Indica las acciones realizadas para cerrar la solicitud.")
         return cleaned
