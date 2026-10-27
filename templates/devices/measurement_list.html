@@ -1,36 +1,267 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mediciones - EcoEnergy</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="container mt-4">
-    <a href="{% url 'dashboard:dashboard' %}" class="btn btn-secondary mb-3">← Volver al Dashboard</a>
-    <h2>Mediciones Energéticas</h2>
-    <table class="table table-striped mt-3">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Dispositivo</th>
-                <th>Valor</th>
-                <th>Unidad</th>
-                <th>Fecha</th>
-            </tr>
+{% extends "base.html" %}
+
+{% block title %}Mediciones | EcoEnergy{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 mb-1">Gestión de mediciones</h1>
+      <p class="text-muted mb-0">
+        Registra y consulta las lecturas de consumo de tus dispositivos.
+      </p>
+    </div>
+
+    {% if perms.devices.add_measurement %}
+      <a href="{% url 'devices:measurement_create' %}"
+         class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Nueva medición
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- Buscador y filtros -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <form method="get" action="{% url 'devices:measurement_list' %}">
+        <div class="row g-3 align-items-end">
+
+          <div class="col-md-4">
+            <label for="buscar" class="form-label">
+              Buscar medición
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="buscar"
+              name="buscar"
+              value="{{ buscar }}"
+              placeholder="Código, dispositivo, unidad u origen">
+          </div>
+
+          <div class="col-md-3">
+            <label for="dispositivo" class="form-label">Dispositivo</label>
+            <select class="form-select" id="dispositivo" name="dispositivo">
+              <option value="">Todos</option>
+              {% for d in dispositivos %}
+                <option value="{{ d.pk }}"
+                  {% if dispositivo_seleccionado == d.pk|stringformat:"s" %}selected{% endif %}>
+                  {{ d.internal_name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label for="estado" class="form-label">Estado</label>
+            <select class="form-select" id="estado" name="estado">
+              <option value="">Todos</option>
+              {% for estado in estados %}
+                <option value="{{ estado }}"
+                  {% if estado_seleccionado == estado %}
+                    selected
+                  {% endif %}>
+                  {{ estado|capfirst }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+            <a href="{% url 'devices:measurement_list' %}"
+               class="btn btn-outline-secondary"
+               title="Limpiar filtros">
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3">
+      <strong>Mediciones registradas</strong>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Código</th>
+            <th>Dispositivo</th>
+            <th class="text-end">Valor</th>
+            <th>Unidad</th>
+            <th>Fecha y hora</th>
+            <th>Origen</th>
+            <th>Estado</th>
+            <th class="text-end">Acciones</th>
+          </tr>
         </thead>
+
         <tbody>
-            {% for m in measurements %}
-            <tr>
-                <td>{{ m.measurement_id }}</td>
-                <td>{{ m.device.internal_name }}</td>
-                <td>{{ m.value }}</td>
-                <td>{{ m.unit }}</td>
-                <td>{{ m.datetime }}</td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="5">No hay mediciones registradas.</td></tr>
-            {% endfor %}
+          {% for measurement in measurements %}
+          <tr>
+            <td>{{ measurement.measurement_id }}</td>
+            <td>{{ measurement.device.internal_name }}</td>
+            <td class="text-end">{{ measurement.value|floatformat:"-4" }}</td>
+            <td>{{ measurement.unit }}</td>
+            <td>{{ measurement.datetime|date:"d/m/Y H:i" }}</td>
+            <td>{{ measurement.origin }}</td>
+            <td>
+              {% if measurement.status %}
+                <span class="badge text-bg-success">
+                  {{ measurement.status|capfirst }}
+                </span>
+              {% else %}
+                <span class="badge text-bg-secondary">Sin estado</span>
+              {% endif %}
+            </td>
+
+            <td class="text-end text-nowrap">
+
+              {% if perms.devices.change_measurement %}
+                <a href="{% url 'devices:measurement_update' measurement.pk %}"
+                   class="btn btn-sm btn-outline-primary"
+                   title="Editar">
+                  <i class="bi bi-pencil"></i>
+                </a>
+              {% endif %}
+
+              {% if perms.devices.delete_measurement %}
+                <form id="delete-form-{{ measurement.pk }}"
+                      method="post"
+                      action="{% url 'devices:measurement_delete' measurement.pk %}"
+                      class="d-inline">
+                  {% csrf_token %}
+                  <button type="button"
+                          class="btn btn-sm btn-outline-danger"
+                          title="Eliminar"
+                          onclick="confirmDelete(
+                            '{{ measurement.pk }}',
+                            '{{ measurement.measurement_id|escapejs }}'
+                          )">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="8" class="text-center py-5">
+              <i class="bi bi-inbox fs-2 text-muted"></i>
+              <p class="mb-1 mt-2">No se encontraron mediciones.</p>
+              <small class="text-muted">
+                Prueba cambiando los filtros o registra una medición.
+              </small>
+            </td>
+          </tr>
+          {% endfor %}
         </tbody>
-    </table>
-</body>
-</html>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    {% if is_paginated %}
+    <div class="card-footer bg-white">
+      <div class="d-flex flex-wrap justify-content-between
+                  align-items-center gap-2">
+        <small class="text-muted">
+          Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+          · {{ page_obj.paginator.count }} resultados
+        </small>
+
+        <nav aria-label="Paginación de mediciones">
+          <ul class="pagination pagination-sm mb-0">
+
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link"
+                   href="?page=1{{ query_string }}">Primera</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ page_obj.previous_page_number }}{{ query_string }}">
+                  Anterior
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link">Anterior</span>
+              </li>
+            {% endif %}
+
+            <li class="page-item active">
+              <span class="page-link">{{ page_obj.number }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ page_obj.next_page_number }}{{ query_string }}">
+                  Siguiente
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ page_obj.paginator.num_pages }}{{ query_string }}">
+                  Última
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link">Siguiente</span>
+              </li>
+            {% endif %}
+
+          </ul>
+        </nav>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Modal compartido para crear y editar -->
+{% if form %}
+  {% include "devices/_measurement_form_modal.html" %}
+{% endif %}
+
+<!-- SweetAlert2: confirmación antes del POST -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function confirmDelete(id, name) {
+    Swal.fire({
+      title: "¿Eliminar medición?",
+      text: "Se eliminará lógicamente: " + name,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc3545",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar"
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        document.getElementById("delete-form-" + id).submit();
+      }
+    });
+  }
+</script>
+
+{% if open_modal %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const modalElement = document.getElementById("measurementModal");
+    if (modalElement) {
+      bootstrap.Modal.getOrCreateInstance(modalElement).show();
+    }
+  });
+</script>
+{% endif %}
+{% endblock %}

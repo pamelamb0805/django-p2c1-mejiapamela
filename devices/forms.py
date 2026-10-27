@@ -126,19 +126,10 @@ class DeviceForm(forms.ModelForm):
         return cleaned_data
 
 
-#def Measurement --> preentrega eva3
+#def Measurement --> preentrega eva3 --> PM
+# ModelForm de Measurement: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
 class MeasurementForm(forms.ModelForm):
     class Meta:
-        #def Registro Formulario
-        def __init__(self, *args, user=None, **kwargs):
-            if user is not None:
-                from .views import get_user_devices
-                self.fields['device'].queryset = get_user_devices(user) 
-            for field in self.fields.values():
-                field.widget.attrs.setdefault({'class': 'form-control'})
-            self.fields["datetime"].widget = forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local",}
-            )
         model = Measurement
         fields = [
             "measurement_id",
@@ -147,14 +138,48 @@ class MeasurementForm(forms.ModelForm):
             "datetime",
             "status",
             "origin",
-            "device"
+            "device",
         ]
         widgets = {
+            "measurement_id": forms.TextInput(attrs={"class": "form-control"}),
+            "value": forms.NumberInput(attrs={"class": "form-control", "step": "0.0001"}),
+            "unit": forms.TextInput(attrs={"class": "form-control"}),
+            # format: para que al editar el campo datetime-local muestre el valor guardado.
+            "datetime": forms.DateTimeInput(
+                format="%Y-%m-%dT%H:%M",
+                attrs={"class": "form-control", "type": "datetime-local"},
+            ),
+            "status": forms.TextInput(attrs={"class": "form-control"}),
+            "origin": forms.TextInput(attrs={"class": "form-control"}),
             "device": forms.Select(attrs={"class": "form-select"}),
-            "value": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
-            "timestamp": forms.DateTimeInput(attrs={"class": "form-control", "type": "datetime-local"}),
         }
 
+    # Recibe el usuario para que el selector solo muestre dispositivos de su ámbito.
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user is not None:
+            from .views import get_visible_devices  # import local: evita import circular
+            self.fields["device"].queryset = get_visible_devices(user)
+
+    # El código es único en la base de datos (incluye eliminadas lógicas).
+    def clean_measurement_id(self):
+        code = self.cleaned_data["measurement_id"].strip()
+        exists = (
+            Measurement.objects.filter(measurement_id__iexact=code)
+            .exclude(pk=self.instance.pk)
+            .exists()
+        )
+        if exists:
+            raise ValidationError("Ya existe una medición con ese código.")
+        return code
+
+    # Una lectura de consumo no puede ser negativa.
+    def clean_value(self):
+        value = self.cleaned_data["value"]
+        if value < 0:
+            raise ValidationError("El valor no puede ser negativo.")
+        return value
+    
 #preentrega eva3 - PM Formulario Catalogo
 class CatalogForm(forms.ModelForm):
     class Meta:
@@ -166,3 +191,96 @@ class CatalogForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
             "status": forms.TextInput(attrs={"class": "form-control"}),
         }
+
+#preentrega eva3 - PM Formulario Alertas
+# Estados posibles de una alerta: se usan en el formulario y en el filtro del listado.
+ALERT_STATUS_CHOICES = [
+    ("abierta", "Abierta"),
+    ("reconocida", "Reconocida"),
+    ("resuelta", "Resuelta"),
+]
+
+
+# ModelForm de AlertEvent: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
+# Quién reconoce o resuelve (y cuándo) lo decide el servidor, no el formulario.
+class AlertEventForm(forms.ModelForm):
+    status = forms.ChoiceField(
+        choices=ALERT_STATUS_CHOICES,
+        initial="abierta",
+        label="Estado",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
+    class Meta:
+        model = AlertEvent
+        fields = [
+            "alert_event_id",
+            "alert_rule",
+            "device",
+            "measurement",
+            "status",
+            "min_limit_snapshot",
+            "max_limit_snapshot",
+            "observations",
+        ]
+        widgets = {
+            "alert_event_id": forms.TextInput(attrs={"class": "form-control"}),
+            "alert_rule": forms.Select(attrs={"class": "form-select"}),
+            "device": forms.Select(attrs={"class": "form-select"}),
+            "measurement": forms.Select(attrs={"class": "form-select"}),
+            "min_limit_snapshot": forms.NumberInput(attrs={"class": "form-control", "step": "0.0001"}),
+            "max_limit_snapshot": forms.NumberInput(attrs={"class": "form-control", "step": "0.0001"}),
+            "observations": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+        }
+        help_texts = {
+            "min_limit_snapshot": "Si lo dejas vacío se copia de la regla.",
+            "max_limit_snapshot": "Si lo dejas vacío se copia de la regla.",
+        }
+
+    # Recibe el usuario para que dispositivos y mediciones sean solo los de su ámbito.
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["alert_rule"].queryset = AlertRule.objects.filter(deleted_at__isnull=True)
+        if user is not None:
+            from .views import get_visible_devices, get_visible_measurements  # import local: evita import circular
+            self.fields["device"].queryset = get_visible_devices(user)
+            self.fields["measurement"].queryset = get_visible_measurements(user)
+
+    # El código es único en la base de datos (incluye eliminadas lógicas).
+    def clean_alert_event_id(self):
+        code = self.cleaned_data["alert_event_id"].strip()
+        exists = (
+            AlertEvent.objects.filter(alert_event_id__iexact=code)
+            .exclude(pk=self.instance.pk)
+            .exists()
+        )
+        if exists:
+            raise ValidationError("Ya existe una alerta con ese código.")
+        return code
+
+    # Reglas que cruzan campos: la medición debe ser del dispositivo, la regla debe
+    # corresponder al producto del dispositivo, y los límites se copian de la regla si vienen vacíos.
+    def clean(self):
+        cleaned = super().clean()
+        device = cleaned.get("device")
+        measurement = cleaned.get("measurement")
+        rule = cleaned.get("alert_rule")
+
+        if device and measurement and measurement.device_id != device.pk:
+            self.add_error("measurement", "La medición no pertenece al dispositivo seleccionado.")
+
+        if device and rule and rule.product_id != device.product_id:
+            self.add_error("alert_rule", "La regla no corresponde al producto del dispositivo.")
+
+        if rule:
+            if cleaned.get("min_limit_snapshot") is None:
+                cleaned["min_limit_snapshot"] = rule.min_limit
+            if cleaned.get("max_limit_snapshot") is None:
+                cleaned["max_limit_snapshot"] = rule.max_limit
+
+        minimo = cleaned.get("min_limit_snapshot")
+        maximo = cleaned.get("max_limit_snapshot")
+        if minimo is not None and maximo is not None and minimo > maximo:
+            self.add_error("max_limit_snapshot", "El límite máximo no puede ser menor que el mínimo.")
+
+        return cleaned

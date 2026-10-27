@@ -23,8 +23,18 @@ urlpatterns = [
     path("zones/", views.zone_list, name="zone_list"),
     path("zones/<int:pk>/", views.zone_detail, name="zone_detail"),
     path("maintenance/", views.maintenance_list, name="maintenance_list"),
-    path("measurements/", views.measurement_list, name="measurement_list"),
-    path("measurements/new/", views.measurement_create, name="measurement_create"),
-    path("alerts/", views.alert_list, name="alert_list"),
+
+    # CRUD de Mediciones ---> preentrega eva3 PM
+    path("measurements/", views.MeasurementListView.as_view(), name="measurement_list"),
+    path("measurements/new/", views.MeasurementCreateView.as_view(), name="measurement_create"),
+    path("measurements/<int:pk>/edit/", views.MeasurementUpdateView.as_view(), name="measurement_update"),
+    path("measurements/<int:pk>/delete/", views.MeasurementDeleteView.as_view(), name="measurement_delete"),
+
+    # CRUD de Alertas (modelo AlertEvent) ---> preentrega eva3 PM
+    path("alerts/", views.AlertListView.as_view(), name="alert_list"),
+    path("alerts/new/", views.AlertCreateView.as_view(), name="alert_create"),
+    path("alerts/<int:pk>/edit/", views.AlertUpdateView.as_view(), name="alert_update"),
+    path("alerts/<int:pk>/delete/", views.AlertDeleteView.as_view(), name="alert_delete"),
+    
     path("history/", views.history_list, name="history_list"),
 ]

@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from .forms import OrganizationForm
+from .forms import DepartmentForm, OrganizationForm, ZoneForm
 from .models import Organization, Department, Zone
 
 
@@ -182,92 +182,306 @@ class OrganizationDeleteView(OrganizationAccessMixin, DeleteView):
 
 # ==========================================
 # 2. DEPARTAMENTOS (RF-02, RN-02, RN-05)
+#preentrega eva 3 - PM
 # ==========================================
 
-@login_required
-def department_list(request):
-    """Listado de departamentos filtrados por la organización del usuario (RN-01)."""
-    profile = getattr(request.user, "profile", None)
-    
-    if request.user.is_superuser:
-        departments = Department.objects.filter(deleted_at__isnull=True)
-    elif profile and profile.organization:
-        departments = Department.objects.filter(organization=profile.organization, deleted_at__isnull=True)
-    else:
-        departments = Department.objects.none()
 
-    return render(request, 'organizations/department_list.html', {'departments': departments})
+def get_visible_departments(user):
+    """Departamentos activos que el usuario puede ver (scoping por organización)."""
+    queryset = Department.objects.filter(deleted_at__isnull=True).select_related(
+        "organization", "user"
+    )
+    if user.is_superuser:
+        return queryset
+    profile = getattr(user, "profile", None)
+    if profile is None or profile.organization_id is None:
+        return queryset.none()
+    # Un usuario normal solo ve los departamentos de su organización.
+    return queryset.filter(organization_id=profile.organization_id)
 
 
-@login_required
-def department_create(request):
-    """Creación de departamentos dentro de la organización del usuario."""
-    profile = getattr(request.user, "profile", None)
-    organization = getattr(profile, "organization", None) if profile else None
+# Login + permiso, y consultas limitadas al ámbito del usuario.
+class DepartmentAccessMixin(CrudAccessMixin):
+    def get_queryset(self):
+        return get_visible_departments(self.request.user)
 
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        description = request.POST.get('description')
-        
-        # Validación de nombre duplicado en el mismo contexto organizacional (RN-05)
-        if Department.objects.filter(organization=organization, name=name, deleted_at__isnull=True).exists():
-            messages.error(request, "Ya existe un departamento con ese nombre en tu organización.")
-        else:
-            Department.objects.create(
-                organization=organization,
-                name=name,
-                description=description
+
+# Mixin para Create y Update: pasa el usuario al formulario, entrega el listado (paginado)
+# detrás del modal y envía open_modal=True para abrir el modal automáticamente.
+class DepartmentFormPageMixin:
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        page_obj = Paginator(
+            get_visible_departments(self.request.user).order_by("name"), 10
+        ).get_page(self.request.GET.get("page"))
+
+        context["departments"] = page_obj.object_list
+        context["page_obj"] = page_obj
+        context["is_paginated"] = page_obj.has_other_pages()
+        context["buscar"] = ""
+        context["estado_seleccionado"] = ""
+        context["query_string"] = ""
+        context["open_modal"] = True
+        return context
+
+
+# Listado (ListView): exige view_department. Incluye buscador, filtro por estado y paginación.
+class DepartmentListView(DepartmentAccessMixin, ListView):
+    permission_required = "organizations.view_department"
+    template_name = "organizations/department_list.html"
+    context_object_name = "departments"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = get_visible_departments(self.request.user)
+
+        # Buscador general.
+        buscar = self.request.GET.get("buscar", "").strip()
+        if buscar:
+            queryset = queryset.filter(
+                Q(department_id__icontains=buscar)
+                | Q(name__icontains=buscar)
+                | Q(description__icontains=buscar)
+                | Q(organization__legal_name__icontains=buscar)
+                | Q(user__username__icontains=buscar)
             )
-            messages.success(request, "Departamento registrado exitosamente.")
-            return redirect('organizations:department_list')
 
-    return render(request, 'organizations/department_form.html')
+        # Filtro por estado: "1" = activos, "0" = inactivos.
+        estado = self.request.GET.get("estado", "").strip()
+        if estado in ("0", "1"):
+            queryset = queryset.filter(status=(estado == "1"))
+
+        return queryset.order_by("name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Mantener los valores seleccionados en los controles.
+        context["buscar"] = self.request.GET.get("buscar", "")
+        context["estado_seleccionado"] = self.request.GET.get("estado", "")
+
+        # Construir enlaces de paginación conservando los filtros.
+        parametros = self.request.GET.copy()
+        parametros.pop("page", None)
+        query_string = urlencode(parametros, doseq=True)
+        context["query_string"] = f"&{query_string}" if query_string else ""
+
+        return context
 
 
+# Crear (CreateView): exige add_department y reutiliza el template del listado (modal).
+class DepartmentCreateView(DepartmentAccessMixin, SuccessMessageMixin, DepartmentFormPageMixin, CreateView):
+    permission_required = ("organizations.view_department", "organizations.add_department")
+    model = Department
+    form_class = DepartmentForm
+    template_name = "organizations/department_list.html"
+    success_url = reverse_lazy("organizations:department_list")
+    success_message = "Departamento creado correctamente."
+
+
+# Editar (UpdateView): exige change_department y reutiliza el mismo DepartmentForm.
+class DepartmentUpdateView(DepartmentAccessMixin, SuccessMessageMixin, DepartmentFormPageMixin, UpdateView):
+    permission_required = ("organizations.view_department", "organizations.change_department")
+    model = Department
+    form_class = DepartmentForm
+    template_name = "organizations/department_list.html"
+    success_url = reverse_lazy("organizations:department_list")
+    success_message = "Departamento actualizado correctamente."
+
+
+# Eliminar (DeleteView): exige delete_department y recibe un POST con CSRF desde SweetAlert2.
+class DepartmentDeleteView(DepartmentAccessMixin, DeleteView):
+    permission_required = "organizations.delete_department"
+    model = Department
+    http_method_names = ["post"]  # solo POST: la confirmación la hace SweetAlert2
+    success_url = reverse_lazy("organizations:department_list")
+
+    # Borrado lógico. Si aún tiene zonas, usuarios o perfiles activos asociados, no se elimina.
+    def form_valid(self, form):
+        self.object = self.get_object()
+
+        dependencias = []
+        if self.object.zones.filter(deleted_at__isnull=True).exists():
+            dependencias.append("zonas")
+        if self.object.users.filter(deleted_at__isnull=True).exists():
+            dependencias.append("usuarios")
+        if self.object.user_profiles.filter(deleted_at__isnull=True).exists():
+            dependencias.append("perfiles de usuario")
+
+        if dependencias:
+            messages.error(
+                self.request,
+                "No se puede eliminar el departamento porque tiene "
+                + ", ".join(dependencias)
+                + " asociados.",
+            )
+            return HttpResponseRedirect(self.get_success_url())
+
+        self.object.deleted_at = timezone.now()
+        self.object.save(update_fields=["deleted_at", "updated_at"])
+        messages.success(self.request, "Departamento eliminado correctamente.")
+        return HttpResponseRedirect(self.get_success_url())
 # ==========================================
 # 3. ZONAS FÍSICAS (RF-03, RN-02, RN-05)
+# preentrega eva 3 - PM
 # ==========================================
 
-@login_required
-def zone_list(request):
-    """Listado de zonas pertenecientes a la estructura interna de la organización."""
-    profile = getattr(request.user, "profile", None)
-    
-    if request.user.is_superuser:
-        zones = Zone.objects.filter(deleted_at__isnull=True)
-    elif profile and profile.organization:
-        zones = Zone.objects.filter(organization=profile.organization, deleted_at__isnull=True)
-    else:
-        zones = Zone.objects.none()
+def get_visible_zones(user):
+    """Zonas activas que el usuario puede ver (scoping por organización)."""
+    queryset = Zone.objects.filter(deleted_at__isnull=True).select_related(
+        "organization", "department"
+    )
+    if user.is_superuser:
+        return queryset
+    profile = getattr(user, "profile", None)
+    if profile is None or profile.organization_id is None:
+        return queryset.none()
+    # Un usuario normal solo ve las zonas de su organización.
+    return queryset.filter(organization_id=profile.organization_id)
 
-    return render(request, 'organizations/zone_list.html', {'zones': zones})
+
+# Departamentos que el usuario puede usar en el filtro del listado.
+def get_zone_filter_departments(user):
+    return get_visible_departments(user).order_by("name")
 
 
-@login_required
-def zone_create(request):
-    """Creación de zonas asociadas a la organización y departamento opcional (RF-03)."""
-    profile = getattr(request.user, "profile", None)
-    organization = getattr(profile, "organization", None) if profile else None
+# Login + permiso, y consultas limitadas al ámbito del usuario.
+class ZoneAccessMixin(CrudAccessMixin):
+    def get_queryset(self):
+        return get_visible_zones(self.request.user)
 
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        limit_kwh = request.POST.get('limit_kwh', 0.0)
-        department_id = request.POST.get('department_id')
-        
-        department = Department.objects.filter(id=department_id, organization=organization).first() if department_id else None
 
-        # Validación RN-05 (nombres únicos dentro del contexto organizacional)
-        if Zone.objects.filter(organization=organization, name=name, deleted_at__isnull=True).exists():
-            messages.error(request, "Ya existe una zona con ese nombre en tu organización.")
-        else:
-            Zone.objects.create(
-                organization=organization,
-                department=department,
-                name=name,
-                limit_kwh=limit_kwh
+# Mixin para Create y Update: pasa el usuario al formulario, entrega el listado (paginado)
+# detrás del modal y envía open_modal=True para abrir el modal automáticamente.
+class ZoneFormPageMixin:
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        page_obj = Paginator(
+            get_visible_zones(self.request.user).order_by("name"), 10
+        ).get_page(self.request.GET.get("page"))
+
+        context["zones"] = page_obj.object_list
+        context["page_obj"] = page_obj
+        context["is_paginated"] = page_obj.has_other_pages()
+        context["departamentos"] = get_zone_filter_departments(self.request.user)
+        context["buscar"] = ""
+        context["estado_seleccionado"] = ""
+        context["departamento_seleccionado"] = ""
+        context["query_string"] = ""
+        context["open_modal"] = True
+        return context
+
+
+# Listado (ListView): exige view_zone. Incluye buscador, dos filtros (estado y departamento) y paginación.
+class ZoneListView(ZoneAccessMixin, ListView):
+    permission_required = "organizations.view_zone"
+    template_name = "organizations/zone_list.html"
+    context_object_name = "zones"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = get_visible_zones(self.request.user)
+
+        # Buscador general.
+        buscar = self.request.GET.get("buscar", "").strip()
+        if buscar:
+            queryset = queryset.filter(
+                Q(zone_id__icontains=buscar)
+                | Q(name__icontains=buscar)
+                | Q(description__icontains=buscar)
+                | Q(organization__legal_name__icontains=buscar)
+                | Q(department__name__icontains=buscar)
             )
-            messages.success(request, "Zona creada exitosamente.")
-            return redirect('organizations:zone_list')
 
-    departments = Department.objects.filter(organization=organization, deleted_at__isnull=True) if organization else []
-    return render(request, 'organizations/zone_form.html', {'departments': departments})
+        # Filtro por estado: "1" = activas, "0" = inactivas.
+        estado = self.request.GET.get("estado", "").strip()
+        if estado in ("0", "1"):
+            queryset = queryset.filter(status=(estado == "1"))
+
+        # Filtro por departamento.
+        departamento = self.request.GET.get("departamento", "").strip()
+        if departamento.isdigit():
+            queryset = queryset.filter(department_id=int(departamento))
+
+        return queryset.order_by("name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Mantener los valores seleccionados en los controles.
+        context["buscar"] = self.request.GET.get("buscar", "")
+        context["estado_seleccionado"] = self.request.GET.get("estado", "")
+        context["departamento_seleccionado"] = self.request.GET.get("departamento", "")
+        context["departamentos"] = get_zone_filter_departments(self.request.user)
+
+        # Construir enlaces de paginación conservando los filtros.
+        parametros = self.request.GET.copy()
+        parametros.pop("page", None)
+        query_string = urlencode(parametros, doseq=True)
+        context["query_string"] = f"&{query_string}" if query_string else ""
+
+        return context
+
+
+# Crear (CreateView): exige add_zone y reutiliza el template del listado (modal).
+class ZoneCreateView(ZoneAccessMixin, SuccessMessageMixin, ZoneFormPageMixin, CreateView):
+    permission_required = ("organizations.view_zone", "organizations.add_zone")
+    model = Zone
+    form_class = ZoneForm
+    template_name = "organizations/zone_list.html"
+    success_url = reverse_lazy("organizations:zone_list")
+    success_message = "Zona creada correctamente."
+
+
+# Editar (UpdateView): exige change_zone y reutiliza el mismo ZoneForm.
+class ZoneUpdateView(ZoneAccessMixin, SuccessMessageMixin, ZoneFormPageMixin, UpdateView):
+    permission_required = ("organizations.view_zone", "organizations.change_zone")
+    model = Zone
+    form_class = ZoneForm
+    template_name = "organizations/zone_list.html"
+    success_url = reverse_lazy("organizations:zone_list")
+    success_message = "Zona actualizada correctamente."
+
+
+# Eliminar (DeleteView): exige delete_zone y recibe un POST con CSRF desde SweetAlert2.
+class ZoneDeleteView(ZoneAccessMixin, DeleteView):
+    permission_required = "organizations.delete_zone"
+    model = Zone
+    http_method_names = ["post"]  # solo POST: la confirmación la hace SweetAlert2
+    success_url = reverse_lazy("organizations:zone_list")
+
+    # Borrado lógico. Si aún tiene dispositivos o historial activos asociados, no se elimina.
+    def form_valid(self, form):
+        self.object = self.get_object()
+
+        dependencias = []
+        if self.object.devices.filter(deleted_at__isnull=True).exists():
+            dependencias.append("dispositivos")
+        if self.object.histories.filter(deleted_at__isnull=True).exists():
+            dependencias.append("registros de historial")
+
+        if dependencias:
+            messages.error(
+                self.request,
+                "No se puede eliminar la zona porque tiene "
+                + ", ".join(dependencias)
+                + " asociados.",
+            )
+            return HttpResponseRedirect(self.get_success_url())
+
+        self.object.deleted_at = timezone.now()
+        self.object.save(update_fields=["deleted_at", "updated_at"])
+        messages.success(self.request, "Zona eliminada correctamente.")
+        return HttpResponseRedirect(self.get_success_url())
