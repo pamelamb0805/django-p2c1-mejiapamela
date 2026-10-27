@@ -16,6 +16,7 @@ from organizations.views import CrudAccessMixin
 
 from .forms import UserProfileForm
 from .models import UserProfile
+from core.pagination import PageSizeMixin
 
 #preentrega eva 3 - PM
 def registro(request):
@@ -83,6 +84,9 @@ class UserProfileAccessMixin(CrudAccessMixin):
 # Mixin para Create y Update: pasa el usuario al formulario, entrega el listado (paginado)
 # detrás del modal y envía open_modal=True para abrir el modal automáticamente.
 class UserProfileFormPageMixin:
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "user_profile_page_size"
+    
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
@@ -112,11 +116,11 @@ class UserProfileFormPageMixin:
 
 
 # Listado (ListView): exige view_userprofile. Incluye buscador, filtros y paginación.
-class UserProfileListView(UserProfileAccessMixin, ListView):
+class UserProfileListView(PageSizeMixin, UserProfileAccessMixin, ListView):
     permission_required = "accounts.view_userprofile"
     template_name = "accounts/user_list.html"
     context_object_name = "profiles"
-    paginate_by = 10
+    page_size_session_key = "user_page_size"
 
     def get_queryset(self):
         queryset = get_visible_profiles(self.request.user)

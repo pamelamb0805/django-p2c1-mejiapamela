@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from organizations.models import Zone
 
+
 from django.db.models import Count, Sum
 from .forms import CategoryForm, DeviceForm, MeasurementForm, ProductForm
 from .models import AlertEvent, Catalog, Product, AlertRule, Device, History, MaintenanceRequest, Measurement
@@ -30,6 +31,7 @@ from .forms import (
     MeasurementForm,
 )
 from .models import AlertEvent, AlertRule, Catalog, Device, History, MaintenanceRequest, Measurement
+from core.pagination import PageSizeMixin
 
 def get_visible_devices(user):
     """Dispositivos activos que el usuario puede ver (scoping por organización)."""
@@ -83,17 +85,36 @@ class DeviceAccessMixin(LoginRequiredMixin, PermissionRequiredMixin):
 class DeviceFormPageMixin:
     """Comparte el listado y abre el modal de crear o editar."""
 
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "device_page_size"
+
     def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
+        kw
+        
+        args = super().get_form_kwargs()
         kwargs["user"] = self.request.user
         return kwargs
 
+    #correccion paginacion Eva3 --> PM
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         dispositivos = get_visible_devices(self.request.user)
 
-        context["devices"] = dispositivos
+        page_size = get_page_size(self.request, self.page_size_session_key)
+        page_obj = Paginator(
+            dispositivos.select_related("product", "zone", "zone__organization")
+            .order_by("internal_name"),
+            page_size,
+        ).get_page(self.request.GET.get("page"))
+
+        context["devices"] = page_obj.object_list
+        context["page_obj"] = page_obj
+        context["is_paginated"] = page_obj.has_other_pages()
+        context["page_size"] = page_size
+        context["page_size_options"] = PAGE_SIZE_OPTIONS
+        context["query_string"] = ""
+
         context["zonas"] = Zone.objects.filter(
             pk__in=dispositivos.values("zone_id"),
             deleted_at__isnull=True,
@@ -108,9 +129,7 @@ class DeviceFormPageMixin:
         )
 
         context["buscar"] = self.request.GET.get("buscar", "")
-        context["estado_seleccionado"] = self.request.GET.get(
-            "estado", ""
-        )
+        context["estado_seleccionado"] = self.request.GET.get("estado", "")
         context["zona_seleccionada"] = self.request.GET.get("zona", "")
         context["open_modal"] = True
 
@@ -120,11 +139,12 @@ class DeviceFormPageMixin:
 # Listado (ListView): exige el permiso view_device.
 # Clase 8 - Alexander
 
-class DeviceListView(DeviceAccessMixin, ListView):
+class DeviceListView(PageSizeMixin, DeviceAccessMixin, ListView):
     permission_required = "devices.view_device"
     template_name = "devices/device_list.html"
     context_object_name = "devices"
-    paginate_by = 10
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "device_page_size"
 
     def get_queryset(self):
         # Solo dispositivos activos y autorizados para el usuario.
@@ -260,14 +280,27 @@ class CategoryAccessMixin(LoginRequiredMixin, PermissionRequiredMixin):
 
 class CategoryFormPageMixin:
     """Comparte el listado y abre el modal de crear o editar."""
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "category_page_size"    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         categorias = get_visible_categories(self.request.user)
 
-        context["categories"] = categorias.annotate(
-            products_count=Count("products", filter=Q(products__deleted_at__isnull=True))
-        ).order_by("name")
+        page_size = get_page_size(self.request, self.page_size_session_key)
+        page_obj = Paginator(
+            categorias.annotate(
+                products_count=Count("products", filter=Q(products__deleted_at__isnull=True))
+            ).order_by("name"),
+            page_size,
+        ).get_page(self.request.GET.get("page"))
+
+        context["categories"] = page_obj.object_list
+        context["page_obj"] = page_obj
+        context["is_paginated"] = page_obj.has_other_pages()
+        context["page_size"] = page_size
+        context["page_size_options"] = PAGE_SIZE_OPTIONS
+        context["query_string"] = ""
         context["estados"] = (
             categorias.exclude(status__isnull=True)
             .exclude(status__exact="")
@@ -279,13 +312,15 @@ class CategoryFormPageMixin:
         context["estado_seleccionado"] = self.request.GET.get("estado", "")
         context["open_modal"] = True
         return context
+        
 
 
-class CategoryListView(CategoryAccessMixin, ListView):
+class CategoryListView(PageSizeMixin, CategoryAccessMixin, ListView):
     permission_required = "devices.view_catalog"
     template_name = "devices/category_list.html"
     context_object_name = "categories"
-    paginate_by = 10
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "category_page_size"
 
     def get_queryset(self):
         queryset = get_visible_categories(self.request.user)
@@ -402,11 +437,12 @@ class ProductFormPageMixin:
         return context
 
 
-class ProductListView(ProductAccessMixin, ListView):
+class ProductListView(PageSizeMixin, ProductAccessMixin, ListView):
     permission_required = "devices.view_product"
     template_name = "devices/product_list.html"
     context_object_name = "products"
-    paginate_by = 10
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "product_page_size"
 
     def get_queryset(self):
         queryset = get_visible_products(self.request.user)
@@ -574,6 +610,9 @@ def get_measurement_filter_options(user):
 # Mixin para Create y Update: pasa el usuario al formulario, entrega el listado (paginado)
 # detrás del modal y envía open_modal=True para abrir el modal automáticamente.
 class MeasurementFormPageMixin:
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "measurement_page_size"
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
@@ -599,11 +638,12 @@ class MeasurementFormPageMixin:
 
 
 # Listado (ListView): exige view_measurement. Incluye buscador, dos filtros y paginación.
-class MeasurementListView(MeasurementAccessMixin, ListView):
+class MeasurementListView(PageSizeMixin, MeasurementAccessMixin, ListView):
     permission_required = "devices.view_measurement"
     template_name = "devices/measurement_list.html"
     context_object_name = "measurements"
-    paginate_by = 10
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "measurement_page_size"
 
     def get_queryset(self):
         queryset = get_visible_measurements(self.request.user)
@@ -753,6 +793,9 @@ class AlertStatusMixin:
 # Mixin para Create y Update: pasa el usuario al formulario, entrega el listado (paginado)
 # detrás del modal y envía open_modal=True para abrir el modal automáticamente.
 class AlertFormPageMixin:
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "alert_page_size"
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
@@ -778,11 +821,12 @@ class AlertFormPageMixin:
 
 
 # Listado (ListView): exige view_alertevent. Incluye buscador, dos filtros y paginación.
-class AlertListView(AlertAccessMixin, ListView):
+class AlertListView(PageSizeMixin, AlertAccessMixin, ListView):
     permission_required = "devices.view_alertevent"
     template_name = "devices/alert_list.html"
     context_object_name = "alerts"
-    paginate_by = 10
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "alert_page_size"
 
     def get_queryset(self):
         queryset = get_visible_alerts(self.request.user)
@@ -896,12 +940,25 @@ class CatalogAccessMixin(LoginRequiredMixin, PermissionRequiredMixin):
 
 class CatalogFormPageMixin:
     """Entrega el listado detrás del modal y abre el modal de crear o editar."""
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "catalog_page_size"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         categorias = get_visible_catalogs()
 
-        context["catalogs"] = categorias.order_by("name")
+        page_size = get_page_size(self.request, self.page_size_session_key)
+        page_obj = Paginator(
+            categorias.order_by("name"),
+            page_size,
+        ).get_page(self.request.GET.get("page"))
+
+        context["catalogs"] = page_obj.object_list
+        context["page_obj"] = page_obj
+        context["is_paginated"] = page_obj.has_other_pages()
+        context["page_size"] = page_size
+        context["page_size_options"] = PAGE_SIZE_OPTIONS
+        context["query_string"] = ""
         context["estados"] = (
             categorias.exclude(status__isnull=True)
             .exclude(status__exact="")
@@ -915,11 +972,12 @@ class CatalogFormPageMixin:
         return context
 
 
-class CatalogListView(CatalogAccessMixin, ListView):
+class CatalogListView(PageSizeMixin, CatalogAccessMixin, ListView):
     permission_required = "devices.view_catalog"
     template_name = "devices/catalog_list.html"
     context_object_name = "catalogs"
-    paginate_by = 10
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "catalog_page_size"
 
     def get_queryset(self):
         queryset = get_visible_catalogs()
@@ -1050,6 +1108,9 @@ class MaintenanceServerFieldsMixin:
 # Mixin para Create y Update: pasa el usuario al formulario, entrega el listado (paginado)
 # detrás del modal y envía open_modal=True para abrir el modal automáticamente.
 class MaintenanceFormPageMixin:
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "maintenance_page_size"
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
@@ -1075,11 +1136,12 @@ class MaintenanceFormPageMixin:
 
 
 # Listado (ListView): exige view_maintenancerequest. Incluye buscador, dos filtros y paginación.
-class MaintenanceListView(MaintenanceAccessMixin, ListView):
+class MaintenanceListView(PageSizeMixin,MaintenanceAccessMixin, ListView):
     permission_required = "devices.view_maintenancerequest"
     template_name = "devices/maintenance_list.html"
     context_object_name = "maintenance_requests"
-    paginate_by = 10
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "maintenance_page_size"
 
     def get_queryset(self):
         queryset = get_visible_maintenance(self.request.user)

@@ -16,7 +16,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from .forms import DepartmentForm, OrganizationForm, ZoneForm
 from .models import Organization, Department, Zone
-
+from core.pagination import PageSizeMixin 
 
 # ==========================================
 # 1. ORGANIZACIONES (RF-01, RF-04)
@@ -61,6 +61,9 @@ class OrganizationAccessMixin(CrudAccessMixin):
 # Mixin para Create y Update: entrega el listado (paginado) detrás del modal
 # y envía open_modal=True para abrir el modal automáticamente.
 class OrganizationFormPageMixin:
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "organization_page_size"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -79,11 +82,11 @@ class OrganizationFormPageMixin:
 
 
 # Listado (ListView): exige view_organization. Incluye buscador, filtro por estado y paginación.
-class OrganizationListView(OrganizationAccessMixin, ListView):
+class OrganizationListView(PageSizeMixin,OrganizationAccessMixin, ListView):
     permission_required = "organizations.view_organization"
     template_name = "organizations/organization_list.html"
     context_object_name = "organizations"
-    paginate_by = 10
+    page_size_session_key = "organization_page_size"
 
     def get_queryset(self):
         # Solo organizaciones activas y autorizadas para el usuario.
@@ -209,6 +212,9 @@ class DepartmentAccessMixin(CrudAccessMixin):
 # Mixin para Create y Update: pasa el usuario al formulario, entrega el listado (paginado)
 # detrás del modal y envía open_modal=True para abrir el modal automáticamente.
 class DepartmentFormPageMixin:
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "department_page_size"
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
@@ -232,11 +238,11 @@ class DepartmentFormPageMixin:
 
 
 # Listado (ListView): exige view_department. Incluye buscador, filtro por estado y paginación.
-class DepartmentListView(DepartmentAccessMixin, ListView):
+class DepartmentListView(PageSizeMixin, DepartmentAccessMixin, ListView):
     permission_required = "organizations.view_department"
     template_name = "organizations/department_list.html"
     context_object_name = "departments"
-    paginate_by = 10
+    page_size_session_key = "department_page_size"
 
     def get_queryset(self):
         queryset = get_visible_departments(self.request.user)
@@ -360,6 +366,9 @@ class ZoneAccessMixin(CrudAccessMixin):
 # Mixin para Create y Update: pasa el usuario al formulario, entrega el listado (paginado)
 # detrás del modal y envía open_modal=True para abrir el modal automáticamente.
 class ZoneFormPageMixin:
+    #correccion paginacion Eva3 --> PM
+    page_size_session_key = "zone_page_size"
+    
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
@@ -385,11 +394,11 @@ class ZoneFormPageMixin:
 
 
 # Listado (ListView): exige view_zone. Incluye buscador, dos filtros (estado y departamento) y paginación.
-class ZoneListView(ZoneAccessMixin, ListView):
+class ZoneListView(PageSizeMixin, ZoneAccessMixin, ListView):
     permission_required = "organizations.view_zone"
     template_name = "organizations/zone_list.html"
     context_object_name = "zones"
-    paginate_by = 10
+    page_size_session_key = "zone_page_size"
 
     def get_queryset(self):
         queryset = get_visible_zones(self.request.user)

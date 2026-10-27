@@ -1,0 +1,9 @@
+<div class="col-md-2">
+  <label for="page_size" class="form-label">Por página</label>
+  <select class="form-select" id="page_size" name="page_size"
+          onchange="this.form.submit()">
+    {% for n in page_size_options %}
+      <option value="{{ n }}" {% if n == page_size %}selected{% endif %}>{{ n }}</option>
+    {% endfor %}
+  </select>
+</div>

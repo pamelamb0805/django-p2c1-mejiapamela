@@ -31,7 +31,7 @@
       <form method="get" action="{% url 'accounts:user_list' %}">
         <div class="row g-3 align-items-end">
 
-          <div class="{% if user.is_superuser %}col-md-3{% else %}col-md-4{% endif %}">
+          <div class="{% if user.is_superuser %}col-md-2{% else %}col-md-4{% endif %}">
             <label for="buscar" class="form-label">Buscar usuario</label>
             <input
               type="text"
@@ -57,6 +57,7 @@
           </div>
           {% endif %}
 
+          {% include "_page_size_select.html" %}
           <div class="col-md-2">
             <label for="departamento" class="form-label">Departamento</label>
             <select class="form-select" id="departamento" name="departamento">
@@ -69,7 +70,8 @@
               {% endfor %}
             </select>
           </div>
-
+          
+          {% include "_page_size_select.html" %}
           <div class="col-md-2">
             <label for="rol" class="form-label">Rol</label>
             <select class="form-select" id="rol" name="rol">
