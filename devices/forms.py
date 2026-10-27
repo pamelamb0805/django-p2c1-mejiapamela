@@ -2,8 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from organizations.models import Zone
-from .models import Device, Measurement, History, AlertEvent, AlertRule, MaintenanceRequest
-
+from .models import Catalog, Device, Measurement, History, AlertEvent, AlertRule, MaintenanceRequest
 
 class ArchiveDevicesForm(forms.Form):
     """Valida que los dispositivos elegidos pertenezcan al ámbito del usuario."""
@@ -154,4 +153,16 @@ class MeasurementForm(forms.ModelForm):
             "device": forms.Select(attrs={"class": "form-select"}),
             "value": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
             "timestamp": forms.DateTimeInput(attrs={"class": "form-control", "type": "datetime-local"}),
+        }
+
+#preentrega eva3 - PM Formulario Catalogo
+class CatalogForm(forms.ModelForm):
+    class Meta:
+        model = Catalog
+        fields = ["catalog_id", "name", "description", "status"]
+        widgets = {
+            "catalog_id": forms.TextInput(attrs={"class": "form-control"}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+            "status": forms.TextInput(attrs={"class": "form-control"}),
         }

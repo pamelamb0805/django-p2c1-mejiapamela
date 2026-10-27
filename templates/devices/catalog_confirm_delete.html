@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Eliminar categoría{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="h4">¿Eliminar "{{ object.name }}"?</h1>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'devices:catalog_list' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

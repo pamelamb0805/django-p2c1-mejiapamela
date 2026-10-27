@@ -19,8 +19,8 @@ from .models import Device, MaintenanceRequest
 from urllib.parse import urlencode
 from django.db.models import Q
 from django.core.paginator import Paginator
-from .forms import DeviceForm, MeasurementForm
-from .models import AlertEvent, Device, History, MaintenanceRequest, Measurement
+from .forms import CatalogForm, DeviceForm, MeasurementForm
+from .models import AlertEvent, Catalog, Device, History, MaintenanceRequest, Measurement
 
 def get_visible_devices(user):
     """Dispositivos activos que el usuario puede ver (scoping por organización)."""
@@ -325,3 +325,126 @@ def history_list(request):
         device__in=get_visible_devices(request.user),
     ).select_related("device")
     return render(request, "devices/history_list.html", {"history": history})
+
+#preentrega eva 3 --> PM -- CRUD CATEGORIAS
+def get_visible_catalogs():
+    """Categorías activas (el catálogo es global: no depende de la organización)."""
+    return Catalog.objects.filter(deleted_at__isnull=True)
+
+
+class CatalogAccessMixin(LoginRequiredMixin, PermissionRequiredMixin):
+    raise_exception = True
+
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return redirect_to_login(
+                self.request.get_full_path(),
+                self.get_login_url(),
+                self.get_redirect_field_name(),
+            )
+        raise PermissionDenied
+
+    def get_queryset(self):
+        return get_visible_catalogs()
+
+
+class CatalogFormPageMixin:
+    """Entrega el listado detrás del modal y abre el modal de crear o editar."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categorias = get_visible_catalogs()
+
+        context["catalogs"] = categorias.order_by("name")
+        context["estados"] = (
+            categorias.exclude(status__isnull=True)
+            .exclude(status__exact="")
+            .values_list("status", flat=True)
+            .distinct()
+            .order_by("status")
+        )
+        context["buscar"] = self.request.GET.get("buscar", "")
+        context["estado_seleccionado"] = self.request.GET.get("estado", "")
+        context["open_modal"] = True
+        return context
+
+
+class CatalogListView(CatalogAccessMixin, ListView):
+    permission_required = "devices.view_catalog"
+    template_name = "devices/catalog_list.html"
+    context_object_name = "catalogs"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = get_visible_catalogs()
+
+        buscar = self.request.GET.get("buscar", "").strip()
+        if buscar:
+            queryset = queryset.filter(
+                Q(catalog_id__icontains=buscar)
+                | Q(name__icontains=buscar)
+                | Q(description__icontains=buscar)
+            )
+
+        estado = self.request.GET.get("estado", "").strip()
+        if estado:
+            queryset = queryset.filter(status__iexact=estado)
+
+        return queryset.order_by("name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        visibles = get_visible_catalogs()
+
+        context["buscar"] = self.request.GET.get("buscar", "")
+        context["estado_seleccionado"] = self.request.GET.get("estado", "")
+
+        parametros = self.request.GET.copy()
+        parametros.pop("page", None)
+        query_string = urlencode(parametros, doseq=True)
+        context["query_string"] = f"&{query_string}" if query_string else ""
+
+        context["estados"] = (
+            visibles.exclude(status__isnull=True)
+            .exclude(status__exact="")
+            .values_list("status", flat=True)
+            .distinct()
+            .order_by("status")
+        )
+        return context
+
+
+class CatalogCreateView(CatalogAccessMixin, SuccessMessageMixin, CatalogFormPageMixin, CreateView):
+    permission_required = ("devices.view_catalog", "devices.add_catalog")
+    model = Catalog
+    form_class = CatalogForm
+    template_name = "devices/catalog_list.html"
+    success_url = reverse_lazy("devices:catalog_list")
+    success_message = "Categoría creada correctamente."
+
+
+class CatalogUpdateView(CatalogAccessMixin, SuccessMessageMixin, CatalogFormPageMixin, UpdateView):
+    permission_required = ("devices.view_catalog", "devices.change_catalog")
+    model = Catalog
+    form_class = CatalogForm
+    template_name = "devices/catalog_list.html"
+    success_url = reverse_lazy("devices:catalog_list")
+    success_message = "Categoría actualizada correctamente."
+
+
+class CatalogDeleteView(CatalogAccessMixin, DeleteView):
+    permission_required = "devices.delete_catalog"
+    model = Catalog
+    template_name = "devices/catalog_confirm_delete.html"
+    success_url = reverse_lazy("devices:catalog_list")
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        # Regla extra: no se elimina una categoría que aún tiene productos activos
+        if self.object.products.filter(deleted_at__isnull=True).exists():
+            messages.error(self.request, "No se puede eliminar: la categoría tiene productos activos.")
+            return HttpResponseRedirect(self.get_success_url())
+        self.object.deleted_at = timezone.now()
+        self.object.save(update_fields=["deleted_at", "updated_at"])
+        messages.success(self.request, "Categoría eliminada correctamente.")
+        return HttpResponseRedirect(self.get_success_url())
