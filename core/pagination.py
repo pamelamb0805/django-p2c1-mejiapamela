@@ -10,11 +10,10 @@ def get_page_size(request, session_key):
         except (TypeError, ValueError):
             selected = None
         if selected in PAGE_SIZE_OPTIONS:
-            reques.session[session_key] = selected
+            request.session[session_key] = selected
 
     saved = request.session.get(session_key, DEFAULT_PAGE_SIZE)
-    if saved not in PAGE_SIZE_OPTIONS:
-        return saved if saved in PAGE_SIZE_OPTIONS else DEFAULT_PAGE_SIZE
+    return saved if saved in PAGE_SIZE_OPTIONS else DEFAULT_PAGE_SIZE
 
 class PageSizeMixin:
     page_size_session_key = "page_size"
