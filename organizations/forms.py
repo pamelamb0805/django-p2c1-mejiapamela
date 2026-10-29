@@ -2,10 +2,13 @@ from django import forms
 from django.core.exceptions import ValidationError
 from .models import Department, Organization, User, Zone
 
+import re
+from core.validators import FormLimitsMixin, validate_code, validate_name, validate_optional_text
 
 # ModelForm de Organization: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
 # Define campos, widgets Bootstrap y validaciones.
-class OrganizationForm(forms.ModelForm):
+#correccion eva 3 --> PM --> Validadores Formularios
+class OrganizationForm(FormLimitsMixin, forms.ModelForm):
     # El modelo permite NULL en status, lo que Django mostraría como "Desconocido / Sí / No".
     # Se declara como casilla simple: marcada = activa, desmarcada = inactiva.
     status = forms.BooleanField(
@@ -38,7 +41,8 @@ class OrganizationForm(forms.ModelForm):
     # Se revisan también las eliminadas lógicamente, porque el código es único en la base de datos.
     # exclude(pk=self.instance.pk) permite editar sin chocar consigo misma.
     def clean_organization_id(self):
-        code = self.cleaned_data["organization_id"].strip()
+        #correccion eva 3 --> PM --> Validadores Formularios
+        code = validate_code(self.cleaned_data["organization_id"])
         exists = (
             Organization.objects.filter(organization_id__iexact=code)
             .exclude(pk=self.instance.pk)
@@ -49,15 +53,26 @@ class OrganizationForm(forms.ModelForm):
         return code
 
     # Validación de legal_name: quita espacios y exige mínimo 3 caracteres.
+    #correccion eva 3 --> PM --> Validadores Formularios
     def clean_legal_name(self):
-        name = self.cleaned_data["legal_name"].strip()
-        if len(name) < 3:
-            raise ValidationError("Ingrese al menos 3 caracteres.")
-        return name
+        return validate_name(self.cleaned_data["legal_name"])
 
-    # Validación de tax (RUT / identificación fiscal): no puede repetirse entre organizaciones activas.
+    def clean_comercial_name(self):
+        return validate_optional_text(self.cleaned_data.get("comercial_name")) or None
+
+    def clean_contact(self):
+        return validate_optional_text(self.cleaned_data.get("contact")) or None
+
+    def clean_email(self):
+        return self.cleaned_data["email"].strip().lower()
+
     def clean_tax(self):
         tax = self.cleaned_data["tax"].strip()
+        if not re.fullmatch(r"[0-9A-Za-z.\-]{5,20}", tax):
+            raise ValidationError(
+                "Ingrese un RUT o identificación fiscal válido "
+                "(5 a 20 caracteres: letras, números, punto y guion)."
+            )
         exists = (
             Organization.objects.filter(tax__iexact=tax, deleted_at__isnull=True)
             .exclude(pk=self.instance.pk)
@@ -70,7 +85,8 @@ class OrganizationForm(forms.ModelForm):
 #preentrega eva3 PM --> Formulario Departamento
 # ModelForm de Department: se reutiliza para Crear y Editar (mismo patrón que OrganizationForm).
 # El superusuario elige la organización; un usuario normal queda atado a la suya.
-class DepartmentForm(forms.ModelForm):
+#correccion eva 3 --> PM --> Validadores Formularios
+class DepartmentForm(FormLimitsMixin, forms.ModelForm):
     # Casilla simple: marcada = activo, desmarcada = inactivo.
     status = forms.BooleanField(
         required=False,
@@ -116,7 +132,8 @@ class DepartmentForm(forms.ModelForm):
 
     # El código es único en la base de datos (incluye eliminados lógicos).
     def clean_department_id(self):
-        code = self.cleaned_data["department_id"].strip()
+        #correccion eva 3 --> PM --> Validadores Formularios
+        code = validate_code(self.cleaned_data["department_id"])
         exists = (
             Department.objects.filter(department_id__iexact=code)
             .exclude(pk=self.instance.pk)
@@ -126,11 +143,12 @@ class DepartmentForm(forms.ModelForm):
             raise ValidationError("Ya existe un departamento con ese código.")
         return code
 
+    #correccion eva 3 --> PM --> Validadores Formularios
     def clean_name(self):
-        name = self.cleaned_data["name"].strip()
-        if len(name) < 3:
-            raise ValidationError("Ingrese al menos 3 caracteres.")
-        return name
+        return validate_name(self.cleaned_data["name"])
+
+    def clean_description(self):
+        return validate_optional_text(self.cleaned_data.get("description")) or None
 
     # Reglas que cruzan campos: organización definida, nombre único dentro de ella (RN-05)
     # y responsable perteneciente a la misma organización.
@@ -166,7 +184,8 @@ class DepartmentForm(forms.ModelForm):
 #preentrega eva3 PM --> Formulario Zonas
 # ModelForm de Zone: se reutiliza para Crear y Editar (mismo patrón que DepartmentForm).
 # El superusuario elige la organización; un usuario normal queda atado a la suya.
-class ZoneForm(forms.ModelForm):
+#correccion eva 3 --> PM --> Validadores Formularios
+class ZoneForm(FormLimitsMixin, forms.ModelForm):
     # Casilla simple: marcada = activa, desmarcada = inactiva.
     status = forms.BooleanField(
         required=False,
@@ -212,7 +231,9 @@ class ZoneForm(forms.ModelForm):
 
     # El código es único en la base de datos (incluye eliminadas lógicas).
     def clean_zone_id(self):
-        code = self.cleaned_data["zone_id"].strip()
+
+        #correccion eva 3 --> PM --> Validadores Formularios
+        code = validate_code(self.cleaned_data["zone_id"])
         exists = (
             Zone.objects.filter(zone_id__iexact=code)
             .exclude(pk=self.instance.pk)
@@ -222,11 +243,9 @@ class ZoneForm(forms.ModelForm):
             raise ValidationError("Ya existe una zona con ese código.")
         return code
 
+    #correccion eva 3 --> PM --> Validadores Formularios
     def clean_name(self):
-        name = self.cleaned_data["name"].strip()
-        if len(name) < 3:
-            raise ValidationError("Ingrese al menos 3 caracteres.")
-        return name
+        return validate_name(self.cleaned_data["name"])
 
     # Reglas que cruzan campos: organización definida, nombre único dentro de ella (RN-05)
     # y departamento perteneciente a la misma organización.
