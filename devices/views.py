@@ -33,6 +33,9 @@ from .forms import (
 from .models import AlertEvent, AlertRule, Catalog, Device, History, MaintenanceRequest, Measurement
 from core.pagination import PageSizeMixin
 
+#Eva3 --> Implementación Websocket --> PM
+from websocket.services import WebSocketCrudEventsMixin
+
 def get_visible_devices(user):
     """Dispositivos activos que el usuario puede ver (scoping por organización)."""
     qs = Device.objects.filter(deleted_at__isnull=True).select_related(
@@ -219,7 +222,9 @@ class DeviceListView(PageSizeMixin, DeviceAccessMixin, ListView):
 
 # Crear (CreateView): exige add_device y reutiliza DeviceForm y el mismo template del listado (modal).
 # Clase 8 - Alexander
-class DeviceCreateView(DeviceAccessMixin, SuccessMessageMixin, DeviceFormPageMixin, CreateView):
+#Eva3 --> Implementación Websocket --> PM
+class DeviceCreateView(WebSocketCrudEventsMixin, DeviceAccessMixin, SuccessMessageMixin, DeviceFormPageMixin, CreateView):
+    crud_module="dispositivos"
     permission_required = ("devices.view_device", "devices.add_device")
     model = Device
     form_class = DeviceForm
@@ -229,7 +234,9 @@ class DeviceCreateView(DeviceAccessMixin, SuccessMessageMixin, DeviceFormPageMix
 
 # Editar (UpdateView): exige change_device y reutiliza el mismo DeviceForm.
 # Clase 8 - Alexander
-class DeviceUpdateView(DeviceAccessMixin, SuccessMessageMixin, DeviceFormPageMixin, UpdateView):
+#EVa3 --> Implementación Websocket --> PM
+class DeviceUpdateView(WebSocketCrudEventsMixin, DeviceAccessMixin, SuccessMessageMixin, DeviceFormPageMixin, UpdateView):
+    crud_module="dispositivos"
     permission_required = ("devices.view_device", "devices.change_device")
     model = Device
     form_class = DeviceForm
@@ -239,7 +246,9 @@ class DeviceUpdateView(DeviceAccessMixin, SuccessMessageMixin, DeviceFormPageMix
 
 # Eliminar (DeleteView): exige delete_device y recibe un POST con CSRF desde SweetAlert2.
 # Clase 8 - Alexander
-class DeviceDeleteView(DeviceAccessMixin, DeleteView):
+#Eva3 --> Implementación Websocket --> PM
+class DeviceDeleteView(WebSocketCrudEventsMixin, DeviceAccessMixin, DeleteView):
+    crud_module="dispositivos"
     permission_required = "devices.delete_device"
     model = Device
     template_name = "devices/device_confirm_delete.html"
@@ -362,8 +371,9 @@ class CategoryListView(PageSizeMixin, CategoryAccessMixin, ListView):
         )
         return context
 
-
-class CategoryCreateView(CategoryAccessMixin, SuccessMessageMixin, CategoryFormPageMixin, CreateView):
+#eva3 --> Implementación Websocket --> PM
+class CategoryCreateView(WebSocketCrudEventsMixin, CategoryAccessMixin, SuccessMessageMixin, CategoryFormPageMixin, CreateView):
+    crud_module = "categorias"
     permission_required = ("devices.view_catalog", "devices.add_catalog")
     model = Catalog
     form_class = CategoryForm
@@ -371,8 +381,9 @@ class CategoryCreateView(CategoryAccessMixin, SuccessMessageMixin, CategoryFormP
     success_url = reverse_lazy("devices:category_list")
     success_message = "Categoría creada correctamente."
 
-
-class CategoryUpdateView(CategoryAccessMixin, SuccessMessageMixin, CategoryFormPageMixin, UpdateView):
+#Eva3 --> Implementación Websocket --> PM
+class CategoryUpdateView(WebSocketCrudEventsMixin, CategoryAccessMixin, SuccessMessageMixin, CategoryFormPageMixin, UpdateView):
+    crud_module = "categorias"
     permission_required = ("devices.view_catalog", "devices.change_catalog")
     model = Catalog
     form_class = CategoryForm
@@ -380,8 +391,9 @@ class CategoryUpdateView(CategoryAccessMixin, SuccessMessageMixin, CategoryFormP
     success_url = reverse_lazy("devices:category_list")
     success_message = "Categoría actualizada correctamente."
 
-
-class CategoryDeleteView(CategoryAccessMixin, DeleteView):
+#Eva3 --> Implementación Websocket --> PM
+class CategoryDeleteView(WebSocketCrudEventsMixin, CategoryAccessMixin, DeleteView):
+    crud_module = "categorias"
     permission_required = "devices.delete_catalog"
     model = Catalog
     template_name = "devices/category_confirm_delete.html"
@@ -473,8 +485,9 @@ class ProductListView(PageSizeMixin, ProductAccessMixin, ListView):
         context["query_string"] = f"&{query_string}" if query_string else ""
         return context
 
-
-class ProductCreateView(ProductAccessMixin, SuccessMessageMixin, ProductFormPageMixin, CreateView):
+#Eva3 --> Implementación Websocket --> PM
+class ProductCreateView(WebSocketCrudEventsMixin,ProductAccessMixin, SuccessMessageMixin, ProductFormPageMixin, CreateView):
+    crud_module = "productos"
     permission_required = ("devices.view_product", "devices.add_product")
     model = Product
     form_class = ProductForm
@@ -482,8 +495,9 @@ class ProductCreateView(ProductAccessMixin, SuccessMessageMixin, ProductFormPage
     success_url = reverse_lazy("devices:product_list")
     success_message = "Producto creado correctamente."
 
-
-class ProductUpdateView(ProductAccessMixin, SuccessMessageMixin, ProductFormPageMixin, UpdateView):
+#eva3 --> Implementación Websocket --> PM
+class ProductUpdateView(WebSocketCrudEventsMixin, ProductAccessMixin, SuccessMessageMixin, ProductFormPageMixin, UpdateView):
+    crud_module = "productos"
     permission_required = ("devices.view_product", "devices.change_product")
     model = Product
     form_class = ProductForm
@@ -491,8 +505,9 @@ class ProductUpdateView(ProductAccessMixin, SuccessMessageMixin, ProductFormPage
     success_url = reverse_lazy("devices:product_list")
     success_message = "Producto actualizado correctamente."
 
-
-class ProductDeleteView(ProductAccessMixin, DeleteView):
+#eva3 --> Implementación Websocket --> PM
+class ProductDeleteView(WebSocketCrudEventsMixin, ProductAccessMixin, DeleteView):
+    crud_module = "productos"
     permission_required = "devices.delete_product"
     model = Product
     template_name = "devices/product_confirm_delete.html"
@@ -688,9 +703,10 @@ class MeasurementListView(PageSizeMixin, MeasurementAccessMixin, ListView):
 
         return context
 
-
+#Eva3 --> Implementación Websocket --> PM
 # Crear (CreateView): exige add_measurement. Guarda quién registró la medición.
-class MeasurementCreateView(MeasurementAccessMixin, SuccessMessageMixin, MeasurementFormPageMixin, CreateView):
+class MeasurementCreateView(WebSocketCrudEventsMixin, MeasurementAccessMixin, SuccessMessageMixin, MeasurementFormPageMixin, CreateView):
+    crud_module = "mediciones"
     permission_required = ("devices.view_measurement", "devices.add_measurement")
     model = Measurement
     form_class = MeasurementForm
@@ -702,9 +718,10 @@ class MeasurementCreateView(MeasurementAccessMixin, SuccessMessageMixin, Measure
         form.instance.user = self.request.user  # el servidor decide el registrador, no el formulario
         return super().form_valid(form)
 
-
+#eva3 --> Implementación Websocket --> PM
 # Editar (UpdateView): exige change_measurement y reutiliza el mismo MeasurementForm.
-class MeasurementUpdateView(MeasurementAccessMixin, SuccessMessageMixin, MeasurementFormPageMixin, UpdateView):
+class MeasurementUpdateView(WebSocketCrudEventsMixin, MeasurementAccessMixin, SuccessMessageMixin, MeasurementFormPageMixin, UpdateView):
+    crud_module = "mediciones"
     permission_required = ("devices.view_measurement", "devices.change_measurement")
     model = Measurement
     form_class = MeasurementForm
@@ -712,9 +729,10 @@ class MeasurementUpdateView(MeasurementAccessMixin, SuccessMessageMixin, Measure
     success_url = reverse_lazy("devices:measurement_list")
     success_message = "Medición actualizada correctamente."
 
-
+#eva3 --> Implementación Websocket --> PM
 # Eliminar (DeleteView): exige delete_measurement y recibe un POST con CSRF desde SweetAlert2.
-class MeasurementDeleteView(MeasurementAccessMixin, DeleteView):
+class MeasurementDeleteView(WebSocketCrudEventsMixin, MeasurementAccessMixin, DeleteView):
+    crud_module = "mediciones"
     permission_required = "devices.delete_measurement"
     model = Measurement
     http_method_names = ["post"]  # solo POST: la confirmación la hace SweetAlert2
@@ -871,10 +889,11 @@ class AlertListView(PageSizeMixin, AlertAccessMixin, ListView):
         context["query_string"] = f"&{query_string}" if query_string else ""
 
         return context
-
+#Eva3 --> Implementación Websocket --> PM
 #preentrega eva 3 --> PM -- CRUD ALERTAS
 # Crear (CreateView): exige add_alertevent.
-class AlertCreateView(AlertAccessMixin, SuccessMessageMixin, AlertStatusMixin, AlertFormPageMixin, CreateView):
+class AlertCreateView(WebSocketCrudEventsMixin, AlertAccessMixin, SuccessMessageMixin, AlertStatusMixin, AlertFormPageMixin, CreateView):
+    crud_module = "alertas"
     permission_required = ("devices.view_alertevent", "devices.add_alertevent")
     model = AlertEvent
     form_class = AlertEventForm
@@ -882,9 +901,10 @@ class AlertCreateView(AlertAccessMixin, SuccessMessageMixin, AlertStatusMixin, A
     success_url = reverse_lazy("devices:alert_list")
     success_message = "Alerta registrada correctamente."
 
-
+#Eva3 --> Implementación Websocket --> PM
 # Editar (UpdateView): exige change_alertevent. Aquí se reconoce o resuelve una alerta.
-class AlertUpdateView(AlertAccessMixin, SuccessMessageMixin, AlertStatusMixin, AlertFormPageMixin, UpdateView):
+class AlertUpdateView(WebSocketCrudEventsMixin, AlertAccessMixin, SuccessMessageMixin, AlertStatusMixin, AlertFormPageMixin, UpdateView):
+    crud_module = "alertas"
     permission_required = ("devices.view_alertevent", "devices.change_alertevent")
     model = AlertEvent
     form_class = AlertEventForm
@@ -892,9 +912,10 @@ class AlertUpdateView(AlertAccessMixin, SuccessMessageMixin, AlertStatusMixin, A
     success_url = reverse_lazy("devices:alert_list")
     success_message = "Alerta actualizada correctamente."
 
-
+#Eva3 --> Implementación Websocket --> PM
 # Eliminar (DeleteView): exige delete_alertevent y recibe un POST con CSRF desde SweetAlert2.
-class AlertDeleteView(AlertAccessMixin, DeleteView):
+class AlertDeleteView(WebSocketCrudEventsMixin, AlertAccessMixin, DeleteView):
+    crud_module = "alertas"
     permission_required = "devices.delete_alertevent"
     model = AlertEvent
     http_method_names = ["post"]  # solo POST: la confirmación la hace SweetAlert2
@@ -1017,8 +1038,9 @@ class CatalogListView(PageSizeMixin, CatalogAccessMixin, ListView):
         )
         return context
 
-
-class CatalogCreateView(CatalogAccessMixin, SuccessMessageMixin, CatalogFormPageMixin, CreateView):
+#Eva3 --> Implementación Websocket --> PM
+class CatalogCreateView(WebSocketCrudEventsMixin,CatalogAccessMixin, SuccessMessageMixin, CatalogFormPageMixin, CreateView):
+    crud_module = "catalogos"
     permission_required = ("devices.view_catalog", "devices.add_catalog")
     model = Catalog
     form_class = CatalogForm
@@ -1026,8 +1048,9 @@ class CatalogCreateView(CatalogAccessMixin, SuccessMessageMixin, CatalogFormPage
     success_url = reverse_lazy("devices:catalog_list")
     success_message = "Categoría creada correctamente."
 
-
-class CatalogUpdateView(CatalogAccessMixin, SuccessMessageMixin, CatalogFormPageMixin, UpdateView):
+#eva3 --> Implementación Websocket --> PM
+class CatalogUpdateView(WebSocketCrudEventsMixin, CatalogAccessMixin, SuccessMessageMixin, CatalogFormPageMixin, UpdateView):
+    crud_module = "catalogos"
     permission_required = ("devices.view_catalog", "devices.change_catalog")
     model = Catalog
     form_class = CatalogForm
@@ -1035,8 +1058,9 @@ class CatalogUpdateView(CatalogAccessMixin, SuccessMessageMixin, CatalogFormPage
     success_url = reverse_lazy("devices:catalog_list")
     success_message = "Categoría actualizada correctamente."
 
-
-class CatalogDeleteView(CatalogAccessMixin, DeleteView):
+#eva3 --> Implementación Websocket --> PM
+class CatalogDeleteView(WebSocketCrudEventsMixin, CatalogAccessMixin, DeleteView):
+    crud_module = "catalogos"
     permission_required = "devices.delete_catalog"
     model = Catalog
     template_name = "devices/catalog_confirm_delete.html"
@@ -1187,9 +1211,10 @@ class MaintenanceListView(PageSizeMixin,MaintenanceAccessMixin, ListView):
 
         return context
 
-
+#eva3 --> Implementación Websocket --> PM
 # Crear (CreateView): exige add_maintenancerequest.
-class MaintenanceCreateView(MaintenanceAccessMixin, SuccessMessageMixin, MaintenanceServerFieldsMixin, MaintenanceFormPageMixin, CreateView):
+class MaintenanceCreateView(WebSocketCrudEventsMixin, MaintenanceAccessMixin, SuccessMessageMixin, MaintenanceServerFieldsMixin, MaintenanceFormPageMixin, CreateView):
+    crud_module = "mantenimiento"
     permission_required = ("devices.view_maintenancerequest", "devices.add_maintenancerequest")
     model = MaintenanceRequest
     form_class = MaintenanceRequestForm
@@ -1197,9 +1222,10 @@ class MaintenanceCreateView(MaintenanceAccessMixin, SuccessMessageMixin, Mainten
     success_url = reverse_lazy("devices:maintenance_list")
     success_message = "Solicitud de mantenimiento registrada correctamente."
 
-
+#eva3 --> Implementación Websocket --> PM
 # Editar (UpdateView): exige change_maintenancerequest. Aquí se asigna, se programa y se cierra.
-class MaintenanceUpdateView(MaintenanceAccessMixin, SuccessMessageMixin, MaintenanceServerFieldsMixin, MaintenanceFormPageMixin, UpdateView):
+class MaintenanceUpdateView(WebSocketCrudEventsMixin, MaintenanceAccessMixin, SuccessMessageMixin, MaintenanceServerFieldsMixin, MaintenanceFormPageMixin, UpdateView):
+    crud_module = "mantenimiento"
     permission_required = ("devices.view_maintenancerequest", "devices.change_maintenancerequest")
     model = MaintenanceRequest
     form_class = MaintenanceRequestForm
@@ -1207,9 +1233,10 @@ class MaintenanceUpdateView(MaintenanceAccessMixin, SuccessMessageMixin, Mainten
     success_url = reverse_lazy("devices:maintenance_list")
     success_message = "Solicitud de mantenimiento actualizada correctamente."
 
-
+#eva3 --> Implementación Websocket --> PM
 # Eliminar (DeleteView): exige delete_maintenancerequest y recibe un POST con CSRF desde SweetAlert2.
-class MaintenanceDeleteView(MaintenanceAccessMixin, DeleteView):
+class MaintenanceDeleteView(WebSocketCrudEventsMixin, MaintenanceAccessMixin, DeleteView):
+    crud_module = "mantenimiento"
     permission_required = "devices.delete_maintenancerequest"
     model = MaintenanceRequest
     http_method_names = ["post"]  # solo POST: la confirmación la hace SweetAlert2

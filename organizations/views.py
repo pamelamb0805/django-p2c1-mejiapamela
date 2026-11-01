@@ -443,9 +443,10 @@ class ZoneListView(PageSizeMixin, ZoneAccessMixin, ListView):
 
         return context
 
-
+#EVA3 --> Implementación Websocket --> PM
 # Crear (CreateView): exige add_zone y reutiliza el template del listado (modal).
-class ZoneCreateView(ZoneAccessMixin, SuccessMessageMixin, ZoneFormPageMixin, CreateView):
+class ZoneCreateView(WebSocketCrudEventsMixin, ZoneAccessMixin, SuccessMessageMixin, ZoneFormPageMixin, CreateView):
+    crud_module = "zonas"
     permission_required = ("organizations.view_zone", "organizations.add_zone")
     model = Zone
     form_class = ZoneForm
@@ -453,9 +454,10 @@ class ZoneCreateView(ZoneAccessMixin, SuccessMessageMixin, ZoneFormPageMixin, Cr
     success_url = reverse_lazy("organizations:zone_list")
     success_message = "Zona creada correctamente."
 
-
+#eva3 --> Implementación Websocket --> PM
 # Editar (UpdateView): exige change_zone y reutiliza el mismo ZoneForm.
-class ZoneUpdateView(ZoneAccessMixin, SuccessMessageMixin, ZoneFormPageMixin, UpdateView):
+class ZoneUpdateView(WebSocketCrudEventsMixin,ZoneAccessMixin, SuccessMessageMixin, ZoneFormPageMixin, UpdateView):
+    crud_module = "zonas"
     permission_required = ("organizations.view_zone", "organizations.change_zone")
     model = Zone
     form_class = ZoneForm
@@ -463,9 +465,10 @@ class ZoneUpdateView(ZoneAccessMixin, SuccessMessageMixin, ZoneFormPageMixin, Up
     success_url = reverse_lazy("organizations:zone_list")
     success_message = "Zona actualizada correctamente."
 
-
+#eva3 --> Implementación Websocket --> PM
 # Eliminar (DeleteView): exige delete_zone y recibe un POST con CSRF desde SweetAlert2.
-class ZoneDeleteView(ZoneAccessMixin, DeleteView):
+class ZoneDeleteView(WebSocketCrudEventsMixin,ZoneAccessMixin, DeleteView):
+    crud_module = "zonas"
     permission_required = "organizations.delete_zone"
     model = Zone
     http_method_names = ["post"]  # solo POST: la confirmación la hace SweetAlert2
