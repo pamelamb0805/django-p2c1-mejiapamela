@@ -406,8 +406,6 @@ class DepartmentDeleteView(
         self.object.save(update_fields=["deleted_at", "updated_at"])
         self.publish_crud_notification("eliminado")
 
-        self.publish_crud_notification("eliminado")
-
         messages.success(
             self.request,
             "Departamento eliminado correctamente.",
@@ -576,5 +574,7 @@ class ZoneDeleteView(WebSocketCrudEventsMixin,ZoneAccessMixin, DeleteView):
 
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
+        #corrección Eva3 --> PM --Notificación de Websocket
+        self.publish_crud_notification("eliminado")
         messages.success(self.request, "Zona eliminada correctamente.")
         return HttpResponseRedirect(self.get_success_url())

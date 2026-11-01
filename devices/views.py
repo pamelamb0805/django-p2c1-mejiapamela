@@ -101,10 +101,38 @@ class DeviceFormPageMixin:
 
         dispositivos = get_visible_devices(self.request.user)
 
-        page_size = get_page_size(self.request, self.page_size_session_key)
+        # Mantener los filtros del listado principal
+        buscar = self.request.GET.get("buscar", "").strip()
+        estado = self.request.GET.get("estado", "").strip()
+        zona = self.request.GET.get("zona", "").strip()
+
+        if buscar:
+            dispositivos = dispositivos.filter(
+                Q(device_id__icontains=buscar)
+                | Q(internal_name__icontains=buscar)
+                | Q(serial_number__icontains=buscar)
+                | Q(product__name__icontains=buscar)
+                | Q(product__sku__icontains=buscar)
+            )
+
+        if estado:
+            dispositivos = dispositivos.filter(status__iexact=estado)
+
+        if zona.isdigit():
+            dispositivos = dispositivos.filter(zone_id=int(zona))
+
+        # Paginación del listado que queda detrás del modal
+        page_size = get_page_size(
+            self.request,
+            self.page_size_session_key
+        )
+
         page_obj = Paginator(
-            dispositivos.select_related("product", "zone", "zone__organization")
-            .order_by("internal_name"),
+            dispositivos.select_related(
+                "product",
+                "zone",
+                "zone__organization"
+            ).order_by("internal_name"),
             page_size,
         ).get_page(self.request.GET.get("page"))
 
@@ -113,24 +141,34 @@ class DeviceFormPageMixin:
         context["is_paginated"] = page_obj.has_other_pages()
         context["page_size"] = page_size
         context["page_size_options"] = PAGE_SIZE_OPTIONS
-        context["query_string"] = ""
 
+        # Conservar los parámetros de búsqueda y filtros en la paginación
+        parametros = self.request.GET.copy()
+        parametros.pop("page", None)
+
+        query_string = urlencode(parametros, doseq=True)
+        context["query_string"] = (
+            f"&{query_string}" if query_string else ""
+        )
+
+        # Zonas disponibles dentro del ámbito autorizado
         context["zonas"] = Zone.objects.filter(
-            pk__in=dispositivos.values("zone_id"),
+            pk__in=get_visible_devices(self.request.user).values("zone_id"),
             deleted_at__isnull=True,
         ).distinct().order_by("name")
 
         context["estados"] = (
-            dispositivos.exclude(status__isnull=True)
+            get_visible_devices(self.request.user)
+            .exclude(status__isnull=True)
             .exclude(status__exact="")
             .values_list("status", flat=True)
             .distinct()
             .order_by("status")
         )
 
-        context["buscar"] = self.request.GET.get("buscar", "")
-        context["estado_seleccionado"] = self.request.GET.get("estado", "")
-        context["zona_seleccionada"] = self.request.GET.get("zona", "")
+        context["buscar"] = buscar
+        context["estado_seleccionado"] = estado
+        context["zona_seleccionada"] = zona
         context["open_modal"] = True
 
         return context
@@ -253,12 +291,20 @@ class DeviceDeleteView(WebSocketCrudEventsMixin, DeviceAccessMixin, DeleteView):
 
     # Borrado lógico: marca deleted_at en vez de borrar el registro (coherente con BaseModel).
     # Clase 8 - Alexander
+    #corrección Eva3 --> PM --Notificación de Websocket
     def form_valid(self, form):
-        # Borrado lógico, coherente con BaseModel.deleted_at
+        # Borrado lógico
         self.object = self.get_object()
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
-        messages.success(self.request, "Dispositivo eliminado correctamente.")
+
+        # Notificar solamente después de guardar correctamente
+        self.publish_crud_notification("eliminado")
+
+        messages.success(
+            self.request,
+            "Dispositivo eliminado correctamente."
+        )
         return HttpResponseRedirect(self.get_success_url())
 
 #preentrega eva 3 PM --> CRUD Categorias
@@ -291,14 +337,40 @@ class CategoryFormPageMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         categorias = get_visible_categories(self.request.user)
 
-        page_size = get_page_size(self.request, self.page_size_session_key)
+        # Mantener los filtros del listado
+        buscar = self.request.GET.get("buscar", "").strip()
+        estado = self.request.GET.get("estado", "").strip()
+
+        if buscar:
+            categorias = categorias.filter(
+                Q(catalog_id__icontains=buscar)
+                | Q(name__icontains=buscar)
+                | Q(description__icontains=buscar)
+            )
+
+        if estado:
+            categorias = categorias.filter(status__iexact=estado)
+
+        # Anotación de productos activos asociados a cada categoría
+        categorias = categorias.annotate(
+            products_count=Count(
+                "products",
+                filter=Q(products__deleted_at__isnull=True)
+            )
+        ).order_by("name")
+
+        # Paginación
+        page_size = get_page_size(
+            self.request,
+            self.page_size_session_key
+        )
+
         page_obj = Paginator(
-            categorias.annotate(
-                products_count=Count("products", filter=Q(products__deleted_at__isnull=True))
-            ).order_by("name"),
-            page_size,
+            categorias,
+            page_size
         ).get_page(self.request.GET.get("page"))
 
         context["categories"] = page_obj.object_list
@@ -306,17 +378,29 @@ class CategoryFormPageMixin:
         context["is_paginated"] = page_obj.has_other_pages()
         context["page_size"] = page_size
         context["page_size_options"] = PAGE_SIZE_OPTIONS
-        context["query_string"] = ""
+
+        # Conservar los filtros al cambiar de página
+        parametros = self.request.GET.copy()
+        parametros.pop("page", None)
+
+        query_string = urlencode(parametros, doseq=True)
+        context["query_string"] = (
+            f"&{query_string}" if query_string else ""
+        )
+
         context["estados"] = (
-            categorias.exclude(status__isnull=True)
+            get_visible_categories(self.request.user)
+            .exclude(status__isnull=True)
             .exclude(status__exact="")
             .values_list("status", flat=True)
             .distinct()
             .order_by("status")
         )
-        context["buscar"] = self.request.GET.get("buscar", "")
-        context["estado_seleccionado"] = self.request.GET.get("estado", "")
+
+        context["buscar"] = buscar
+        context["estado_seleccionado"] = estado
         context["open_modal"] = True
+
         return context
         
 
@@ -396,10 +480,11 @@ class CategoryDeleteView(WebSocketCrudEventsMixin, CategoryAccessMixin, DeleteVi
     template_name = "devices/category_confirm_delete.html"
     success_url = reverse_lazy("devices:category_list")
 
+    #corrección Eva3 --> PM --Notificación de Websocket
     def form_valid(self, form):
         self.object = self.get_object()
 
-        # No se elimina una categoría que todavía tiene productos activos.
+        # No eliminar una categoría que tenga productos activos
         if self.object.products.filter(deleted_at__isnull=True).exists():
             messages.error(
                 self.request,
@@ -409,7 +494,14 @@ class CategoryDeleteView(WebSocketCrudEventsMixin, CategoryAccessMixin, DeleteVi
 
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
-        messages.success(self.request, "Categoría eliminada correctamente.")
+
+        # Notificación WebSocket
+        self.publish_crud_notification("eliminado")
+
+        messages.success(
+            self.request,
+            "Categoría eliminada correctamente."
+        )
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -510,19 +602,34 @@ class ProductDeleteView(WebSocketCrudEventsMixin, ProductAccessMixin, DeleteView
     template_name = "devices/product_confirm_delete.html"
     success_url = reverse_lazy("devices:product_list")
 
+    #corrección Eva3 --> PM --Notificación de Websocket
     def form_valid(self, form):
         self.object = self.get_object()
 
+        # Comprobar si el producto está asociado a dispositivos o reglas de alerta
         en_uso = (
             self.object.devices.filter(deleted_at__isnull=True).exists()
             or self.object.alert_rules.filter(deleted_at__isnull=True).exists()
         )
+
         if en_uso:
             messages.error(
                 self.request,
                 "No se puede eliminar el producto porque está asociado a dispositivos o reglas de alerta.",
             )
             return HttpResponseRedirect(self.get_success_url())
+
+        self.object.deleted_at = timezone.now()
+        self.object.save(update_fields=["deleted_at", "updated_at"])
+
+        # Notificación WebSocket
+        self.publish_crud_notification("eliminado")
+
+        messages.success(
+            self.request,
+            "Producto eliminado correctamente."
+        )
+        return HttpResponseRedirect(self.get_success_url())
 
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
@@ -736,17 +843,28 @@ class MeasurementDeleteView(WebSocketCrudEventsMixin, MeasurementAccessMixin, De
     success_url = reverse_lazy("devices:measurement_list")
 
     # Borrado lógico. Si tiene eventos de alerta activos asociados, no se elimina.
+    #corrección Eva3 --> PM --Notificación de Websocket
     def form_valid(self, form):
         self.object = self.get_object()
+
+        # Comprobar si tiene eventos de alerta asociados
         if self.object.alert_events.filter(deleted_at__isnull=True).exists():
             messages.error(
                 self.request,
                 "No se puede eliminar la medición porque tiene alertas asociadas.",
             )
             return HttpResponseRedirect(self.get_success_url())
+
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
-        messages.success(self.request, "Medición eliminada correctamente.")
+
+        # Notificación WebSocket
+        self.publish_crud_notification("eliminado")
+
+        messages.success(
+            self.request,
+            "Medición eliminada correctamente."
+        )
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -919,11 +1037,21 @@ class AlertDeleteView(WebSocketCrudEventsMixin, AlertAccessMixin, DeleteView):
     success_url = reverse_lazy("devices:alert_list")
 
     # Borrado lógico: marca deleted_at en vez de borrar el registro.
+    #corrección Eva3 --> PM --Notificación de Websocket
     def form_valid(self, form):
         self.object = self.get_object()
+
+        # Borrado lógico
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
-        messages.success(self.request, "Alerta eliminada correctamente.")
+
+        # Notificación WebSocket
+        self.publish_crud_notification("eliminado")
+
+        messages.success(
+            self.request,
+            "Alerta eliminada correctamente."
+        )
         return HttpResponseRedirect(self.get_success_url())
 
 @login_required
@@ -1063,15 +1191,28 @@ class CatalogDeleteView(WebSocketCrudEventsMixin, CatalogAccessMixin, DeleteView
     template_name = "devices/catalog_confirm_delete.html"
     success_url = reverse_lazy("devices:catalog_list")
 
+    #corrección Eva3 --> PM --Notificación de Websocket
     def form_valid(self, form):
         self.object = self.get_object()
-        # Regla extra: no se elimina una categoría que aún tiene productos activos
+
+        # No eliminar una categoría que tenga productos activos
         if self.object.products.filter(deleted_at__isnull=True).exists():
-            messages.error(self.request, "No se puede eliminar: la categoría tiene productos activos.")
+            messages.error(
+                self.request,
+                "No se puede eliminar: la categoría tiene productos activos."
+            )
             return HttpResponseRedirect(self.get_success_url())
+
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
-        messages.success(self.request, "Categoría eliminada correctamente.")
+
+        # Notificación WebSocket
+        self.publish_crud_notification("eliminado")
+
+        messages.success(
+            self.request,
+            "Categoría eliminada correctamente."
+        )
         return HttpResponseRedirect(self.get_success_url())
 
 #preentrega eva 3 --> PM -- CRUD MANTENIMIENTO
@@ -1240,15 +1381,26 @@ class MaintenanceDeleteView(WebSocketCrudEventsMixin, MaintenanceAccessMixin, De
     success_url = reverse_lazy("devices:maintenance_list")
 
     # Borrado lógico. Una solicitud cerrada es parte del historial (RF-29) y no se elimina.
+    #corrección Eva3 --> PM --Notificación de Websocket
     def form_valid(self, form):
         self.object = self.get_object()
+
+        # No eliminar solicitudes cerradas porque forman parte del historial
         if (self.object.status or "").lower() == "cerrada":
             messages.error(
                 self.request,
                 "No se puede eliminar una solicitud cerrada: queda como historial de mantenimiento.",
             )
             return HttpResponseRedirect(self.get_success_url())
+
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
-        messages.success(self.request, "Solicitud de mantenimiento eliminada correctamente.")
+
+        # Notificación WebSocket
+        self.publish_crud_notification("eliminado")
+
+        messages.success(
+            self.request,
+            "Solicitud de mantenimiento eliminada correctamente."
+        )
         return HttpResponseRedirect(self.get_success_url())
