@@ -17,6 +17,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from .forms import DepartmentForm, OrganizationForm, ZoneForm
 from .models import Organization, Department, Zone
 from core.pagination import PageSizeMixin 
+from websocket.mixins import WebSocketCrudEventsMixin
 
 # ==========================================
 # 1. ORGANIZACIONES (RF-01, RF-04)
@@ -128,45 +129,78 @@ class OrganizationListView(PageSizeMixin,OrganizationAccessMixin, ListView):
 
 
 # Crear (CreateView): exige add_organization y reutiliza el template del listado (modal).
-class OrganizationCreateView(OrganizationAccessMixin, SuccessMessageMixin, OrganizationFormPageMixin, CreateView):
-    permission_required = ("organizations.view_organization", "organizations.add_organization")
+class OrganizationCreateView(
+    WebSocketCrudEventsMixin,
+    OrganizationAccessMixin,
+    SuccessMessageMixin,
+    OrganizationFormPageMixin,
+    CreateView,
+):
+    crud_module = "organizaciones"
+    crud_action = "creado"
+
+    permission_required = (
+        "organizations.view_organization",
+        "organizations.add_organization",
+    )
     model = Organization
     form_class = OrganizationForm
     template_name = "organizations/organization_list.html"
     success_url = reverse_lazy("organizations:organization_list")
     success_message = "Organización creada correctamente."
 
-
 # Editar (UpdateView): exige change_organization y reutiliza el mismo OrganizationForm.
-class OrganizationUpdateView(OrganizationAccessMixin, SuccessMessageMixin, OrganizationFormPageMixin, UpdateView):
-    permission_required = ("organizations.view_organization", "organizations.change_organization")
+class OrganizationUpdateView(
+    WebSocketCrudEventsMixin,
+    OrganizationAccessMixin,
+    SuccessMessageMixin,
+    OrganizationFormPageMixin,
+    UpdateView,
+):
+    crud_module = "organizaciones"
+    crud_action = "actualizado"
+
+    permission_required = (
+        "organizations.view_organization",
+        "organizations.change_organization",
+    )
     model = Organization
     form_class = OrganizationForm
     template_name = "organizations/organization_list.html"
     success_url = reverse_lazy("organizations:organization_list")
     success_message = "Organización actualizada correctamente."
 
-
 # Eliminar (DeleteView): exige delete_organization y recibe un POST con CSRF desde SweetAlert2.
-class OrganizationDeleteView(OrganizationAccessMixin, DeleteView):
+class OrganizationDeleteView(
+    WebSocketCrudEventsMixin,
+    OrganizationAccessMixin,
+    DeleteView,
+):
+    crud_module = "organizaciones"
+    crud_action = "eliminado"
+
     permission_required = "organizations.delete_organization"
     model = Organization
-    http_method_names = ["post"]  # solo POST: la confirmación la hace SweetAlert2
+    http_method_names = ["post"]
     success_url = reverse_lazy("organizations:organization_list")
 
-    # Borrado lógico: marca deleted_at en vez de borrar el registro (coherente con BaseModel).
-    # Si la organización aún tiene datos activos asociados, no se elimina.
     def form_valid(self, form):
         self.object = self.get_object()
 
         dependencias = []
+
         if self.object.departments.filter(deleted_at__isnull=True).exists():
             dependencias.append("departamentos")
+
         if self.object.zones.filter(deleted_at__isnull=True).exists():
             dependencias.append("zonas")
+
         if self.object.user_profiles.filter(deleted_at__isnull=True).exists():
             dependencias.append("perfiles de usuario")
-        if self.object.maintenance_requests.filter(deleted_at__isnull=True).exists():
+
+        if self.object.maintenance_requests.filter(
+            deleted_at__isnull=True
+        ).exists():
             dependencias.append("solicitudes de mantenimiento")
 
         if dependencias:
@@ -180,9 +214,15 @@ class OrganizationDeleteView(OrganizationAccessMixin, DeleteView):
 
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
-        messages.success(self.request, "Organización eliminada correctamente.")
-        return HttpResponseRedirect(self.get_success_url())
 
+        self.publish_crud_notification("eliminado")
+
+        messages.success(
+            self.request,
+            "Organización eliminada correctamente.",
+        )
+
+        return HttpResponseRedirect(self.get_success_url())
 # ==========================================
 # 2. DEPARTAMENTOS (RF-02, RN-02, RN-05)
 #preentrega eva 3 - PM
@@ -282,8 +322,20 @@ class DepartmentListView(PageSizeMixin, DepartmentAccessMixin, ListView):
 
 
 # Crear (CreateView): exige add_department y reutiliza el template del listado (modal).
-class DepartmentCreateView(DepartmentAccessMixin, SuccessMessageMixin, DepartmentFormPageMixin, CreateView):
-    permission_required = ("organizations.view_department", "organizations.add_department")
+class DepartmentCreateView(
+    WebSocketCrudEventsMixin,
+    DepartmentAccessMixin,
+    SuccessMessageMixin,
+    DepartmentFormPageMixin,
+    CreateView,
+):
+    crud_module = "departamentos"
+    crud_action = "creado"
+
+    permission_required = (
+        "organizations.view_department",
+        "organizations.add_department",
+    )
     model = Department
     form_class = DepartmentForm
     template_name = "organizations/department_list.html"
@@ -291,9 +343,20 @@ class DepartmentCreateView(DepartmentAccessMixin, SuccessMessageMixin, Departmen
     success_message = "Departamento creado correctamente."
 
 
-# Editar (UpdateView): exige change_department y reutiliza el mismo DepartmentForm.
-class DepartmentUpdateView(DepartmentAccessMixin, SuccessMessageMixin, DepartmentFormPageMixin, UpdateView):
-    permission_required = ("organizations.view_department", "organizations.change_department")
+class DepartmentUpdateView(
+    WebSocketCrudEventsMixin,
+    DepartmentAccessMixin,
+    SuccessMessageMixin,
+    DepartmentFormPageMixin,
+    UpdateView,
+):
+    crud_module = "departamentos"
+    crud_action = "actualizado"
+
+    permission_required = (
+        "organizations.view_department",
+        "organizations.change_department",
+    )
     model = Department
     form_class = DepartmentForm
     template_name = "organizations/department_list.html"
@@ -301,23 +364,33 @@ class DepartmentUpdateView(DepartmentAccessMixin, SuccessMessageMixin, Departmen
     success_message = "Departamento actualizado correctamente."
 
 
-# Eliminar (DeleteView): exige delete_department y recibe un POST con CSRF desde SweetAlert2.
-class DepartmentDeleteView(DepartmentAccessMixin, DeleteView):
+class DepartmentDeleteView(
+    WebSocketCrudEventsMixin,
+    DepartmentAccessMixin,
+    DeleteView,
+):
+    crud_module = "departamentos"
+    crud_action = "eliminado"
+
     permission_required = "organizations.delete_department"
     model = Department
-    http_method_names = ["post"]  # solo POST: la confirmación la hace SweetAlert2
+    http_method_names = ["post"]
     success_url = reverse_lazy("organizations:department_list")
 
-    # Borrado lógico. Si aún tiene zonas, usuarios o perfiles activos asociados, no se elimina.
     def form_valid(self, form):
         self.object = self.get_object()
 
         dependencias = []
+
         if self.object.zones.filter(deleted_at__isnull=True).exists():
             dependencias.append("zonas")
+
         if self.object.users.filter(deleted_at__isnull=True).exists():
             dependencias.append("usuarios")
-        if self.object.user_profiles.filter(deleted_at__isnull=True).exists():
+
+        if self.object.user_profiles.filter(
+            deleted_at__isnull=True
+        ).exists():
             dependencias.append("perfiles de usuario")
 
         if dependencias:
@@ -331,7 +404,15 @@ class DepartmentDeleteView(DepartmentAccessMixin, DeleteView):
 
         self.object.deleted_at = timezone.now()
         self.object.save(update_fields=["deleted_at", "updated_at"])
-        messages.success(self.request, "Departamento eliminado correctamente.")
+        self.publish_crud_notification("eliminado")
+
+        self.publish_crud_notification("eliminado")
+
+        messages.success(
+            self.request,
+            "Departamento eliminado correctamente.",
+        )
+
         return HttpResponseRedirect(self.get_success_url())
 # ==========================================
 # 3. ZONAS FÍSICAS (RF-03, RN-02, RN-05)

@@ -34,7 +34,7 @@ from .models import AlertEvent, AlertRule, Catalog, Device, History, Maintenance
 from core.pagination import PageSizeMixin
 
 #Eva3 --> Implementación Websocket --> PM
-from websocket.services import WebSocketCrudEventsMixin
+from websocket.mixins import WebSocketCrudEventsMixin
 
 def get_visible_devices(user):
     """Dispositivos activos que el usuario puede ver (scoping por organización)."""
