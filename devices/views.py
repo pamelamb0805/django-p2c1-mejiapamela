@@ -31,7 +31,7 @@ from .forms import (
     MeasurementForm,
 )
 from .models import AlertEvent, AlertRule, Catalog, Device, History, MaintenanceRequest, Measurement
-from core.pagination import PageSizeMixin
+from core.pagination import PageSizeMixin,  get_page_size, PAGE_SIZE_OPTIONS
 
 #Eva3 --> Implementación Websocket --> PM
 from websocket.mixins import WebSocketCrudEventsMixin
@@ -92,12 +92,9 @@ class DeviceFormPageMixin:
     page_size_session_key = "device_page_size"
 
     def get_form_kwargs(self):
-        kw
-        
-        args = super().get_form_kwargs()
+        kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
         return kwargs
-
     #correccion paginacion Eva3 --> PM
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
