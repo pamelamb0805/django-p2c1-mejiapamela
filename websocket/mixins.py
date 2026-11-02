@@ -1,3 +1,4 @@
+
 from websocket.services import publish_crud_event
 
 
@@ -7,35 +8,66 @@ class WebSocketCrudEventsMixin:
 
     def get_crud_organization_id(self):
         """
-        Obtiene la organización asociada al objeto.
-        Contempla registros con organización directa o mediante
-        zona/departamento.
+        Obtiene la organización propietaria del registro.
+
+        La organización puede estar relacionada directamente
+        o mediante un dispositivo y su zona.
         """
         obj = getattr(self, "object", None)
 
         if obj is None:
             return None
 
-        # Organización: el propio objeto representa la organización.
+        # La organización es el propio registro.
         if self.crud_module == "organizaciones":
             return obj.pk
 
-        # Departamento, zona u otros modelos con FK organization.
+        # Relaciones directas con organización.
         organization_id = getattr(obj, "organization_id", None)
 
         if organization_id:
             return organization_id
 
-        # Dispositivos u otros registros vinculados mediante zona.
+        # Registros relacionados directamente con una zona.
         zone = getattr(obj, "zone", None)
-        if zone and getattr(zone, "organization_id", None):
-            return zone.organization_id
 
-        # Registros vinculados mediante departamento.
+        if zone is not None:
+            organization_id = getattr(zone, "organization_id", None)
+
+            if organization_id:
+                return organization_id
+
+        # Registros relacionados con un departamento.
         department = getattr(obj, "department", None)
-        if department and getattr(department, "organization_id", None):
-            return department.organization_id
 
+        if department is not None:
+            organization_id = getattr(
+                department,
+                "organization_id",
+                None,
+            )
+
+            if organization_id:
+                return organization_id
+
+        # Mediciones y alertas: dispositivo -> zona -> organización.
+        device = getattr(obj, "device", None)
+
+        if device is not None:
+            device_zone = getattr(device, "zone", None)
+
+            if device_zone is not None:
+                organization_id = getattr(
+                    device_zone,
+                    "organization_id",
+                    None,
+                )
+
+                if organization_id:
+                    return organization_id
+
+        # Los registros globales, como categorías y productos,
+        # no se difunden a todas las organizaciones.
         return None
 
     def publish_crud_notification(self, action=None):
@@ -52,8 +84,7 @@ class WebSocketCrudEventsMixin:
         )
 
     def form_valid(self, form):
-        # En CreateView self.object todavía es None antes de guardar.
-        # En UpdateView ya contiene el objeto que se está modificando.
+        # Identificar la acción antes de guardar.
         action = self.crud_action
 
         if action is None:
@@ -65,6 +96,7 @@ class WebSocketCrudEventsMixin:
 
         response = super().form_valid(form)
 
+        # Publicar después de guardar correctamente.
         if response.status_code < 400:
             self.publish_crud_notification(action)
 

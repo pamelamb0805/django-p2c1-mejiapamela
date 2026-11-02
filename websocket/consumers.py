@@ -1,3 +1,4 @@
+
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 from django.core.exceptions import ObjectDoesNotExist
@@ -8,26 +9,25 @@ class ChatConsumer(JsonWebsocketConsumer):
     def connect(self):
         user = self.scope["user"]
 
-        # 1. Solo usuarios autenticados.
+        # Solo usuarios autenticados.
         if not user.is_authenticated:
             self.close()
             return
 
-        # 2. Obtener la organización del usuario.
+        # Obtener la organización del perfil.
         try:
-            org_id = user.profile.organization_id
+            organization_id = user.profile.organization_id
         except (ObjectDoesNotExist, AttributeError):
             self.close()
             return
 
-        if not org_id:
+        if not organization_id:
             self.close()
             return
 
-        # 3. Grupo exclusivo de la organización.
-        self.group_name = f"chat_org_{org_id}"
+        # Grupo exclusivo de la organización.
+        self.group_name = f"chat_org_{organization_id}"
 
-        # 4. Suscribir el socket al grupo.
         async_to_sync(self.channel_layer.group_add)(
             self.group_name,
             self.channel_name,
@@ -36,7 +36,6 @@ class ChatConsumer(JsonWebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code):
-        # 5. Salir del grupo al desconectarse.
         if hasattr(self, "group_name"):
             async_to_sync(self.channel_layer.group_discard)(
                 self.group_name,
@@ -44,7 +43,7 @@ class ChatConsumer(JsonWebsocketConsumer):
             )
 
     def receive_json(self, content, **kwargs):
-        # 6. Recibir mensajes del chat.
+        # Recibir mensajes del chat.
         mensaje = content.get("mensaje", "")
 
         if not isinstance(mensaje, str):
@@ -67,14 +66,14 @@ class ChatConsumer(JsonWebsocketConsumer):
         )
 
     def chat_event(self, event):
-        # 7. Entregar mensajes de chat al navegador.
+        # Entregar mensajes normales del chat.
         self.send_json(event["payload"])
 
     def crud_event(self, event):
-        # 8. Entregar notificaciones de CRUD al navegador.
+        # Entregar notificaciones de operaciones CRUD.
         self.send_json({
-            "tipo": "crud",
-            "modulo": event["module"],
-            "accion": event["action"],
+            "type": "crud_update",
+            "module": event["module"],
+            "action": event["action"],
             "actor_id": event["actor_id"],
         })
