@@ -1,0 +1,399 @@
+
+/* =========================================================
+   ECOENERGY — IDENTIDAD VISUAL GLOBAL
+   Paleta: Green Energy / Eco-friendly Modern UI
+   ========================================================= */
+
+:root {
+    --eco-deep: #021D1B;
+    --eco-cyan: #034159;
+    --eco-teal: #02735E;
+    --eco-green: #038C65;
+    --eco-mint: #A9FFCB;
+
+    --eco-background: #F3F8F5;
+    --eco-surface: #FFFFFF;
+    --eco-text: #021D1B;
+    --eco-muted: #647A73;
+    --eco-border: #DCE9E2;
+
+    --eco-shadow: 0 4px 18px rgba(2, 29, 27, 0.08);
+    --eco-radius: 14px;
+}
+
+/* ---------- Base ---------- */
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--eco-background) !important;
+    color: var(--eco-text);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+main {
+    min-height: calc(100vh - 70px);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--eco-deep);
+    font-weight: 700;
+}
+
+.text-muted {
+    color: var(--eco-muted) !important;
+}
+
+/* ---------- Barra superior ---------- */
+
+.eco-navbar {
+    background-color: var(--eco-deep) !important;
+    min-height: 72px;
+    padding: 10px 24px;
+    box-shadow: 0 3px 12px rgba(2, 29, 27, 0.16);
+}
+
+.eco-navbar .navbar-brand {
+    color: var(--eco-mint) !important;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+
+.eco-navbar .nav-link,
+.eco-navbar .navbar-text {
+    color: #FFFFFF !important;
+}
+
+.eco-navbar .nav-link:hover {
+    color: var(--eco-mint) !important;
+}
+
+.eco-navbar .navbar-toggler {
+    border-color: rgba(169, 255, 203, 0.45);
+}
+
+/* ---------- Botones ---------- */
+
+.btn-primary {
+    background-color: var(--eco-cyan) !important;
+    border-color: var(--eco-cyan) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--eco-teal) !important;
+    border-color: var(--eco-teal) !important;
+}
+
+.btn-success {
+    background-color: var(--eco-green) !important;
+    border-color: var(--eco-green) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-success:hover {
+    background-color: var(--eco-teal) !important;
+    border-color: var(--eco-teal) !important;
+}
+
+.btn-outline-primary {
+    color: var(--eco-cyan) !important;
+    border-color: var(--eco-cyan) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--eco-cyan) !important;
+    color: #FFFFFF !important;
+}
+
+.btn-outline-light:hover {
+    color: var(--eco-deep) !important;
+    background-color: var(--eco-mint) !important;
+    border-color: var(--eco-mint) !important;
+}
+
+/* ---------- Tarjetas ---------- */
+
+.card {
+    background-color: var(--eco-surface);
+    border: 1px solid var(--eco-border);
+    border-radius: var(--eco-radius);
+    box-shadow: var(--eco-shadow);
+}
+
+.card-header {
+    background-color: var(--eco-deep);
+    color: #FFFFFF;
+    border-bottom: 0;
+    border-radius: var(--eco-radius) var(--eco-radius) 0 0 !important;
+}
+
+.card-title {
+    color: var(--eco-deep);
+}
+
+/* ---------- Formularios ---------- */
+
+.form-control,
+.form-select {
+    border: 1px solid var(--eco-border);
+    border-radius: 9px;
+    padding: 10px 12px;
+    color: var(--eco-text);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--eco-green);
+    box-shadow: 0 0 0 0.2rem rgba(3, 140, 101, 0.15);
+}
+
+.form-label,
+label {
+    color: var(--eco-deep);
+}
+
+/* ---------- Tablas ---------- */
+
+.table {
+    color: var(--eco-text);
+    vertical-align: middle;
+}
+
+.table thead th,
+.table-dark th {
+    background-color: var(--eco-deep) !important;
+    color: #FFFFFF !important;
+    border-color: var(--eco-deep) !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(169, 255, 203, 0.20);
+}
+
+/* ---------- Paginación ---------- */
+
+.page-link {
+    color: var(--eco-cyan);
+    border-color: var(--eco-border);
+}
+
+.page-link:hover {
+    color: var(--eco-deep);
+    background-color: var(--eco-mint);
+    border-color: var(--eco-mint);
+}
+
+.page-item.active .page-link {
+    background-color: var(--eco-cyan);
+    border-color: var(--eco-cyan);
+}
+
+/* ---------- Modales ---------- */
+
+.modal-content {
+    border: 0;
+    border-radius: var(--eco-radius);
+    box-shadow: var(--eco-shadow);
+}
+
+.modal-header {
+    background-color: var(--eco-deep);
+    color: #FFFFFF;
+}
+
+.modal-header .modal-title {
+    color: #FFFFFF;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+/* ---------- Alertas ---------- */
+
+.alert {
+    border: 0;
+    border-radius: 10px;
+}
+
+/* ---------- Enlaces ---------- */
+
+a {
+    color: var(--eco-teal);
+}
+
+a:hover {
+    color: var(--eco-cyan);
+}
+
+/* ---------- Dashboard: estructura visual ---------- */
+
+.eco-dashboard-navbar {
+    background-color: var(--eco-deep) !important;
+}
+
+.eco-sidebar {
+    background-color: var(--eco-deep) !important;
+    min-height: calc(100vh - 72px);
+}
+
+.eco-sidebar .nav-link {
+    color: #EAFBF1 !important;
+    border-radius: 9px;
+    padding: 10px 12px;
+    margin-bottom: 5px;
+}
+
+.eco-sidebar .nav-link:hover,
+.eco-sidebar .nav-link.active {
+    background-color: var(--eco-teal);
+    color: var(--eco-mint) !important;
+}
+
+.eco-dashboard-content {
+    background-color: var(--eco-background);
+}
+
+/* ---------- Acceso y registro ---------- */
+
+.eco-auth-container {
+    background-color: var(--eco-surface);
+    border: 1px solid var(--eco-border);
+    border-radius: 18px;
+    box-shadow: var(--eco-shadow);
+    padding: 30px;
+}
+
+.eco-auth-title {
+    color: var(--eco-deep);
+    margin-bottom: 8px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 767px) {
+    .eco-navbar {
+        padding: 10px 14px;
+    }
+
+    .eco-sidebar {
+        min-height: auto;
+    }
+
+    .eco-auth-container {
+        padding: 22px;
+        margin: 16px;
+    }
+}
+
+
+/* =========================================
+   NAVBAR PRINCIPAL ECOENERGY
+   ========================================= */
+
+.eco-navbar {
+    min-height: 66px;
+    background-color: #021D1B;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(169, 255, 203, 0.12);
+}
+
+/* Logo */
+.eco-brand {
+    min-width: 190px;
+    padding: 0;
+}
+
+.eco-logo-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1A4C3D;
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+.eco-logo {
+    display: block;
+    width: 145px;
+    height: 42px;
+    object-fit: contain;
+}
+
+/* Navegación central */
+.eco-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.eco-nav-links .nav-link {
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 0.98rem;
+    padding: 10px 8px;
+    transition: color 0.2s ease;
+}
+
+.eco-nav-links .nav-link:hover {
+    color: #A9FFCB;
+}
+
+/* Acción derecha */
+.eco-navbar-action {
+    min-width: 190px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.eco-btn-start {
+    background-color: #A9FFCB;
+    color: #021D1B;
+    border: none;
+    border-radius: 30px;
+    padding: 11px 23px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+.eco-btn-start:hover {
+    background-color: #038C65;
+    color: #FFFFFF;
+    transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .eco-navbar .navbar-collapse {
+        padding: 18px 0 12px;
+    }
+
+    .eco-nav-links {
+        align-items: flex-start;
+        gap: 4px;
+        margin: 12px 0 !important;
+    }
+
+    .eco-navbar-action {
+        justify-content: flex-start;
+        min-width: auto;
+        margin-top: 10px;
+    }
+
+    .eco-brand {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .eco-logo {
+        width: 120px;
+        height: 36px;
+    }
+}
