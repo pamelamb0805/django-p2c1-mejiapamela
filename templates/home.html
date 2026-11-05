@@ -14,12 +14,6 @@
 
     /* =========================================================
        LANDING ECOENERGY
-       Paleta:
-       Deep Teal:  #021D1B
-       Dark Cyan:  #034159
-       Dark Teal:  #02735E
-       Green:      #038C65
-       Soft Green: #A9FFCB
        ========================================================= */
 
     .landing {
@@ -34,6 +28,12 @@
         isolation: isolate;
         background-color: #021D1B;
         color: #EAFBF1;
+        overflow: hidden;
+    }
+
+    .landing,
+    .landing * {
+        box-sizing: border-box;
     }
 
     .landing h2,
@@ -66,13 +66,14 @@
         display: block;
         margin: 0 auto;
         width: min(70vw, 300px);
+        max-width: 100%;
         height: auto;
     }
 
     .land-hero-text {
         font-family: "Poppins", sans-serif;
         font-weight: 300;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         color: rgba(169, 255, 203, 0.8);
         margin: 0.75rem 0 1rem;
     }
@@ -96,7 +97,7 @@
         color: #FFFFFF;
     }
 
-    /* ---------- SECCIONES DIVIDIDAS ---------- */
+    /* ---------- QUIÉNES SOMOS Y VISIÓN ---------- */
 
     .land-split {
         display: flex;
@@ -119,20 +120,26 @@
     .land-body {
         font-family: "Poppins", sans-serif;
         font-weight: 500;
-        font-size: 1rem;
-        line-height: 1.5;
+        font-size: 0.94rem;
+        line-height: 1.65;
         color: var(--land-mint);
         margin: 0;
+        overflow-wrap: break-word;
     }
 
     .land-br {
         display: none;
     }
 
+    .land-photo {
+        width: 100%;
+        overflow: hidden;
+    }
+
     .land-photo img {
         display: block;
         width: 100%;
-        height: 260px;
+        height: clamp(220px, 35vw, 420px);
         object-fit: cover;
         object-position: center;
     }
@@ -153,34 +160,54 @@
 
     .land-svc-stage {
         position: relative;
+        width: 100%;
     }
 
     .land-svc-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 1rem;
+        width: 100%;
         max-width: 1100px;
         margin: 0 auto;
     }
 
+    /* TARJETAS: UN SOLO COLOR DE FONDO */
+
     .land-card {
-        background-color: var(--land-panel);
+        background: #034159 !important;
+        background-color: #034159 !important;
+        border: none !important;
+        box-shadow: none !important;
+
         border-radius: 1.6rem;
         padding: 1.5rem 1rem;
         text-align: center;
+
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: space-between;
         gap: 1rem;
+
+        min-width: 0;
     }
 
     .land-card h3 {
-        color: var(--land-mint);
-        font-size: 1.15rem;
+        color: #A9FFCB;
+        font-size: 1.05rem;
         line-height: 1.4;
+        overflow-wrap: break-word;
     }
 
+    /* IMÁGENES TRANSPARENTES */
+
     .land-card img {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        mix-blend-mode: normal;
+
         max-height: 150px;
         max-width: 100%;
         width: auto;
@@ -192,16 +219,136 @@
 
     @media (min-width: 576px) {
         .land-svc-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .land-card {
+            min-height: 240px;
+        }
+    }
+
+    /* ---------- TABLET GRANDE / NOTEBOOK ---------- */
+
+    @media (min-width: 768px) and (max-width: 1199px) {
+
+        .land-hero {
+            padding: 2.5rem 1rem;
+        }
+
+        .land-hero-logo {
+            width: min(38vw, 300px);
+        }
+
+        .land-hero-text {
+            font-size: 1rem;
+        }
+
+        .land-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: stretch;
+        }
+
+        .land-pane {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: clamp(1.5rem, 3vw, 3rem);
+            min-width: 0;
+        }
+
+        .land-title {
+            position: static;
+            width: 100%;
+            font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+            line-height: 1.3;
+            margin-bottom: 1.5rem !important;
+        }
+
+        .land-body {
+            position: static;
+            width: 100%;
+            font-size: clamp(0.82rem, 1.15vw, 0.95rem);
+            line-height: 1.7;
+            white-space: normal;
+        }
+
+        .land-br {
+            display: none;
+        }
+
+        .land-photo {
+            min-height: 100%;
+        }
+
+        .land-photo img {
+            height: 100%;
+            min-height: 350px;
+            object-fit: cover;
+        }
+
+        .land-svc {
+            padding: 3rem 2rem;
+        }
+
+        .land-svc-title {
+            position: static;
+            width: 100%;
+            font-size: 2rem;
+            margin-bottom: 2rem !important;
+        }
+
+        .land-svc-stage {
+            height: auto;
+        }
+
+        .land-svc-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.25rem;
+        }
+
+        .land-card {
+            position: static;
+            width: 100%;
+            height: auto;
+            min-height: 260px;
+            padding: 1.5rem 1rem;
+            border-radius: 1.5rem;
+        }
+
+        .land-card h3 {
+            position: static;
+            width: 100%;
+            font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+            line-height: 1.5;
+            white-space: normal;
+        }
+
+        .land-card img {
+            position: static;
+            width: auto;
+            height: auto;
+            max-width: 85%;
+            max-height: 145px;
+        }
+
+        .land-c1,
+        .land-c2,
+        .land-c3,
+        .land-c4,
+        .land-c5,
+        .land-c6 {
+            left: auto;
+            top: auto;
         }
     }
 
     /* =========================================================
-       ESCRITORIO
-       Distribución proporcional al ancho de la landing.
+       ESCRITORIO GRANDE
        ========================================================= */
 
-    @media (min-width: 992px) {
+    @media (min-width: 1200px) {
 
         /* HERO */
 
@@ -235,7 +382,7 @@
             justify-content: center;
         }
 
-        /* PANELES DIVIDIDOS */
+        /* PANELES */
 
         .land-split {
             display: grid;
@@ -252,6 +399,7 @@
 
         .land-pane {
             position: relative;
+            display: block;
             padding: 0;
             height: 100%;
         }
@@ -263,6 +411,7 @@
 
         .land-photo img {
             height: 100%;
+            min-height: 0;
         }
 
         .land-title {
@@ -272,10 +421,12 @@
             margin: 0 !important;
         }
 
+        /* PÁRRAFOS LIGERAMENTE MÁS PEQUEÑOS */
+
         .land-body {
             position: absolute;
-            font-size: 1.342cqw;
-            line-height: 1.83cqw;
+            font-size: 1.18cqw;
+            line-height: 1.72cqw;
             white-space: nowrap;
         }
 
@@ -343,9 +494,16 @@
             display: block;
             width: 28.73cqw;
             height: 25.71cqw;
+            min-height: 0;
             padding: 0;
             border-radius: 2.6cqw;
             overflow: hidden;
+
+            /* Mantener fondo uniforme en escritorio */
+            background: #034159 !important;
+            background-color: #034159 !important;
+            border: none !important;
+            box-shadow: none !important;
         }
 
         .land-card h3 {
@@ -363,6 +521,10 @@
             max-width: none;
             max-height: none;
             object-fit: contain;
+
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
         }
 
         /* POSICIÓN DE TARJETAS */
@@ -397,7 +559,7 @@
             top: 31.71cqw;
         }
 
-        /* TAMAÑO Y POSICIÓN DE ÍCONOS */
+        /* ÍCONOS */
 
         .land-c1 img {
             left: 8.78cqw;
@@ -440,33 +602,64 @@
             width: 12.33cqw;
             height: 13.09cqw;
         }
+    }
 
-        /* EVITAR ALTERACIONES DE BOOTSTRAP */
+    /* ---------- MÓVIL ---------- */
 
-        .landing {
-            background-color: #021D1B;
-            color: #EAFBF1;
+    @media (max-width: 575px) {
+
+        .land-hero {
+            padding: 2rem 1rem;
         }
 
-        .landing h2,
-        .landing h3 {
-            margin-top: 0;
+        .land-hero-logo {
+            width: min(75vw, 260px);
         }
 
-        .landing .land-hero,
-        .landing .land-split,
-        .landing .land-svc {
-            width: 100%;
-            max-width: 100%;
+        .land-hero-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
-        .landing .land-photo img {
-            display: block;
-            width: 100%;
+        .land-pane {
+            padding: 2rem 1.25rem;
         }
 
-        .landing section {
-            margin: 0;
+        .land-title {
+            font-size: 1.45rem;
+        }
+
+        .land-body {
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .land-photo img {
+            height: 230px;
+        }
+
+        .land-svc {
+            padding: 2.5rem 1rem;
+        }
+
+        .land-svc-title {
+            font-size: 1.55rem;
+        }
+
+        .land-card {
+            min-height: 210px;
+        }
+
+        .land-card h3 {
+            font-size: 1rem;
+        }
+    }
+
+    /* ---------- ACCESIBILIDAD ---------- */
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
         }
     }
 </style>
