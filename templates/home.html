@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 {% load static %}
 
@@ -5,24 +6,34 @@
 
 {% block extra_head %}
 <style>
-    @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap");
 
     html {
         scroll-behavior: smooth;
     }
 
     /* =========================================================
-       LANDING ECOENERGY — réplica del diseño (PDF de Canva)
-       Escritorio: todo en cqw (1% del ancho de la página)
-       Móvil/tablet: versión apilada
+       LANDING ECOENERGY
+       Paleta:
+       Deep Teal:  #021D1B
+       Dark Cyan:  #034159
+       Dark Teal:  #02735E
+       Green:      #038C65
+       Soft Green: #A9FFCB
        ========================================================= */
 
     .landing {
+        --land-panel: #034159;
+        --land-mint: #A9FFCB;
+        --land-title-font: "Montserrat", sans-serif;
+
         width: 100%;
         max-width: 100%;
         container-type: inline-size;
         position: relative;
         isolation: isolate;
+        background-color: #021D1B;
+        color: #EAFBF1;
     }
 
     .landing h2,
@@ -32,14 +43,22 @@
         margin: 0;
     }
 
-    /* ---------- Base móvil (apilado) ---------- */
+    /* ---------- HERO ---------- */
 
     .land-hero {
         text-align: center;
         padding: 2rem 1rem 2.5rem;
         background:
-            radial-gradient(ellipse 42% 105% at 72% 0%, rgba(3, 48, 40, 0.95), rgba(2, 29, 27, 0) 100%),
-            radial-gradient(ellipse 30% 100% at 4% 0%, rgba(3, 40, 44, 0.95), rgba(2, 29, 27, 0) 100%),
+            radial-gradient(
+                ellipse 42% 105% at 72% 0%,
+                rgba(3, 48, 40, 0.95),
+                rgba(2, 29, 27, 0) 100%
+            ),
+            radial-gradient(
+                ellipse 30% 100% at 4% 0%,
+                rgba(3, 40, 44, 0.95),
+                rgba(2, 29, 27, 0) 100%
+            ),
             #021D1B;
     }
 
@@ -51,7 +70,7 @@
     }
 
     .land-hero-text {
-        font-family: "Segoe UI", Arial, sans-serif;
+        font-family: "Poppins", sans-serif;
         font-weight: 300;
         font-size: 1.1rem;
         color: rgba(169, 255, 203, 0.8);
@@ -63,12 +82,29 @@
         justify-content: center;
     }
 
+    .land-hero-cta .btn {
+        background-color: #038C65;
+        border-color: #038C65;
+        color: #A9FFCB;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+    }
+
+    .land-hero-cta .btn:hover {
+        background-color: #02735E;
+        border-color: #02735E;
+        color: #FFFFFF;
+    }
+
+    /* ---------- SECCIONES DIVIDIDAS ---------- */
+
     .land-split {
         display: flex;
         flex-direction: column;
     }
 
     .land-pane {
+        position: relative;
         background-color: var(--land-panel);
         padding: 2rem 1.25rem;
     }
@@ -101,6 +137,8 @@
         object-position: center;
     }
 
+    /* ---------- SERVICIOS ---------- */
+
     .land-svc {
         background-color: #021D1B;
         padding: 2.5rem 1rem 3rem;
@@ -113,18 +151,16 @@
         margin-bottom: 1.5rem !important;
     }
 
+    .land-svc-stage {
+        position: relative;
+    }
+
     .land-svc-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 1rem;
         max-width: 1100px;
         margin: 0 auto;
-    }
-
-    @media (min-width: 576px) {
-        .land-svc-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
     }
 
     .land-card {
@@ -152,12 +188,23 @@
         object-fit: contain;
     }
 
+    /* ---------- TABLET ---------- */
+
+    @media (min-width: 576px) {
+        .land-svc-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
     /* =========================================================
-       ESCRITORIO — réplica exacta (medidas del PDF, en cqw)
+       ESCRITORIO
+       Distribución proporcional al ancho de la landing.
        ========================================================= */
+
     @media (min-width: 992px) {
 
-        /* ---- Hero (alto 14.93) ---- */
+        /* HERO */
+
         .land-hero {
             height: 14.93cqw;
             padding: 0.04cqw 0 0;
@@ -188,14 +235,20 @@
             justify-content: center;
         }
 
-        /* ---- Paneles divididos ---- */
+        /* PANELES DIVIDIDOS */
+
         .land-split {
             display: grid;
             grid-template-columns: 52.56fr 47.44fr;
         }
 
-        .land-split--about  { height: 35.36cqw; }
-        .land-split--vision { height: 35.42cqw; }
+        .land-split--about {
+            height: 35.36cqw;
+        }
+
+        .land-split--vision {
+            height: 35.42cqw;
+        }
 
         .land-pane {
             position: relative;
@@ -230,7 +283,8 @@
             display: inline;
         }
 
-        /* Quiénes somos */
+        /* QUIÉNES SOMOS */
+
         .land-split--about .land-title {
             left: 0;
             top: 4.25cqw;
@@ -243,7 +297,8 @@
             width: 50cqw;
         }
 
-        /* Visión */
+        /* VISIÓN */
+
         .land-split--vision .land-title {
             left: 0;
             top: 3.13cqw;
@@ -256,7 +311,8 @@
             width: 46.45cqw;
         }
 
-        /* ---- Servicios ---- */
+        /* SERVICIOS */
+
         .land-svc {
             padding: 3cqw 0;
         }
@@ -309,24 +365,83 @@
             object-fit: contain;
         }
 
-        /* Posición de cada tarjeta (fila 1 y fila 2) */
-        .land-c1 { left: 4.95cqw;  top: 4.02cqw; }
-        .land-c2 { left: 34.79cqw; top: 4.02cqw; }
-        .land-c3 { left: 64.63cqw; top: 4.02cqw; }
-        .land-c4 { left: 5.29cqw;  top: 31.71cqw; }
-        .land-c5 { left: 35.13cqw; top: 31.71cqw; }
-        .land-c6 { left: 64.97cqw; top: 31.71cqw; }
+        /* POSICIÓN DE TARJETAS */
 
-        /* Posición y tamaño de cada ícono dentro de su tarjeta */
-        .land-c1 img { left: 8.78cqw; top: 9.84cqw; width: 11.2cqw;  height: 11.2cqw; }
-        .land-c2 img { left: 4.99cqw; top: 6.68cqw; width: 18.38cqw; height: 19.54cqw; }
-        .land-c3 img { left: 7.64cqw; top: 8.23cqw; width: 13.63cqw; height: 14.49cqw; }
-        .land-c4 img { left: 6.40cqw; top: 6.42cqw; width: 16.08cqw; height: 17.09cqw; }
-        .land-c5 img { left: 5.62cqw; top: 6.40cqw; width: 16.71cqw; height: 17.77cqw; }
-        .land-c6 img { left: 8.20cqw; top: 8.99cqw; width: 12.33cqw; height: 13.09cqw; }
+        .land-c1 {
+            left: 4.95cqw;
+            top: 4.02cqw;
+        }
 
-        /* Evitar que los estilos globales de Bootstrap
-          alteren la composición de la landing page */
+        .land-c2 {
+            left: 34.79cqw;
+            top: 4.02cqw;
+        }
+
+        .land-c3 {
+            left: 64.63cqw;
+            top: 4.02cqw;
+        }
+
+        .land-c4 {
+            left: 5.29cqw;
+            top: 31.71cqw;
+        }
+
+        .land-c5 {
+            left: 35.13cqw;
+            top: 31.71cqw;
+        }
+
+        .land-c6 {
+            left: 64.97cqw;
+            top: 31.71cqw;
+        }
+
+        /* TAMAÑO Y POSICIÓN DE ÍCONOS */
+
+        .land-c1 img {
+            left: 8.78cqw;
+            top: 9.84cqw;
+            width: 11.2cqw;
+            height: 11.2cqw;
+        }
+
+        .land-c2 img {
+            left: 4.99cqw;
+            top: 6.68cqw;
+            width: 18.38cqw;
+            height: 19.54cqw;
+        }
+
+        .land-c3 img {
+            left: 7.64cqw;
+            top: 8.23cqw;
+            width: 13.63cqw;
+            height: 14.49cqw;
+        }
+
+        .land-c4 img {
+            left: 6.40cqw;
+            top: 6.42cqw;
+            width: 16.08cqw;
+            height: 17.09cqw;
+        }
+
+        .land-c5 img {
+            left: 5.62cqw;
+            top: 6.40cqw;
+            width: 16.71cqw;
+            height: 17.77cqw;
+        }
+
+        .land-c6 img {
+            left: 8.20cqw;
+            top: 8.99cqw;
+            width: 12.33cqw;
+            height: 13.09cqw;
+        }
+
+        /* EVITAR ALTERACIONES DE BOOTSTRAP */
 
         .landing {
             background-color: #021D1B;
@@ -350,7 +465,6 @@
             width: 100%;
         }
 
-        /* Evitar márgenes externos que desplacen las secciones */
         .landing section {
             margin: 0;
         }
@@ -363,9 +477,12 @@
 
     <!-- HERO -->
     <section class="land-hero">
-        <img src="{% static 'img/ecoenergy-logo.png' %}"
-             alt="EcoEnergy"
-             class="land-hero-logo">
+
+        <img
+            src="{% static 'img/ecoenergy-logo.png' %}"
+            alt="EcoEnergy"
+            class="land-hero-logo"
+        >
 
         <p class="land-hero-text">
             Sistema de monitoreo de dispositivos y consumo energético.
@@ -373,17 +490,33 @@
 
         <div class="land-hero-cta">
             {% if user.is_authenticated %}
-                <a href="{% url 'dashboard:dashboard' %}" class="btn btn-primary">Ir al dashboard</a>
+                <a
+                    href="{% url 'dashboard:dashboard' %}"
+                    class="btn btn-primary"
+                >
+                    Ir al dashboard
+                </a>
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-primary">Iniciar sesión</a>
+                <a
+                    href="{% url 'login' %}"
+                    class="btn btn-primary"
+                >
+                    Iniciar sesión
+                </a>
             {% endif %}
         </div>
+
     </section>
 
     <!-- QUIÉNES SOMOS -->
     <section class="land-split land-split--about">
+
         <div class="land-pane">
-            <h2 class="land-title">Quiénes somos</h2>
+
+            <h2 class="land-title">
+                Quiénes somos
+            </h2>
+
             <p class="land-body">
                 EcoEnergy somos una empresa orientada al monitoreo de dispositivos y<br class="land-br">
                 consumo energético.<br class="land-br">
@@ -394,21 +527,38 @@
                 de dispositivos IoT, control de mediciones en tiempo real, supervisión de<br class="land-br">
                 alertas y mantenimiento preventivo de infraestructura energética.
             </p>
+
         </div>
+
         <div class="land-photo">
-            <img src="{% static 'img/mision.png' %}"
-                 alt="Parque eólico y paneles solares al atardecer">
+
+            <img
+                src="{% static 'img/mision.png' %}"
+                alt="Parque eólico y paneles solares al atardecer"
+            >
+
         </div>
+
     </section>
 
     <!-- VISIÓN -->
     <section class="land-split land-split--vision">
+
         <div class="land-photo">
-            <img src="{% static 'img/vision.png' %}"
-                 alt="Ilustración de energía eólica y solar">
+
+            <img
+                src="{% static 'img/vision.png' %}"
+                alt="Ilustración de energía eólica y solar"
+            >
+
         </div>
+
         <div class="land-pane">
-            <h2 class="land-title">Visión</h2>
+
+            <h2 class="land-title">
+                Visión
+            </h2>
+
             <p class="land-body">
                 Nuestra visión es ser reconocidos por la excelencia y calidad en la<br class="land-br">
                 prestación de nuestros servicios, brindando soluciones que generen<br class="land-br">
@@ -417,48 +567,110 @@
                 referente en plataformas de monitoreo, análisis de consumo y gestión<br class="land-br">
                 inteligente de energía.
             </p>
+
         </div>
+
     </section>
 
     <!-- SERVICIOS -->
     <section class="land-svc" id="servicios">
+
         <div class="land-svc-stage">
-            <h2 class="land-svc-title">Nuestros servicios</h2>
+
+            <h2 class="land-svc-title">
+                Nuestros servicios
+            </h2>
 
             <div class="land-svc-grid">
 
                 <div class="land-card land-c1">
-                    <h3>Monitoreo energético y<br class="land-br"> métricas en tiempo real</h3>
-                    <img src="{% static 'img/servicio_icon1.png' %}" alt="Monitoreo energético">
+
+                    <h3>
+                        Monitoreo energético y<br class="land-br">
+                        métricas en tiempo real
+                    </h3>
+
+                    <img
+                        src="{% static 'img/servicio_icon1.png' %}"
+                        alt="Monitoreo energético"
+                    >
+
                 </div>
 
                 <div class="land-card land-c2">
-                    <h3>Gestión de dispositivos y<br class="land-br"> catálogo de equipos</h3>
-                    <img src="{% static 'img/servicio_icon2.png' %}" alt="Gestión de dispositivos">
+
+                    <h3>
+                        Gestión de dispositivos y<br class="land-br">
+                        catálogo de equipos
+                    </h3>
+
+                    <img
+                        src="{% static 'img/servicio_icon2.png' %}"
+                        alt="Gestión de dispositivos"
+                    >
+
                 </div>
 
                 <div class="land-card land-c3">
-                    <h3>Alertas automáticas por<br class="land-br"> umbrales y notificaciones</h3>
-                    <img src="{% static 'img/servicio_icon3.png' %}" alt="Alertas automáticas">
+
+                    <h3>
+                        Alertas automáticas por<br class="land-br">
+                        umbrales y notificaciones
+                    </h3>
+
+                    <img
+                        src="{% static 'img/servicio_icon3.png' %}"
+                        alt="Alertas automáticas"
+                    >
+
                 </div>
 
                 <div class="land-card land-c4">
-                    <h3>Gestión de solicitudes y<br class="land-br"> planes de mantenimiento</h3>
-                    <img src="{% static 'img/servicio_icon4.png' %}" alt="Mantenimiento">
+
+                    <h3>
+                        Gestión de solicitudes y<br class="land-br">
+                        planes de mantenimiento
+                    </h3>
+
+                    <img
+                        src="{% static 'img/servicio_icon4.png' %}"
+                        alt="Mantenimiento"
+                    >
+
                 </div>
 
                 <div class="land-card land-c5">
-                    <h3>Reportes y analítica de<br class="land-br"> consumo sustentable</h3>
-                    <img src="{% static 'img/servicio_icon5.png' %}" alt="Reportes y analítica">
+
+                    <h3>
+                        Reportes y analítica de<br class="land-br">
+                        consumo sustentable
+                    </h3>
+
+                    <img
+                        src="{% static 'img/servicio_icon5.png' %}"
+                        alt="Reportes y analítica"
+                    >
+
                 </div>
 
                 <div class="land-card land-c6">
-                    <h3>Gestión multiempresa y<br class="land-br"> control de accesos por rol</h3>
-                    <img src="{% static 'img/servicio_icon6.png' %}" alt="Gestión multiempresa">
+
+                    <h3>
+                        Gestión multiempresa y<br class="land-br">
+                        control de accesos por rol
+                    </h3>
+
+                    <img
+                        src="{% static 'img/servicio_icon6.png' %}"
+                        alt="Gestión multiempresa"
+                    >
+
                 </div>
 
             </div>
+
         </div>
+
     </section>
 
 </div>
