@@ -18,13 +18,11 @@
        ========================================================= */
 
     .landing {
+        width: 100%;
+        max-width: 100%;
         container-type: inline-size;
-        font-family: "Poppins", "Segoe UI", Arial, sans-serif;
-        background-color: #021D1B;
-        overflow-x: hidden;
-        --land-panel: #063446;
-        --land-mint: #A9FFCB;
-        --land-title-font: "Montserrat", "Poppins", Arial, sans-serif;
+        position: relative;
+        isolation: isolate;
     }
 
     .landing h2,
@@ -326,6 +324,36 @@
         .land-c4 img { left: 6.40cqw; top: 6.42cqw; width: 16.08cqw; height: 17.09cqw; }
         .land-c5 img { left: 5.62cqw; top: 6.40cqw; width: 16.71cqw; height: 17.77cqw; }
         .land-c6 img { left: 8.20cqw; top: 8.99cqw; width: 12.33cqw; height: 13.09cqw; }
+
+        /* Evitar que los estilos globales de Bootstrap
+          alteren la composición de la landing page */
+
+        .landing {
+            background-color: #021D1B;
+            color: #EAFBF1;
+        }
+
+        .landing h2,
+        .landing h3 {
+            margin-top: 0;
+        }
+
+        .landing .land-hero,
+        .landing .land-split,
+        .landing .land-svc {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .landing .land-photo img {
+            display: block;
+            width: 100%;
+        }
+
+        /* Evitar márgenes externos que desplacen las secciones */
+        .landing section {
+            margin: 0;
+        }
     }
 </style>
 {% endblock %}

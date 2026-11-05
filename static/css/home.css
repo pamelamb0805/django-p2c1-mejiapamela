@@ -1,0 +1,66 @@
+:root {
+  --bg: #011c1a;
+  --panel: #05344a;
+  --mint: #a8ffc8;
+  --white: #ffffff;
+}
+
+.home { background: var(--bg); color: var(--mint); font-family: 'Poppins', sans-serif; }
+.home img { display: block; max-width: 100%; }
+
+/* HERO: logo mediano centrado */
+.hero {
+  text-align: center;
+  padding: 1.2rem 1rem 1.6rem;
+  background: linear-gradient(180deg, #011c1a 0%, #022d22 50%, #011c1a 100%);
+}
+.hero__logo { height: 110px; width: auto; margin: 0 auto; }   /* <- tamaño del logo */
+.hero__subtitle { margin: .6rem 0 1rem; font-weight: 300; font-size: 1.1rem; opacity: .85; }
+.btn-mint {
+  display: inline-block; background: var(--mint); color: #012; font-weight: 600;
+  padding: .55rem 1rem; border-radius: 10px; text-decoration: none; font-size: .95rem;
+}
+
+/* SECCIONES 50/50 */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 515px;
+  background: var(--panel);
+}
+.split__text {
+  display: flex; flex-direction: column; justify-content: flex-start;
+  padding: 4.5rem 1rem 2rem;
+}
+.split__text h2 { color: var(--white); text-align: center; font-weight: 600; font-size: 1.7rem; margin: 0 0 2rem; }
+.split__text p { font-size: 1.15rem; line-height: 1.55; margin: 0; }
+.split__img { overflow: hidden; }
+.split__img img { width: 100%; height: 100%; object-fit: cover; }
+.split__img--illustration { background: linear-gradient(180deg, #154a5c, #0b2347); }
+.split__img--illustration img { object-fit: contain; }
+
+/* SERVICIOS */
+.services { background: var(--bg); padding: 1rem 1.5rem 3rem; }
+.services h2 { color: var(--white); text-align: center; font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 2rem; margin: 0 0 .8rem; }
+.services__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);   /* 3 arriba + 3 abajo */
+  gap: 1.8rem 1.6rem;
+  max-width: 1280px; margin: 0 auto;
+}
+.card {
+  background: var(--panel);
+  border-radius: 48px;
+  padding: 2.2rem 1.2rem 1.5rem;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+  min-height: 370px;
+}
+.card h3 { color: var(--mint); font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 1.45rem; line-height: 1.35; margin: 0; }
+.card img { width: 190px; height: auto; margin-top: auto; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .split { grid-template-columns: 1fr; }
+  .services__grid { grid-template-columns: 1fr; }
+}
