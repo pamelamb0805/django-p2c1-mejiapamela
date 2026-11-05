@@ -62,10 +62,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark eco-navbar shadow-sm px-4">
         <div class="container-fluid">
 
-            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-4"
-               href="{% url 'home' %}">
-                <i class="bi bi-lightning-charge-fill"></i>
-                <span>EcoEnergy</span>
+            <a class="navbar-brand eco-brand" href="{% url 'home' %}">
+                {% include "_brand.html" %}
             </a>
 
             <div class="d-flex gap-2">

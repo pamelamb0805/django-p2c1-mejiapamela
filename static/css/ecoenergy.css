@@ -66,7 +66,7 @@ body.bg-light {
 }
 
 main {
-    min-height: calc(100vh - 72px);
+    min-height: calc(100vh - 92px);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -117,7 +117,7 @@ body.bg-light {
 
 .eco-navbar {
     background-color: var(--eco-deep) !important;
-    min-height: 72px;
+    min-height: 92px;
     padding-top: 8px;
     padding-bottom: 8px;
     border-bottom: 1px solid var(--eco-border);
@@ -130,12 +130,12 @@ body.bg-light {
     gap: 0.75rem;
     padding: 0;
     margin-right: 1.5rem;
-    min-width: 150px;
+    min-width: 200px;
 }
 
 .eco-logo {
     display: block;
-    height: 48px;
+    height: 72px;
     width: auto;
     max-width: 100%;
 }
@@ -505,7 +505,7 @@ label {
 .eco-sidebar {
     background-color: rgba(2, 29, 27, 0.92) !important;
     border-right: 1px solid var(--eco-border);
-    min-height: calc(100vh - 72px);
+    min-height: calc(100vh - 92px);
 }
 
 .eco-sidebar .nav-link {
@@ -584,6 +584,10 @@ label {
     .eco-brand {
         min-width: auto;
     }
+
+    .eco-logo {
+        height: 60px;
+    }
 }
 
 @media (max-width: 767px) {
@@ -594,6 +598,6 @@ label {
 
 @media (max-width: 576px) {
     .eco-logo {
-        height: 38px;
+        height: 48px;
     }
 }

@@ -23,10 +23,9 @@
 <nav class="navbar navbar-expand-lg navbar-dark eco-navbar shadow">
     <div class="container-fluid">
 
-        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{% url 'dashboard:dashboard' %}">
-            <i class="bi bi-lightning-charge-fill"></i>
-            <span>EcoEnergy</span>
-            <span class="fw-normal opacity-75 ms-2">| Mi Panel</span>
+        <a class="navbar-brand eco-brand" href="{% url 'dashboard:dashboard' %}">
+            {% include "_brand.html" %}
+            <span class="eco-brand-text">Mi Panel</span>
         </a>
 
         <div class="d-flex align-items-center gap-3">
