@@ -1,4 +1,6 @@
+
 {% load django_bootstrap5 %}
+{% load static %}
 <!doctype html>
 <html lang="es">
 <head>
@@ -7,76 +9,154 @@
 
     <title>{% block title %}EcoEnergy{% endblock %}</title>
 
-    <!-- Bootstrap 5 y Bootstrap Icons -->
+    <link rel="icon" type="image/png" href="{% static 'img/ecoenergy-logo.png' %}">
+
+    <!-- Bootstrap 5.3.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS global -->
+    <link rel="stylesheet" href="{% static 'css/ecoenergy.css' %}">
+
+    <!-- CSS específico de cada página -->
+    {% block extra_head %}{% endblock %}
 </head>
 
 <body class="bg-light">
 
-    {# Layout global: navbar, mensajes de Django y bloque content (lo extienden todas las páginas). #}
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark eco-navbar">
+        <div class="container-fluid px-4 px-lg-5">
 
-    <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm px-4">
-        <div class="container-fluid">
-
-            <a class="navbar-brand fw-bold text-success d-flex align-items-center gap-2 fs-4"
-               href="{% url 'home' %}">
-                <i class="bi bi-lightning-charge-fill"></i>
-                <span class="text-white">EcoEnergy</span>
+            <a class="navbar-brand eco-brand" href="{% url 'home' %}">
+                {% include "_brand.html" %}
             </a>
 
-            <button class="navbar-toggler border-0" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Mostrar menú">
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#ecoNavbar"
+                    aria-controls="ecoNavbar"
+                    aria-expanded="false"
+                    aria-label="Abrir navegación">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto gap-2">
-                    {% if user.is_authenticated %}
+            <div class="collapse navbar-collapse" id="ecoNavbar">
+
+                <!-- ENLACES DE NAVEGACIÓN -->
+                <ul class="navbar-nav mx-auto eco-nav-links">
+
                     <li class="nav-item">
-                        <a class="nav-link fw-bold" href="{% url 'devices:zone_list' %}">
-                            <i class="bi bi-geo-alt-fill me-1"></i>Zonas
+                        <a class="nav-link" href="{% url 'home' %}#inicio">
+                            Inicio
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link fw-bold" href="{% url 'devices:device_list' %}">
-                            <i class="bi bi-cpu-fill me-1"></i>Dispositivos
+                        <a class="nav-link" href="{% url 'home' %}#mision">
+                            Quiénes somos
                         </a>
                     </li>
-                    {% endif %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}#vision">
+                            Visión
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}#servicios">
+                            Servicios
+                        </a>
+                    </li>
+
                 </ul>
 
-                <div class="d-flex align-items-center gap-2">
+                <!-- BOTÓN DE ACCESO -->
+                <div class="eco-navbar-action">
                     {% if user.is_authenticated %}
-                    <span class="navbar-text text-light me-2">{{ user.username }}</span>
-                    <form method="post" action="{% url 'logout' %}" class="m-0">
-                        {% csrf_token %}
-                        <button class="btn btn-outline-danger btn-sm" type="submit">Cerrar sesión</button>
-                    </form>
+                        <a href="{% url 'dashboard:dashboard' %}" class="btn eco-btn-start">
+                            Mi panel
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
                     {% else %}
-                    <a href="{% url 'accounts:registro' %}" class="btn btn-outline-light btn-sm">Registrarse</a>
-                    <a href="{% url 'login' %}" class="btn btn-primary btn-sm">Iniciar Sesión</a>
+                        <a href="{% url 'accounts:registro' %}" class="btn eco-btn-start">
+                            Comenzar
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
                     {% endif %}
                 </div>
+
             </div>
         </div>
     </nav>
 
-    <!-- Mensajes: fuera de "content" para que se vean en todas las páginas -->
+    <!-- MENSAJES -->
     {% if messages %}
     <div class="container mt-3">
         {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
         {% endfor %}
     </div>
     {% endif %}
 
+    <!-- CONTENIDO -->
     <main>
         {% block content %}{% endblock %}
     </main>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- WEBSOCKET -->
+    {% if user.is_authenticated %}
+    <script>
+    (() => {
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+
+        const socket = new WebSocket(
+            `${protocol}//${window.location.host}/ws/chat/`
+        );
+
+        socket.onmessage = (event) => {
+            let data;
+
+            try {
+                data = JSON.parse(event.data);
+            } catch (error) {
+                console.error("Mensaje WebSocket inválido:", error);
+                return;
+            }
+
+            if (data.type !== "crud_update") return;
+
+            const path = window.location.pathname;
+
+            const esPantallaCrud =
+                path.startsWith("/devices/") ||
+                path.startsWith("/organizations/");
+
+            if (esPantallaCrud) {
+                window.location.reload();
+            }
+        };
+
+        socket.onclose = () => {
+            console.info("Conexión WebSocket cerrada.");
+        };
+
+        socket.onerror = (error) => {
+            console.error("Error en la conexión WebSocket:", error);
+        };
+    })();
+    </script>
+    {% endif %}
+
 </body>
 </html>

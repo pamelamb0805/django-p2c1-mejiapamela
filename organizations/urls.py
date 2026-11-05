@@ -4,19 +4,22 @@ from . import views
 app_name = "organizations"
 
 urlpatterns = [
-    # Listado de organizaciones (para el Administrador de plataforma)
-    path('', views.organization_list, name='organization_list'),
+    # URLS CRUD Organozaciones --> preentrega eva 3 - PM
+    path('', views.OrganizationListView.as_view(), name='organization_list'),
+    path('new/', views.OrganizationCreateView.as_view(), name='organization_create'),
+    path('<int:pk>/edit/', views.OrganizationUpdateView.as_view(), name='organization_update'),
+    path('<int:pk>/delete/', views.OrganizationDeleteView.as_view(), name='organization_delete'),
     
-    # Detalle, creación y actualización de organizaciones (RF-01)
-    path('create/', views.organization_create, name='organization_create'),
-    path('<int:pk>/', views.organization_detail, name='organization_detail'),
-    path('<int:pk>/update/', views.organization_update, name='organization_update'),
-    
-    # Departamentos o unidades internas de la organización (RF-02)
-    path('departments/', views.department_list, name='department_list'),
-    path('departments/create/', views.department_create, name='department_create'),
+    # Departamentos o unidades internas de la organización (RF-02) --> actualizacion enlaces preentrega eva 3 - PM
+    path('departments/', views.DepartmentListView.as_view(), name='department_list'),
+    path('departments/new/', views.DepartmentCreateView.as_view(), name='department_create'),
+    path('departments/<int:pk>/edit/', views.DepartmentUpdateView.as_view(), name='department_update'),
+    path('departments/<int:pk>/delete/', views.DepartmentDeleteView.as_view(), name='department_delete'),
     
     # Zonas físicas de la organización (sala, bodega, oficina) (RF-03)
-    path('zones/', views.zone_list, name='zone_list'),
-    path('zones/create/', views.zone_create, name='zone_create'),
+    # URLS CRUD Zonas físicas (RF-03) --> preentrega eva 3 - PM
+    path('zones/', views.ZoneListView.as_view(), name='zone_list'),
+    path('zones/new/', views.ZoneCreateView.as_view(), name='zone_create'),
+    path('zones/<int:pk>/edit/', views.ZoneUpdateView.as_view(), name='zone_update'),
+    path('zones/<int:pk>/delete/', views.ZoneDeleteView.as_view(), name='zone_delete'),
 ]
