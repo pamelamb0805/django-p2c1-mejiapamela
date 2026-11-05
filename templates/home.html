@@ -172,11 +172,11 @@
         margin: 0 auto;
     }
 
-    /* TARJETAS: UN SOLO COLOR DE FONDO */
+    /* ---------- TARJETAS DE SERVICIOS ---------- */
 
     .land-card {
-        background: #034159 !important;
-        background-color: #034159 !important;
+        background: #004b67 !important;
+        background-color: #004b67 !important;
         border: none !important;
         box-shadow: none !important;
 
@@ -200,24 +200,34 @@
         overflow-wrap: break-word;
     }
 
-    /* IMÁGENES TRANSPARENTES */
+    /* ---------- ICONOS: MISMO TAMAÑO ---------- */
 
     .land-card img {
-        background: transparent !important;
+        display: block;
+
+        width: 140px !important;
+        height: 140px !important;
+
+        max-width: 85% !important;
+        max-height: 140px !important;
+
+        object-fit: contain;
+        object-position: center;
+
+        background: #004b67 !important;
+        background-color: #004b67 !important;
+
         border: none !important;
         box-shadow: none !important;
-        mix-blend-mode: normal;
 
-        max-height: 150px;
-        max-width: 100%;
-        width: auto;
-        height: auto;
-        object-fit: contain;
+        mix-blend-mode: normal;
+        flex-shrink: 0;
     }
 
     /* ---------- TABLET ---------- */
 
     @media (min-width: 576px) {
+
         .land-svc-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
@@ -327,10 +337,14 @@
 
         .land-card img {
             position: static;
-            width: auto;
-            height: auto;
-            max-width: 85%;
-            max-height: 145px;
+
+            width: 140px !important;
+            height: 140px !important;
+
+            max-width: 85% !important;
+            max-height: 140px !important;
+
+            object-fit: contain;
         }
 
         .land-c1,
@@ -499,9 +513,9 @@
             border-radius: 2.6cqw;
             overflow: hidden;
 
-            /* Mantener fondo uniforme en escritorio */
-            background: #034159 !important;
-            background-color: #034159 !important;
+            background: #004b67 !important;
+            background-color: #004b67 !important;
+
             border: none !important;
             box-shadow: none !important;
         }
@@ -516,13 +530,27 @@
             white-space: nowrap;
         }
 
+        /* LOS SEIS ICONOS TIENEN LAS MISMAS DIMENSIONES Y POSICIÓN */
+
         .land-card img {
             position: absolute;
-            max-width: none;
-            max-height: none;
-            object-fit: contain;
 
-            background: transparent !important;
+            width: 14cqw !important;
+            height: 14cqw !important;
+
+            max-width: none !important;
+            max-height: none !important;
+
+            left: 50%;
+            top: 58%;
+            transform: translate(-50%, -50%);
+
+            object-fit: contain;
+            object-position: center;
+
+            background: #004b67 !important;
+            background-color: #004b67 !important;
+
             border: none !important;
             box-shadow: none !important;
         }
@@ -557,50 +585,6 @@
         .land-c6 {
             left: 64.97cqw;
             top: 31.71cqw;
-        }
-
-        /* ÍCONOS */
-
-        .land-c1 img {
-            left: 8.78cqw;
-            top: 9.84cqw;
-            width: 11.2cqw;
-            height: 11.2cqw;
-        }
-
-        .land-c2 img {
-            left: 4.99cqw;
-            top: 6.68cqw;
-            width: 18.38cqw;
-            height: 19.54cqw;
-        }
-
-        .land-c3 img {
-            left: 7.64cqw;
-            top: 8.23cqw;
-            width: 13.63cqw;
-            height: 14.49cqw;
-        }
-
-        .land-c4 img {
-            left: 6.40cqw;
-            top: 6.42cqw;
-            width: 16.08cqw;
-            height: 17.09cqw;
-        }
-
-        .land-c5 img {
-            left: 5.62cqw;
-            top: 6.40cqw;
-            width: 16.71cqw;
-            height: 17.77cqw;
-        }
-
-        .land-c6 img {
-            left: 8.20cqw;
-            top: 8.99cqw;
-            width: 12.33cqw;
-            height: 13.09cqw;
         }
     }
 
