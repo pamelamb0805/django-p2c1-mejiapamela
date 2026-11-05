@@ -46,20 +46,36 @@
 
             <div class="collapse navbar-collapse" id="ecoNavbar">
 
+                <!-- ENLACES DE NAVEGACIÓN -->
                 <ul class="navbar-nav mx-auto eco-nav-links">
+
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+                        <a class="nav-link" href="{% url 'home' %}#inicio">
+                            Inicio
+                        </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}#servicios">Servicios</a>
+                        <a class="nav-link" href="{% url 'home' %}#mision">
+                            Quiénes somos
+                        </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}#contacto">Contacto</a>
+                        <a class="nav-link" href="{% url 'home' %}#vision">
+                            Visión
+                        </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}#servicios">
+                            Servicios
+                        </a>
+                    </li>
+
                 </ul>
 
+                <!-- BOTÓN DE ACCESO -->
                 <div class="eco-navbar-action">
                     {% if user.is_authenticated %}
                         <a href="{% url 'dashboard:dashboard' %}" class="btn eco-btn-start">

@@ -8,26 +8,43 @@
 <style>
     @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap");
 
+    :root {
+        --eco-dark: #021D1B;
+        --eco-blue: #034159;
+        --eco-green: #02735E;
+        --eco-accent: #038C65;
+        --eco-mint: #A9FFCB;
+        --eco-card: #004b67;
+        --eco-navbar-height: 76px;
+    }
+
     html {
         scroll-behavior: smooth;
     }
 
-    /* =========================================================
-       LANDING ECOENERGY
-       ========================================================= */
+    /* =====================================================
+       FULLPAGE SCROLL
+       ===================================================== */
+
+    body:has(.landing) {
+        overflow: hidden;
+        background: var(--eco-dark) !important;
+    }
+
+    body:has(.landing) main {
+        height: calc(100svh - var(--eco-navbar-height));
+        overflow-y: auto;
+        overflow-x: hidden;
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+        overscroll-behavior-y: contain;
+    }
 
     .landing {
-        --land-panel: #034159;
-        --land-mint: #A9FFCB;
-        --land-title-font: "Montserrat", sans-serif;
-
         width: 100%;
-        max-width: 100%;
-        container-type: inline-size;
-        position: relative;
-        isolation: isolate;
-        background-color: #021D1B;
+        background: var(--eco-dark);
         color: #EAFBF1;
+        font-family: "Poppins", sans-serif;
         overflow: hidden;
     }
 
@@ -36,672 +53,457 @@
         box-sizing: border-box;
     }
 
-    .landing h2,
-    .landing h3 {
-        font-family: var(--land-title-font);
+    .land-slide {
+        width: 100%;
+        height: calc(100svh - var(--eco-navbar-height));
+        min-height: calc(100svh - var(--eco-navbar-height));
+        position: relative;
+        overflow: hidden;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+    }
+
+    .land-slide h2,
+    .land-slide h3 {
+        font-family: "Montserrat", sans-serif;
         font-weight: 700;
         margin: 0;
     }
 
-    /* ---------- HERO ---------- */
+    /* =====================================================
+       1. INICIO
+       ===================================================== */
 
-    .land-hero {
-        text-align: center;
-        padding: 2rem 1rem 2.5rem;
-        background:
-            radial-gradient(
-                ellipse 42% 105% at 72% 0%,
-                rgba(3, 48, 40, 0.95),
-                rgba(2, 29, 27, 0) 100%
-            ),
-            radial-gradient(
-                ellipse 30% 100% at 4% 0%,
-                rgba(3, 40, 44, 0.95),
-                rgba(2, 29, 27, 0) 100%
-            ),
-            #021D1B;
-    }
-
-    .land-hero-logo {
-        display: block;
-        margin: 0 auto;
-        width: min(70vw, 300px);
-        max-width: 100%;
-        height: auto;
-    }
-
-    .land-hero-text {
-        font-family: "Poppins", sans-serif;
-        font-weight: 300;
-        font-size: 1.05rem;
-        color: rgba(169, 255, 203, 0.8);
-        margin: 0.75rem 0 1rem;
-    }
-
-    .land-hero-cta {
-        display: flex;
-        justify-content: center;
-    }
-
-    .land-hero-cta .btn {
-        background-color: #038C65;
-        border-color: #038C65;
-        color: #A9FFCB;
-        font-family: "Montserrat", sans-serif;
-        font-weight: 700;
-    }
-
-    .land-hero-cta .btn:hover {
-        background-color: #02735E;
-        border-color: #02735E;
-        color: #FFFFFF;
-    }
-
-    /* ---------- QUIÉNES SOMOS Y VISIÓN ---------- */
-
-    .land-split {
+    .land-home {
         display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+        background:
+            radial-gradient(
+                ellipse 55% 75% at 70% 20%,
+                rgba(3, 72, 58, 0.55),
+                transparent 100%
+            ),
+            radial-gradient(
+                ellipse 50% 75% at 15% 80%,
+                rgba(3, 65, 89, 0.5),
+                transparent 100%
+            ),
+            var(--eco-dark);
+    }
+
+    .land-home-logo {
+        display: block;
+        width: min(42vw, 440px);
+        max-height: 48%;
+        object-fit: contain;
+        margin-bottom: 1.2rem;
+    }
+
+    .land-home-title {
+        color: var(--eco-mint);
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        margin-bottom: 0.8rem !important;
+    }
+
+    .land-home-text {
+        color: rgba(169, 255, 203, 0.85);
+        font-size: clamp(0.95rem, 1.4vw, 1.2rem);
+        line-height: 1.7;
+        max-width: 650px;
+        margin: 0 0 1.8rem;
+    }
+
+    .land-home-cta .btn {
+        background: var(--eco-accent);
+        border-color: var(--eco-accent);
+        color: var(--eco-mint);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        padding: 0.8rem 2rem;
+        border-radius: 0.7rem;
+        transition: 0.25s ease;
+    }
+
+    .land-home-cta .btn:hover {
+        background: var(--eco-green);
+        border-color: var(--eco-green);
+        color: #fff;
+        transform: translateY(-3px);
+    }
+
+    /* =====================================================
+       2. MISIÓN Y 3. VISIÓN
+       ===================================================== */
+
+    .land-split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: var(--eco-blue);
     }
 
     .land-pane {
-        position: relative;
-        background-color: var(--land-panel);
-        padding: 2rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: clamp(2rem, 5vw, 6rem);
+        min-width: 0;
+        background: var(--eco-blue);
     }
 
     .land-title {
-        color: #FFFFFF;
-        text-align: center;
-        font-size: 1.6rem;
-        margin-bottom: 1.25rem !important;
+        color: #fff;
+        font-size: clamp(2rem, 3.2vw, 3rem);
+        margin-bottom: 2rem !important;
     }
 
     .land-body {
-        font-family: "Poppins", sans-serif;
-        font-weight: 500;
-        font-size: 0.94rem;
-        line-height: 1.65;
-        color: var(--land-mint);
+        color: var(--eco-mint);
+        font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+        line-height: 1.9;
         margin: 0;
         overflow-wrap: break-word;
     }
 
-    .land-br {
-        display: none;
-    }
-
     .land-photo {
         width: 100%;
+        height: 100%;
         overflow: hidden;
     }
 
     .land-photo img {
         display: block;
         width: 100%;
-        height: clamp(220px, 35vw, 420px);
+        height: 100%;
         object-fit: cover;
         object-position: center;
     }
 
-    /* ---------- SERVICIOS ---------- */
+    /* =====================================================
+       4. SERVICIOS
+       ===================================================== */
 
-    .land-svc {
-        background-color: #021D1B;
-        padding: 2.5rem 1rem 3rem;
+    .land-services {
+        background: var(--eco-dark);
+        padding: 2rem clamp(1rem, 4vw, 4rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .land-svc-title {
-        color: #FFFFFF;
+        color: #fff;
         text-align: center;
-        font-size: 1.8rem;
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
         margin-bottom: 1.5rem !important;
-    }
-
-    .land-svc-stage {
-        position: relative;
-        width: 100%;
-    }
-
-    .land-svc-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        width: 100%;
-        max-width: 1100px;
-        margin: 0 auto;
-    }
-
-    /* ---------- TARJETAS DE SERVICIOS ---------- */
-
-    .land-card {
-        background: #004b67 !important;
-        background-color: #004b67 !important;
-        border: none !important;
-        box-shadow: none !important;
-
-        border-radius: 1.6rem;
-        padding: 1.5rem 1rem;
-        text-align: center;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-
-        min-width: 0;
-    }
-
-    .land-card h3 {
-        color: #A9FFCB;
-        font-size: 1.05rem;
-        line-height: 1.4;
-        overflow-wrap: break-word;
-    }
-
-    /* ---------- ICONOS: MISMO TAMAÑO ---------- */
-
-    .land-card img {
-        display: block;
-
-        width: 140px !important;
-        height: 140px !important;
-
-        max-width: 85% !important;
-        max-height: 140px !important;
-
-        object-fit: contain;
-        object-position: center;
-
-        background: #004b67 !important;
-        background-color: #004b67 !important;
-
-        border: none !important;
-        box-shadow: none !important;
-
-        mix-blend-mode: normal;
         flex-shrink: 0;
     }
 
-    /* ---------- TABLET ---------- */
+    .land-svc-grid {
+        width: 100%;
+        max-width: 1250px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: clamp(0.8rem, 1.5vw, 1.4rem);
+        flex: 1;
+        min-height: 0;
+    }
 
-    @media (min-width: 576px) {
+    .land-card {
+        min-width: 0;
+        min-height: 0;
+        background: var(--eco-card);
+        border-radius: 1.5rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.7rem;
+        text-align: center;
+        overflow: hidden;
+    }
 
-        .land-svc-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+    .land-card h3 {
+        color: var(--eco-mint);
+        font-size: clamp(0.85rem, 1.25vw, 1.2rem);
+        line-height: 1.4;
+    }
+
+    .land-card img {
+        display: block;
+        width: clamp(85px, 10vw, 145px);
+        height: clamp(85px, 10vw, 145px);
+        max-width: 85%;
+        object-fit: contain;
+        object-position: center;
+        background: transparent;
+        flex-shrink: 0;
+    }
+
+    /* =====================================================
+       INDICADORES DE DESPLAZAMIENTO
+       ===================================================== */
+
+    .land-scroll-hint {
+        position: absolute;
+        bottom: 1.2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        color: var(--eco-mint);
+        font-size: 1.8rem;
+        opacity: 0.8;
+        animation: land-bounce 1.8s infinite;
+        z-index: 2;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    @keyframes land-bounce {
+        0%, 100% {
+            transform: translate(-50%, 0);
         }
-
-        .land-card {
-            min-height: 240px;
+        50% {
+            transform: translate(-50%, 8px);
         }
     }
 
-    /* ---------- TABLET GRANDE / NOTEBOOK ---------- */
+    /* =====================================================
+       TABLET
+       ===================================================== */
 
-    @media (min-width: 768px) and (max-width: 1199px) {
-
-        .land-hero {
-            padding: 2.5rem 1rem;
-        }
-
-        .land-hero-logo {
-            width: min(38vw, 300px);
-        }
-
-        .land-hero-text {
-            font-size: 1rem;
-        }
-
-        .land-split {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: stretch;
-        }
+    @media (min-width: 576px) and (max-width: 991px) {
 
         .land-pane {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: clamp(1.5rem, 3vw, 3rem);
-            min-width: 0;
-        }
-
-        .land-title {
-            position: static;
-            width: 100%;
-            font-size: clamp(1.35rem, 2.2vw, 1.8rem);
-            line-height: 1.3;
-            margin-bottom: 1.5rem !important;
+            padding: 2rem;
         }
 
         .land-body {
-            position: static;
-            width: 100%;
-            font-size: clamp(0.82rem, 1.15vw, 0.95rem);
+            font-size: 0.9rem;
             line-height: 1.7;
-            white-space: normal;
-        }
-
-        .land-br {
-            display: none;
-        }
-
-        .land-photo {
-            min-height: 100%;
-        }
-
-        .land-photo img {
-            height: 100%;
-            min-height: 350px;
-            object-fit: cover;
-        }
-
-        .land-svc {
-            padding: 3rem 2rem;
-        }
-
-        .land-svc-title {
-            position: static;
-            width: 100%;
-            font-size: 2rem;
-            margin-bottom: 2rem !important;
-        }
-
-        .land-svc-stage {
-            height: auto;
-        }
-
-        .land-svc-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1.25rem;
-        }
-
-        .land-card {
-            position: static;
-            width: 100%;
-            height: auto;
-            min-height: 260px;
-            padding: 1.5rem 1rem;
-            border-radius: 1.5rem;
-        }
-
-        .land-card h3 {
-            position: static;
-            width: 100%;
-            font-size: clamp(0.9rem, 1.2vw, 1.1rem);
-            line-height: 1.5;
-            white-space: normal;
-        }
-
-        .land-card img {
-            position: static;
-
-            width: 140px !important;
-            height: 140px !important;
-
-            max-width: 85% !important;
-            max-height: 140px !important;
-
-            object-fit: contain;
-        }
-
-        .land-c1,
-        .land-c2,
-        .land-c3,
-        .land-c4,
-        .land-c5,
-        .land-c6 {
-            left: auto;
-            top: auto;
-        }
-    }
-
-    /* =========================================================
-       ESCRITORIO GRANDE
-       ========================================================= */
-
-    @media (min-width: 1200px) {
-
-        /* HERO */
-
-        .land-hero {
-            height: 14.93cqw;
-            padding: 0.04cqw 0 0;
-        }
-
-        .land-hero-logo {
-            width: 18.6cqw;
-        }
-
-        .land-hero-text {
-            font-size: 1.2cqw;
-            line-height: 1.5;
-            margin: 0.6cqw 0 0;
-        }
-
-        .land-hero-cta {
-            margin-top: 0.99cqw;
-        }
-
-        .land-hero-cta .btn {
-            width: 8.76cqw;
-            height: 2.4cqw;
-            padding: 0;
-            font-size: 0.96cqw;
-            border-radius: 0.55cqw;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* PANELES */
-
-        .land-split {
-            display: grid;
-            grid-template-columns: 52.56fr 47.44fr;
-        }
-
-        .land-split--about {
-            height: 35.36cqw;
-        }
-
-        .land-split--vision {
-            height: 35.42cqw;
-        }
-
-        .land-pane {
-            position: relative;
-            display: block;
-            padding: 0;
-            height: 100%;
-        }
-
-        .land-photo {
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .land-photo img {
-            height: 100%;
-            min-height: 0;
         }
 
         .land-title {
-            position: absolute;
-            font-size: 1.812cqw;
-            line-height: 2.63cqw;
-            margin: 0 !important;
-        }
-
-        /* PÁRRAFOS LIGERAMENTE MÁS PEQUEÑOS */
-
-        .land-body {
-            position: absolute;
-            font-size: 1.18cqw;
-            line-height: 1.72cqw;
-            white-space: nowrap;
-        }
-
-        .land-br {
-            display: inline;
-        }
-
-        /* QUIÉNES SOMOS */
-
-        .land-split--about .land-title {
-            left: 0;
-            top: 4.25cqw;
-            width: 51.2cqw;
-        }
-
-        .land-split--about .land-body {
-            left: 1.15cqw;
-            top: 9.02cqw;
-            width: 50cqw;
-        }
-
-        /* VISIÓN */
-
-        .land-split--vision .land-title {
-            left: 0;
-            top: 3.13cqw;
-            width: 43.42cqw;
-        }
-
-        .land-split--vision .land-body {
-            left: 0.49cqw;
-            top: 10.03cqw;
-            width: 46.45cqw;
-        }
-
-        /* SERVICIOS */
-
-        .land-svc {
-            padding: 3cqw 0;
-        }
-
-        .land-svc-stage {
-            position: relative;
-            height: 57.42cqw;
-        }
-
-        .land-svc-title {
-            position: absolute;
-            left: 0;
-            top: 0.48cqw;
-            width: 98.66cqw;
-            font-size: 2.593cqw;
-            line-height: 3.76cqw;
-            margin: 0 !important;
-        }
-
-        .land-svc-grid {
-            display: block;
-            max-width: none;
-            margin: 0;
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem !important;
         }
 
         .land-card {
-            position: absolute;
-            display: block;
-            width: 28.73cqw;
-            height: 25.71cqw;
-            min-height: 0;
-            padding: 0;
-            border-radius: 2.6cqw;
-            overflow: hidden;
+            padding: 0.7rem;
+        }
 
-            background: #004b67 !important;
-            background-color: #004b67 !important;
-
-            border: none !important;
-            box-shadow: none !important;
+        .land-card img {
+            width: 100px;
+            height: 100px;
         }
 
         .land-card h3 {
-            position: absolute;
-            left: 0;
-            top: 2.77cqw;
-            width: 100%;
-            font-size: 1.812cqw;
-            line-height: 2.78cqw;
-            white-space: nowrap;
-        }
-
-        /* LOS SEIS ICONOS TIENEN LAS MISMAS DIMENSIONES Y POSICIÓN */
-
-        .land-card img {
-            position: absolute;
-
-            width: 14cqw !important;
-            height: 14cqw !important;
-
-            max-width: none !important;
-            max-height: none !important;
-
-            left: 50%;
-            top: 58%;
-            transform: translate(-50%, -50%);
-
-            object-fit: contain;
-            object-position: center;
-
-            background: #004b67 !important;
-            background-color: #004b67 !important;
-
-            border: none !important;
-            box-shadow: none !important;
-        }
-
-        /* POSICIÓN DE TARJETAS */
-
-        .land-c1 {
-            left: 4.95cqw;
-            top: 4.02cqw;
-        }
-
-        .land-c2 {
-            left: 34.79cqw;
-            top: 4.02cqw;
-        }
-
-        .land-c3 {
-            left: 64.63cqw;
-            top: 4.02cqw;
-        }
-
-        .land-c4 {
-            left: 5.29cqw;
-            top: 31.71cqw;
-        }
-
-        .land-c5 {
-            left: 35.13cqw;
-            top: 31.71cqw;
-        }
-
-        .land-c6 {
-            left: 64.97cqw;
-            top: 31.71cqw;
+            font-size: 0.9rem;
         }
     }
 
-    /* ---------- MÓVIL ---------- */
+    /* =====================================================
+       MÓVIL
+       ===================================================== */
 
     @media (max-width: 575px) {
 
-        .land-hero {
-            padding: 2rem 1rem;
+        body:has(.landing) main {
+            scroll-snap-type: y mandatory;
         }
 
-        .land-hero-logo {
-            width: min(75vw, 260px);
+        .land-slide {
+            padding: 1.5rem 1rem;
         }
 
-        .land-hero-text {
+        .land-home-logo {
+            width: min(75vw, 280px);
+            max-height: 40%;
+        }
+
+        .land-home-title {
+            font-size: 2rem;
+        }
+
+        .land-home-text {
             font-size: 0.9rem;
-            line-height: 1.6;
         }
 
-        .land-pane {
-            padding: 2rem 1.25rem;
+        .land-split {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .land-split .land-pane {
+            padding: 1.5rem 1rem;
+            min-height: 45%;
+        }
+
+        .land-split .land-photo {
+            min-height: 40%;
+            height: 40%;
+            flex-shrink: 0;
+        }
+
+        .land-split .land-photo img {
+            height: 100%;
+            min-height: 200px;
         }
 
         .land-title {
-            font-size: 1.45rem;
+            font-size: 1.6rem;
+            margin-bottom: 1rem !important;
         }
 
         .land-body {
-            font-size: 0.9rem;
-            line-height: 1.7;
+            font-size: 0.85rem;
+            line-height: 1.6;
         }
 
-        .land-photo img {
-            height: 230px;
-        }
-
-        .land-svc {
-            padding: 2.5rem 1rem;
+        .land-services {
+            justify-content: flex-start;
+            overflow-y: auto;
+            padding: 1.5rem 0.8rem;
         }
 
         .land-svc-title {
-            font-size: 1.55rem;
+            font-size: 1.6rem;
+            margin-bottom: 1rem !important;
+        }
+
+        .land-svc-grid {
+            flex: none;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: auto;
+            gap: 0.7rem;
         }
 
         .land-card {
-            min-height: 210px;
+            min-height: 170px;
+            padding: 0.6rem;
+            border-radius: 1rem;
+            gap: 0.5rem;
         }
 
         .land-card h3 {
-            font-size: 1rem;
+            font-size: 0.75rem;
+        }
+
+        .land-card img {
+            width: 85px;
+            height: 85px;
+        }
+
+        .land-scroll-hint {
+            display: none;
         }
     }
 
-    /* ---------- ACCESIBILIDAD ---------- */
+    /* =====================================================
+       ACCESIBILIDAD
+       ===================================================== */
 
     @media (prefers-reduced-motion: reduce) {
-        html {
+
+        html,
+        body:has(.landing) main {
             scroll-behavior: auto;
+        }
+
+        .land-scroll-hint {
+            animation: none;
         }
     }
 </style>
 {% endblock %}
 
+
 {% block content %}
+
 <div class="landing">
 
-    <!-- HERO -->
-    <section class="land-hero">
+    <!-- ================================================
+         1. INICIO
+         ================================================ -->
+
+    <section class="land-slide land-home" id="inicio">
 
         <img
             src="{% static 'img/ecoenergy-logo.png' %}"
-            alt="EcoEnergy"
-            class="land-hero-logo"
+            alt="Logo EcoEnergy"
+            class="land-home-logo"
         >
 
-        <p class="land-hero-text">
+        <h1 class="land-home-title">
+            EcoEnergy
+        </h1>
+
+        <p class="land-home-text">
             Sistema de monitoreo de dispositivos y consumo energético.
         </p>
 
-        <div class="land-hero-cta">
+        <div class="land-home-cta">
+
             {% if user.is_authenticated %}
+
                 <a
                     href="{% url 'dashboard:dashboard' %}"
-                    class="btn btn-primary"
+                    class="btn"
                 >
                     Ir al dashboard
                 </a>
+
             {% else %}
+
                 <a
                     href="{% url 'login' %}"
-                    class="btn btn-primary"
+                    class="btn"
                 >
                     Iniciar sesión
                 </a>
+
             {% endif %}
+
         </div>
+
+        <a
+            href="#mision"
+            class="land-scroll-hint"
+            aria-label="Ir a misión"
+        >
+            <i class="bi bi-chevron-down"></i>
+        </a>
 
     </section>
 
-    <!-- QUIÉNES SOMOS -->
-    <section class="land-split land-split--about">
+
+    <!-- ================================================
+         2. MISIÓN
+         ================================================ -->
+
+    <section class="land-slide land-split" id="mision">
 
         <div class="land-pane">
 
             <h2 class="land-title">
-                Quiénes somos
+                Misión
             </h2>
 
             <p class="land-body">
-                EcoEnergy somos una empresa orientada al monitoreo de dispositivos y<br class="land-br">
-                consumo energético.<br class="land-br">
-                Nuestra misión es entregar un servicio de excelencia, confiable y<br class="land-br">
-                transparente a nuestros clientes, con la finalidad de mejorar la eficiencia<br class="land-br">
-                operativa de sus empresas y fortalecer su competitividad en el mercado, a<br class="land-br">
-                través de la prestación de servicios tecnológicos de alta calidad en gestión<br class="land-br">
-                de dispositivos IoT, control de mediciones en tiempo real, supervisión de<br class="land-br">
+                EcoEnergy somos una empresa orientada al monitoreo de dispositivos y
+                consumo energético.
+
+                Nuestra misión es entregar un servicio de excelencia, confiable y
+                transparente a nuestros clientes, con la finalidad de mejorar la eficiencia
+                operativa de sus empresas y fortalecer su competitividad en el mercado, a
+                través de la prestación de servicios tecnológicos de alta calidad en gestión
+                de dispositivos IoT, control de mediciones en tiempo real, supervisión de
                 alertas y mantenimiento preventivo de infraestructura energética.
             </p>
 
@@ -711,21 +513,33 @@
 
             <img
                 src="{% static 'img/mision.png' %}"
-                alt="Parque eólico y paneles solares al atardecer"
+                alt="Imagen representativa de la misión de EcoEnergy"
             >
 
         </div>
 
+        <a
+            href="#vision"
+            class="land-scroll-hint"
+            aria-label="Ir a visión"
+        >
+            <i class="bi bi-chevron-down"></i>
+        </a>
+
     </section>
 
-    <!-- VISIÓN -->
-    <section class="land-split land-split--vision">
+
+    <!-- ================================================
+         3. VISIÓN
+         ================================================ -->
+
+    <section class="land-slide land-split" id="vision">
 
         <div class="land-photo">
 
             <img
                 src="{% static 'img/vision.png' %}"
-                alt="Ilustración de energía eólica y solar"
+                alt="Imagen representativa de la visión de EcoEnergy"
             >
 
         </div>
@@ -737,118 +551,454 @@
             </h2>
 
             <p class="land-body">
-                Nuestra visión es ser reconocidos por la excelencia y calidad en la<br class="land-br">
-                prestación de nuestros servicios, brindando soluciones que generen<br class="land-br">
-                un impacto positivo y duradero en la optimización energética y<br class="land-br">
-                sustentabilidad de los negocios de nuestros clientes, siendo un<br class="land-br">
-                referente en plataformas de monitoreo, análisis de consumo y gestión<br class="land-br">
+                Nuestra visión es ser reconocidos por la excelencia y calidad en la
+                prestación de nuestros servicios, brindando soluciones que generen
+                un impacto positivo y duradero en la optimización energética y
+                sustentabilidad de los negocios de nuestros clientes, siendo un
+                referente en plataformas de monitoreo, análisis de consumo y gestión
                 inteligente de energía.
             </p>
 
         </div>
 
+        <a
+            href="#servicios"
+            class="land-scroll-hint"
+            aria-label="Ir a servicios"
+        >
+            <i class="bi bi-chevron-down"></i>
+        </a>
+
     </section>
 
-    <!-- SERVICIOS -->
-    <section class="land-svc" id="servicios">
 
-        <div class="land-svc-stage">
+    <!-- ================================================
+         4. SERVICIOS
+         ================================================ -->
 
-            <h2 class="land-svc-title">
-                Nuestros servicios
-            </h2>
+    <section class="land-slide land-services" id="servicios">
 
-            <div class="land-svc-grid">
+        <h2 class="land-svc-title">
+            Nuestros servicios
+        </h2>
 
-                <div class="land-card land-c1">
+        <div class="land-svc-grid">
 
-                    <h3>
-                        Monitoreo energético y<br class="land-br">
-                        métricas en tiempo real
-                    </h3>
+            <article class="land-card">
 
-                    <img
-                        src="{% static 'img/servicio_icon1.png' %}"
-                        alt="Monitoreo energético"
-                    >
+                <h3>
+                    Monitoreo energético y
+                    métricas en tiempo real
+                </h3>
 
-                </div>
+                <img
+                    src="{% static 'img/servicio_icon1.png' %}"
+                    alt="Monitoreo energético"
+                >
 
-                <div class="land-card land-c2">
+            </article>
 
-                    <h3>
-                        Gestión de dispositivos y<br class="land-br">
-                        catálogo de equipos
-                    </h3>
 
-                    <img
-                        src="{% static 'img/servicio_icon2.png' %}"
-                        alt="Gestión de dispositivos"
-                    >
+            <article class="land-card">
 
-                </div>
+                <h3>
+                    Gestión de dispositivos y
+                    catálogo de equipos
+                </h3>
 
-                <div class="land-card land-c3">
+                <img
+                    src="{% static 'img/servicio_icon2.png' %}"
+                    alt="Gestión de dispositivos"
+                >
 
-                    <h3>
-                        Alertas automáticas por<br class="land-br">
-                        umbrales y notificaciones
-                    </h3>
+            </article>
 
-                    <img
-                        src="{% static 'img/servicio_icon3.png' %}"
-                        alt="Alertas automáticas"
-                    >
 
-                </div>
+            <article class="land-card">
 
-                <div class="land-card land-c4">
+                <h3>
+                    Alertas automáticas por
+                    umbrales y notificaciones
+                </h3>
 
-                    <h3>
-                        Gestión de solicitudes y<br class="land-br">
-                        planes de mantenimiento
-                    </h3>
+                <img
+                    src="{% static 'img/servicio_icon3.png' %}"
+                    alt="Alertas automáticas"
+                >
 
-                    <img
-                        src="{% static 'img/servicio_icon4.png' %}"
-                        alt="Mantenimiento"
-                    >
+            </article>
 
-                </div>
 
-                <div class="land-card land-c5">
+            <article class="land-card">
 
-                    <h3>
-                        Reportes y analítica de<br class="land-br">
-                        consumo sustentable
-                    </h3>
+                <h3>
+                    Gestión de solicitudes y
+                    planes de mantenimiento
+                </h3>
 
-                    <img
-                        src="{% static 'img/servicio_icon5.png' %}"
-                        alt="Reportes y analítica"
-                    >
+                <img
+                    src="{% static 'img/servicio_icon4.png' %}"
+                    alt="Mantenimiento"
+                >
 
-                </div>
+            </article>
 
-                <div class="land-card land-c6">
 
-                    <h3>
-                        Gestión multiempresa y<br class="land-br">
-                        control de accesos por rol
-                    </h3>
+            <article class="land-card">
 
-                    <img
-                        src="{% static 'img/servicio_icon6.png' %}"
-                        alt="Gestión multiempresa"
-                    >
+                <h3>
+                    Reportes y analítica de
+                    consumo sustentable
+                </h3>
 
-                </div>
+                <img
+                    src="{% static 'img/servicio_icon5.png' %}"
+                    alt="Reportes y analítica"
+                >
 
-            </div>
+            </article>
+
+
+            <article class="land-card">
+
+                <h3>
+                    Gestión multiempresa y
+                    control de accesos por rol
+                </h3>
+
+                <img
+                    src="{% static 'img/servicio_icon6.png' %}"
+                    alt="Gestión multiempresa"
+                >
+
+            </article>
 
         </div>
 
     </section>
 
 </div>
+
+
+<!-- ================================================
+     NAVEGACIÓN FULLPAGE CON JAVASCRIPT
+     ================================================ -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const main = document.querySelector("body:has(.landing) main");
+
+    if (!main) return;
+
+    const slides = Array.from(
+        document.querySelectorAll(".land-slide")
+    );
+
+    if (!slides.length) return;
+
+    let currentSlide = 0;
+    let isAnimating = false;
+    let wheelAccumulator = 0;
+
+    const transitionDuration = 900;
+    const wheelThreshold = 35;
+
+    let animationTimeout = null;
+
+    // ==========================================
+    // POSICIÓN DE CADA DIAPOSITIVA
+    // ==========================================
+
+    function getSlidePosition(index) {
+
+        const slide = slides[index];
+
+        return (
+            slide.getBoundingClientRect().top -
+            main.getBoundingClientRect().top +
+            main.scrollTop
+        );
+    }
+
+    // ==========================================
+    // IDENTIFICAR DIAPOSITIVA ACTUAL
+    // ==========================================
+
+    function updateCurrentSlide() {
+
+        const scrollPosition = main.scrollTop;
+
+        let closestIndex = 0;
+        let closestDistance = Infinity;
+
+        slides.forEach((slide, index) => {
+
+            const distance = Math.abs(
+                getSlidePosition(index) - scrollPosition
+            );
+
+            if (distance < closestDistance) {
+
+                closestDistance = distance;
+                closestIndex = index;
+
+            }
+
+        });
+
+        currentSlide = closestIndex;
+    }
+
+    // ==========================================
+    // CAMBIAR DIAPOSITIVA
+    // ==========================================
+
+    function goToSlide(index) {
+
+        if (isAnimating) return;
+
+        if (index < 0 || index >= slides.length) return;
+
+        currentSlide = index;
+        isAnimating = true;
+
+        main.scrollTo({
+
+            top: getSlidePosition(index),
+            behavior: "smooth"
+
+        });
+
+        clearTimeout(animationTimeout);
+
+        animationTimeout = setTimeout(function () {
+
+            isAnimating = false;
+            updateCurrentSlide();
+
+        }, transitionDuration);
+
+    }
+
+    // ==========================================
+    // SIGUIENTE / ANTERIOR
+    // ==========================================
+
+    function nextSlide() {
+
+        goToSlide(currentSlide + 1);
+
+    }
+
+    function previousSlide() {
+
+        goToSlide(currentSlide - 1);
+
+    }
+
+    // ==========================================
+    // RUEDA DEL MOUSE
+    // ==========================================
+
+    main.addEventListener("wheel", function (event) {
+
+        if (isAnimating) {
+
+            event.preventDefault();
+            return;
+
+        }
+
+        const direction = event.deltaY > 0 ? 1 : -1;
+
+        // Permitir scroll interno en elementos
+        // que tengan desplazamiento propio.
+
+        let element = event.target;
+
+        while (element && element !== main) {
+
+            const style = window.getComputedStyle(element);
+
+            const canScroll =
+                /(auto|scroll)/.test(style.overflowY) &&
+                element.scrollHeight > element.clientHeight;
+
+            if (canScroll) {
+
+                const atTop = element.scrollTop <= 0;
+
+                const atBottom =
+                    element.scrollTop + element.clientHeight >=
+                    element.scrollHeight - 1;
+
+                if (
+                    (direction < 0 && !atTop) ||
+                    (direction > 0 && !atBottom)
+                ) {
+
+                    return;
+
+                }
+
+            }
+
+            element = element.parentElement;
+
+        }
+
+        event.preventDefault();
+
+        wheelAccumulator += event.deltaY;
+
+        if (Math.abs(wheelAccumulator) >= wheelThreshold) {
+
+            if (wheelAccumulator > 0) {
+
+                nextSlide();
+
+            } else {
+
+                previousSlide();
+
+            }
+
+            wheelAccumulator = 0;
+
+        }
+
+    }, { passive: false });
+
+
+    // ==========================================
+    // TECLADO
+    // ==========================================
+
+    document.addEventListener("keydown", function (event) {
+
+        const activeElement = document.activeElement;
+
+        const isTyping =
+            activeElement &&
+            (
+                activeElement.tagName === "INPUT" ||
+                activeElement.tagName === "TEXTAREA" ||
+                activeElement.tagName === "SELECT" ||
+                activeElement.isContentEditable
+            );
+
+        if (isTyping) return;
+
+        switch (event.key) {
+
+            case "ArrowDown":
+
+                event.preventDefault();
+                nextSlide();
+
+                break;
+
+
+            case "ArrowUp":
+
+                event.preventDefault();
+                previousSlide();
+
+                break;
+
+
+            case " ":
+            case "Spacebar":
+
+                if (
+                    activeElement &&
+                    activeElement.closest("a, button")
+                ) return;
+
+                event.preventDefault();
+
+                if (event.shiftKey) {
+
+                    previousSlide();
+
+                } else {
+
+                    nextSlide();
+
+                }
+
+                break;
+
+
+            case "Enter":
+
+                if (
+                    activeElement &&
+                    activeElement.closest("a, button")
+                ) return;
+
+                event.preventDefault();
+                nextSlide();
+
+                break;
+
+        }
+
+    });
+
+
+    // ==========================================
+    // ACTUALIZAR DIAPOSITIVA
+    // ==========================================
+
+    main.addEventListener("scroll", function () {
+
+        if (!isAnimating) {
+
+            updateCurrentSlide();
+
+        }
+
+    }, { passive: true });
+
+
+    // ==========================================
+    // FLECHAS DE NAVEGACIÓN DE LA PÁGINA
+    // ==========================================
+
+    document.querySelectorAll(".land-scroll-hint").forEach(link => {
+
+        link.addEventListener("click", function (event) {
+
+            const targetId = this.getAttribute("href");
+
+            const target = document.querySelector(targetId);
+
+            if (!target) return;
+
+            event.preventDefault();
+
+            const index = slides.indexOf(target);
+
+            if (index !== -1) {
+
+                goToSlide(index);
+
+            }
+
+        });
+
+    });
+
+
+    // ==========================================
+    // POSICIÓN INICIAL
+    // ==========================================
+
+    updateCurrentSlide();
+
+});
+</script>
+
 {% endblock %}
