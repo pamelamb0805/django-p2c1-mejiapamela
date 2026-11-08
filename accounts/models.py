@@ -1,4 +1,3 @@
-
 from django.conf import settings
 from django.db import models
 from core.models import BaseModel
@@ -30,6 +29,16 @@ class UserProfile(BaseModel):
     phone = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=255, blank=True)
 
+    # Perfil de usuario con foto (Clase 9: archivos e imágenes) --> PM
+    # avatar (ImageField): foto de perfil. En la BD se guarda solo la ruta relativa; el archivo queda en MEDIA_ROOT.
+    # upload_to ordena las fotos por año y mes. blank=True porque la foto es opcional (los perfiles ya creados no se rompen).
+    avatar = models.ImageField(
+        upload_to="accounts/avatars/%Y/%m/",
+        blank=True,
+        verbose_name="Foto de perfil",
+        help_text="Formato de imagen (JPG, PNG, WEBP). Máximo 2 MB.",
+    )
+
         # ... campos anteriores ...
         #clean (ppt4) ---> valida pertenencia entre organizacion --> departamento
     def clean(self):
@@ -49,4 +58,3 @@ class UserProfile(BaseModel):
 
     def __str__(self):
         return f"{self.user.username} · {self.organization}"
-

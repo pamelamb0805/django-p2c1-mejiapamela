@@ -1,6 +1,7 @@
 from urllib.parse import urlencode
 
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -14,7 +15,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from organizations.models import Department, Organization
 from organizations.views import CrudAccessMixin
 
-from .forms import UserProfileForm
+from .forms import ProfileAvatarForm, UserProfileForm
 from .models import UserProfile
 from core.pagination import PageSizeMixin
 
@@ -225,3 +226,28 @@ class UserProfileDeleteView(UserProfileAccessMixin, DeleteView):
             self.request, "Perfil eliminado y acceso de la cuenta desactivado correctamente."
         )
         return HttpResponseRedirect(self.get_success_url())
+
+
+# ==========================================
+# Perfil de usuario con foto (Clase 9) --> PM
+# "Mi perfil": cada usuario ve sus propios datos y puede cambiar su foto.
+# No recibe ningún id por la URL: siempre usa request.user, así nadie puede ver ni editar el perfil de otro.
+# ==========================================
+@login_required
+def perfil(request):
+    # Si la cuenta no tiene perfil (por ejemplo un superusuario recién creado), getattr devuelve None y no se rompe.
+    profile = getattr(request.user, "profile", None)
+    if profile is None:
+        return render(request, "accounts/perfil.html", {"profile": None})
+
+    if request.method == "POST":
+        # request.FILES lleva el archivo subido; el formulario HTML debe tener enctype="multipart/form-data".
+        form = ProfileAvatarForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Tu foto de perfil se actualizó correctamente.")
+            return redirect("accounts:perfil")
+    else:
+        form = ProfileAvatarForm(instance=profile)
+
+    return render(request, "accounts/perfil.html", {"profile": profile, "form": form})

@@ -1,4 +1,3 @@
-
 {% load django_bootstrap5 %}
 {% load static %}
 <!doctype html>
@@ -78,6 +77,20 @@
                 <!-- BOTÓN DE ACCESO -->
                 <div class="eco-navbar-action">
                     {% if user.is_authenticated %}
+                        {# Perfil de usuario con foto (Clase 9) --> PM: foto + enlace a "Mi perfil". user.profile.avatar no falla si el usuario no tiene perfil. #}
+                        <a href="{% url 'accounts:perfil' %}"
+                           class="d-inline-flex align-items-center gap-2 text-decoration-none text-light me-3"
+                           title="Mi perfil">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}"
+                                     alt="Foto de {{ user.username }}"
+                                     class="rounded-circle"
+                                     style="width: 32px; height: 32px; object-fit: cover;">
+                            {% else %}
+                                <i class="bi bi-person-circle fs-4"></i>
+                            {% endif %}
+                            <span class="d-none d-lg-inline">Mi perfil</span>
+                        </a>
                         <a href="{% url 'dashboard:dashboard' %}" class="btn eco-btn-start">
                             Mi panel
                             <i class="bi bi-arrow-right ms-1"></i>
