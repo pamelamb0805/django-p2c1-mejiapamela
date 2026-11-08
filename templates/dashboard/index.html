@@ -34,6 +34,12 @@
                 {{ request.user.first_name|default:request.user.username }}
             </span>
 
+            {# Perfil de usuario con foto (Clase 9) --> PM: acceso a "Mi perfil" #}
+            <a href="{% url 'accounts:perfil' %}" class="btn btn-outline-light btn-sm">
+                <i class="bi bi-person-lines-fill me-1"></i>
+                Mi perfil
+            </a>
+
             <!-- Ruta nombrada de cierre de sesión (logout) -->
             <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">
                 <i class="bi bi-box-arrow-right me-1"></i>
@@ -157,7 +163,17 @@
 
                     <div class="d-flex align-items-center gap-3">
 
-                        {% if foto_sesion %}
+                        {# Clase 9 --> PM: si el usuario subió una foto de perfil se muestra aquí; si no, queda lo de antes. #}
+                        {% if request.user.profile.avatar %}
+                            <a href="{% url 'accounts:perfil' %}" title="Mi perfil">
+                                <img src="{{ request.user.profile.avatar.url }}"
+                                     alt="Foto de {{ request.user.username }}"
+                                     class="rounded-circle border border-2 border-success"
+                                     width="55"
+                                     height="55"
+                                     style="object-fit:cover;">
+                            </a>
+                        {% elif foto_sesion %}
                             <img src="{% static 'img/' %}{{ foto_sesion }}"
                                  alt="Usuario"
                                  class="rounded-circle border border-2 border-success"

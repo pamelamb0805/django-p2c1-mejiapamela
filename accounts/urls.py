@@ -6,6 +6,9 @@ app_name = 'accounts'
 urlpatterns = [
     path('registro/', views.registro, name='registro'),
 
+    # Perfil de usuario con foto (Clase 9) --> PM: ruta /accounts/perfil/
+    path('perfil/', views.perfil, name='perfil'),
+
     # CRUD de usuarios y perfiles (M02): listar, crear, editar y eliminar
     path('users/', views.UserProfileListView.as_view(), name='user_list'),
     path('users/new/', views.UserProfileCreateView.as_view(), name='user_create'),

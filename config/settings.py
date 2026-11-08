@@ -154,6 +154,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Clase 9 (archivos e imágenes) --> PM
+# MEDIA_URL: prefijo de la URL con la que se acceden los archivos subidos (ej: /media/accounts/avatars/foto.jpg).
+# MEDIA_ROOT: carpeta física del servidor donde Django guarda esos archivos (no van dentro de la base de datos).
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Email

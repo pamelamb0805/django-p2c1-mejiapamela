@@ -7,12 +7,17 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import UploadedFile
 from django.db import transaction
 from django.db.models import Q
 
 from organizations.models import Department, Organization
 
 from .models import UserProfile
+
+# Perfil de usuario con foto (Clase 9) --> PM
+# Límite de tamaño que valida el servidor (el atributo accept del HTML solo orienta al navegador).
+MAX_AVATAR = 2 * 1024 * 1024  # 2 MB
 
 User = get_user_model()
 
@@ -303,3 +308,28 @@ class UserProfileForm(forms.ModelForm):
             rol = datos.get("role")
             cuenta.groups.set([rol] if rol else [])
         return perfil
+
+
+# Perfil de usuario con foto (Clase 9) --> PM
+# Formulario para que cada usuario cambie SOLO su foto. Con fields explícitos no se exponen
+# organización, departamento, código de empleado ni RUT: esos datos los administra el administrador.
+class ProfileAvatarForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ["avatar"]
+        widgets = {
+            # FileInput es el selector simple: no muestra el texto "Actualmente" ni la casilla "Limpiar".
+            # El input queda oculto (d-none) y en la plantilla se usa un botón propio "Elegir imagen" que lo activa.
+            # accept orienta al navegador (solo imágenes); la validación real se hace en clean_avatar.
+            "avatar": forms.FileInput(
+                attrs={"class": "d-none", "accept": "image/*"}
+            ),
+        }
+
+    # ImageField (con Pillow) ya comprueba que sea una imagen válida; aquí se valida el tamaño.
+    # Solo se revisa si es una carga nueva (UploadedFile); si no se sube nada, el valor es la foto ya guardada.
+    def clean_avatar(self):
+        avatar = self.cleaned_data.get("avatar")
+        if isinstance(avatar, UploadedFile) and avatar.size > MAX_AVATAR:
+            raise ValidationError("La imagen no puede superar los 2 MB.")
+        return avatar
