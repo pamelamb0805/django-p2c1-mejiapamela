@@ -1,15 +1,28 @@
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 from organizations.models import Zone
-from .models import Catalog, Product, Device, Measurement, History, AlertEvent, AlertRule, MaintenanceRequest
+from .models import (
+    Catalog,
+    Product,
+    Device,
+    Measurement,
+    History,
+    AlertEvent,
+    AlertRule,
+    MaintenanceRequest,
+)
 from core.validators import FormLimitsMixin
+
 
 ACTIVE_INACTIVE_CHOICES = [
     ("activo", "Activo"),
     ("inactivo", "Inactivo"),
 ]
+
+
 class ArchiveDevicesForm(forms.Form):
     """Valida que los dispositivos elegidos pertenezcan al ámbito del usuario."""
 
@@ -24,15 +37,17 @@ class ArchiveDevicesForm(forms.Form):
             self.fields["devices"].queryset = queryset
 
 
-# ModelForm de Device: se reutiliza para Crear y Editar. Define campos, widgets Bootstrap y validaciones.
+# ModelForm de Device: se reutiliza para Crear y Editar.
 # Clase 8 - Alexander
-class DeviceForm(FormLimitsMixin,forms.ModelForm):
-        status = forms.ChoiceField(
+class DeviceForm(FormLimitsMixin, forms.ModelForm):
+
+    status = forms.ChoiceField(
         choices=ACTIVE_INACTIVE_CHOICES,
         initial="activo",
         label="Estado",
         widget=forms.Select(attrs={"class": "form-select"}),
     )
+
     class Meta:
         model = Device
         fields = [
@@ -57,7 +72,6 @@ class DeviceForm(FormLimitsMixin,forms.ModelForm):
 
     # Recibe el usuario para que el selector de zona solo muestre zonas de su organización.
     # Clase 8 - Alexander - corrección preentrega eva 3 --> PM
-    
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -83,7 +97,6 @@ class DeviceForm(FormLimitsMixin,forms.ModelForm):
 
         self.fields["zone"].queryset = zones
 
-
     # Validación del campo internal_name: quita espacios y exige mínimo 3 caracteres.
     # Clase 8 - Alexander
     def clean_internal_name(self):
@@ -93,7 +106,6 @@ class DeviceForm(FormLimitsMixin,forms.ModelForm):
         return name
 
     # Validación del campo device_id: evita códigos repetidos (sin distinguir mayúsculas).
-    # exclude(pk=self.instance.pk) permite editar sin chocar consigo mismo.
     # Clase 8 - Alexander
     def clean_device_id(self):
         device_id = self.cleaned_data["device_id"].strip()
@@ -135,15 +147,19 @@ class DeviceForm(FormLimitsMixin,forms.ModelForm):
             )
 
         return cleaned_data
-#clases formulario categoria y producto - preentrega eva3 --> PM 
+
+
+# Clases formulario categoría y producto - preentrega eva3 --> PM
 # ModelForm de Categoría (modelo Catalog): se reutiliza para Crear y Editar.
-class CategoryForm(FormLimitsMixin,forms.ModelForm):
-        status = forms.ChoiceField(
+class CategoryForm(FormLimitsMixin, forms.ModelForm):
+
+    status = forms.ChoiceField(
         choices=ACTIVE_INACTIVE_CHOICES,
         initial="activo",
         label="Estado",
         widget=forms.Select(attrs={"class": "form-select"}),
     )
+
     class Meta:
         model = Catalog
         fields = ["catalog_id", "name", "description", "status"]
@@ -172,7 +188,8 @@ class CategoryForm(FormLimitsMixin,forms.ModelForm):
 
 
 # ModelForm de Producto: se reutiliza para Crear y Editar.
-class ProductForm(FormLimitsMixin,forms.ModelForm):
+class ProductForm(FormLimitsMixin, forms.ModelForm):
+
     class Meta:
         model = Product
         fields = [
@@ -193,6 +210,7 @@ class ProductForm(FormLimitsMixin,forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         # Las categorías eliminadas lógicamente no se pueden seleccionar.
         self.fields["catalog"].queryset = Catalog.objects.filter(
             deleted_at__isnull=True
@@ -231,10 +249,12 @@ class ProductForm(FormLimitsMixin,forms.ModelForm):
         if kwh is not None and kwh < 0:
             raise ValidationError("El consumo no puede ser negativo.")
         return kwh
-    
-#def Measurement --> preentrega eva3 --> PM
-# ModelForm de Measurement: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
-class MeasurementForm(FormLimitsMixin,forms.ModelForm):
+
+
+# def Measurement --> preentrega eva3 --> PM
+# ModelForm de Measurement: se reutiliza para Crear y Editar.
+class MeasurementForm(FormLimitsMixin, forms.ModelForm):
+
     class Meta:
         model = Measurement
         fields = [
@@ -285,15 +305,18 @@ class MeasurementForm(FormLimitsMixin,forms.ModelForm):
         if value < 0:
             raise ValidationError("El valor no puede ser negativo.")
         return value
-    
-#preentrega eva3 - PM Formulario Catalogo
-class CatalogForm(FormLimitsMixin,forms.ModelForm):
-        status = forms.ChoiceField(
+
+
+# Preentrega eva3 - PM Formulario Catálogo
+class CatalogForm(FormLimitsMixin, forms.ModelForm):
+
+    status = forms.ChoiceField(
         choices=ACTIVE_INACTIVE_CHOICES,
         initial="activo",
         label="Estado",
         widget=forms.Select(attrs={"class": "form-select"}),
     )
+
     class Meta:
         model = Catalog
         fields = ["catalog_id", "name", "description", "status"]
@@ -303,7 +326,8 @@ class CatalogForm(FormLimitsMixin,forms.ModelForm):
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
         }
 
-#preentrega eva3 - PM Formulario Alertas
+
+# Preentrega eva3 - PM Formulario Alertas
 # Estados posibles de una alerta: se usan en el formulario y en el filtro del listado.
 ALERT_STATUS_CHOICES = [
     ("abierta", "Abierta"),
@@ -312,9 +336,10 @@ ALERT_STATUS_CHOICES = [
 ]
 
 
-# ModelForm de AlertEvent: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
+# ModelForm de AlertEvent: se reutiliza para Crear y Editar.
 # Quién reconoce o resuelve (y cuándo) lo decide el servidor, no el formulario.
-class AlertEventForm(FormLimitsMixin,forms.ModelForm):
+class AlertEventForm(FormLimitsMixin, forms.ModelForm):
+
     status = forms.ChoiceField(
         choices=ALERT_STATUS_CHOICES,
         initial="abierta",
@@ -353,7 +378,7 @@ class AlertEventForm(FormLimitsMixin,forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["alert_rule"].queryset = AlertRule.objects.filter(deleted_at__isnull=True)
         if user is not None:
-            from .views import get_visible_devices, get_visible_measurements  # import local: evita import circular
+            from .views import get_visible_devices, get_visible_measurements
             self.fields["device"].queryset = get_visible_devices(user)
             self.fields["measurement"].queryset = get_visible_measurements(user)
 
@@ -369,8 +394,7 @@ class AlertEventForm(FormLimitsMixin,forms.ModelForm):
             raise ValidationError("Ya existe una alerta con ese código.")
         return code
 
-    # Reglas que cruzan campos: la medición debe ser del dispositivo, la regla debe
-    # corresponder al producto del dispositivo, y los límites se copian de la regla si vienen vacíos.
+    # Reglas que cruzan campos.
     def clean(self):
         cleaned = super().clean()
         device = cleaned.get("device")
@@ -397,8 +421,7 @@ class AlertEventForm(FormLimitsMixin,forms.ModelForm):
         return cleaned
 
 
-#preentrega eva3 - PM Formulario Mantenimiento
-# Opciones controladas: se usan en el formulario y en los filtros del listado.
+# Preentrega eva3 - PM Formulario Mantenimiento
 MAINTENANCE_TYPE_CHOICES = [
     ("preventivo", "Preventivo"),
     ("correctivo", "Correctivo"),
@@ -416,9 +439,10 @@ MAINTENANCE_STATUS_CHOICES = [
 ]
 
 
-# ModelForm de MaintenanceRequest: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
-# La organización, quién la solicita y la fecha de cierre las decide el servidor, no el formulario.
-class MaintenanceRequestForm(FormLimitsMixin,forms.ModelForm):
+# ModelForm de MaintenanceRequest: se reutiliza para Crear y Editar.
+# La organización, quién la solicita y la fecha de cierre las decide el servidor.
+class MaintenanceRequestForm(FormLimitsMixin, forms.ModelForm):
+
     request_type = forms.ChoiceField(
         choices=MAINTENANCE_TYPE_CHOICES,
         label="Tipo de solicitud",
@@ -436,6 +460,7 @@ class MaintenanceRequestForm(FormLimitsMixin,forms.ModelForm):
         label="Estado",
         widget=forms.Select(attrs={"class": "form-select"}),
     )
+
     # RF-26: toda solicitud se asocia a un dispositivo.
     device = forms.ModelChoiceField(
         queryset=Device.objects.none(),
@@ -464,7 +489,6 @@ class MaintenanceRequestForm(FormLimitsMixin,forms.ModelForm):
             "maintenance_request_id": forms.TextInput(attrs={"class": "form-control"}),
             "reason": forms.TextInput(attrs={"class": "form-control"}),
             "assigned_to": forms.Select(attrs={"class": "form-select"}),
-            # format: para que al editar el campo datetime-local muestre el valor guardado.
             "scheduled_date": forms.DateTimeInput(
                 format="%Y-%m-%dT%H:%M",
                 attrs={"class": "form-control", "type": "datetime-local"},
@@ -492,7 +516,7 @@ class MaintenanceRequestForm(FormLimitsMixin,forms.ModelForm):
             lambda u: u.get_full_name() or u.username
         )
         if user is not None:
-            from .views import get_visible_devices  # import local: evita import circular
+            from .views import get_visible_devices
             self.fields["device"].queryset = get_visible_devices(user)
 
             # RF-27: solo usuarios activos de la misma organización (RN-03 / RF-08).
