@@ -612,32 +612,37 @@
                 {% endif %}
 
             </div>
-        
+                       
             <!-- GRÁFICOS ECOENERGY -->
             <div class="mb-4">
+
+                <!-- ENCABEZADO -->
                 <div class="mb-3">
                     <h4 class="fw-bold mb-1">
                         <i class="bi bi-graph-up-arrow text-success me-2"></i>
                         Monitoreo energético
                     </h4>
+
                     <p class="text-muted small mb-0">
                         Análisis de consumo, dispositivos, alertas y mantenimiento.
                     </p>
                 </div>
 
-                <div class="row g-3">
+                <!-- CONTENEDOR DE TODOS LOS GRÁFICOS -->
+                <div class="row g-3" id="dashboardCharts">
 
                     {% if mostrar_mediciones %}
 
                     <!-- 1. CONSUMO HISTÓRICO -->
-                    <div class="col-12">
-                        <div class="card border-0 shadow-sm h-100">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
-                                <h6 class="fw-bold">Consumo energético histórico</h6>
+                                <h6 class="fw-bold">Consumo histórico</h6>
                                 <p class="text-muted small">
                                     Consumo diario registrado en kWh.
                                 </p>
-                                <div class="dashboard-chart-container chart-large">
+
+                                <div class="dashboard-chart-container">
                                     <canvas id="chartConsumoHistorico"></canvas>
                                 </div>
                             </div>
@@ -645,13 +650,14 @@
                     </div>
 
                     <!-- 2. CONSUMO POR DEPARTAMENTO -->
-                    <div class="col-12 col-xl-6">
-                        <div class="card border-0 shadow-sm h-100">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
                                 <h6 class="fw-bold">Consumo por departamento</h6>
                                 <p class="text-muted small">
                                     Comparación de consumo energético.
                                 </p>
+
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartDepartamento"></canvas>
                                 </div>
@@ -660,13 +666,14 @@
                     </div>
 
                     <!-- 3. CONSUMO POR ZONA -->
-                    <div class="col-12 col-xl-6">
-                        <div class="card border-0 shadow-sm h-100">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
-                                <h6 class="fw-bold">Distribución por zona</h6>
+                                <h6 class="fw-bold">Consumo por zona</h6>
                                 <p class="text-muted small">
                                     Participación del consumo energético.
                                 </p>
+
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartZona"></canvas>
                                 </div>
@@ -675,13 +682,14 @@
                     </div>
 
                     <!-- 4. TOP DISPOSITIVOS -->
-                    <div class="col-12 col-xl-6">
-                        <div class="card border-0 shadow-sm h-100">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
-                                <h6 class="fw-bold">Dispositivos con mayor consumo</h6>
+                                <h6 class="fw-bold">Top dispositivos</h6>
                                 <p class="text-muted small">
-                                    Los cinco equipos con mayor consumo acumulado.
+                                    Cinco equipos con mayor consumo.
                                 </p>
+
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartTopDispositivos"></canvas>
                                 </div>
@@ -690,13 +698,14 @@
                     </div>
 
                     <!-- 5. DEMANDA HORARIA -->
-                    <div class="col-12 col-xl-6">
-                        <div class="card border-0 shadow-sm h-100">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
-                                <h6 class="fw-bold">Demanda energética por hora</h6>
+                                <h6 class="fw-bold">Demanda horaria</h6>
                                 <p class="text-muted small">
-                                    Distribución de las lecturas según hora del día.
+                                    Lecturas según hora del día.
                                 </p>
+
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartDemanda"></canvas>
                                 </div>
@@ -707,81 +716,132 @@
                     {% endif %}
 
                     {% if mostrar_dispositivos %}
+
                     <!-- 6. ESTADO DE DISPOSITIVOS -->
-                    <div class="col-12 col-xl-6">
-                        <div class="card border-0 shadow-sm h-100">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
                                 <h6 class="fw-bold">Estado de dispositivos</h6>
                                 <p class="text-muted small">
                                     Distribución de unidades instaladas.
                                 </p>
+
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartEstadoDispositivos"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     {% endif %}
 
                     {% if mostrar_alertas %}
+
                     <!-- 7. ESTADO DE ALERTAS -->
-                    <div class="col-12 col-xl-6">
-                        <div class="card border-0 shadow-sm h-100">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
-                                <h6 class="fw-bold">Alertas por estado</h6>
+                                <h6 class="fw-bold">Estado de alertas</h6>
                                 <p class="text-muted small">
                                     Eventos abiertos, reconocidos y resueltos.
                                 </p>
+
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartEstadoAlertas"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     {% endif %}
 
                     {% if mostrar_mantenimientos %}
-                    <!-- 8. MANTENIMIENTOS -->
-                    <div class="col-12 col-xl-6">
-                        <div class="card border-0 shadow-sm h-100">
+
+                    <!-- 8. ESTADO DE MANTENIMIENTOS -->
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
-                                <h6 class="fw-bold">Solicitudes de mantenimiento</h6>
+                                <h6 class="fw-bold">Mantenimientos</h6>
                                 <p class="text-muted small">
-                                    Distribución según estado de las solicitudes.
+                                    Distribución según estado de solicitudes.
                                 </p>
+
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartEstadoMantenimientos"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     {% endif %}
 
                 </div>
             </div>
 
+            <!-- ESTILOS DE GRÁFICOS COMPACTOS -->
             <style>
-                .dashboard-chart-container {
+
+                /* Tarjetas de gráficos */
+                #dashboardCharts .dashboard-chart-card {
+                    border-radius: 12px;
+                    min-width: 0;
+                    transition: transform .2s ease, box-shadow .2s ease;
+                }
+
+                #dashboardCharts .dashboard-chart-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 16px rgba(0, 0, 0, .08) !important;
+                }
+
+                #dashboardCharts .card-body {
+                    padding: 14px;
+                }
+
+                #dashboardCharts h6 {
+                    font-size: .88rem;
+                    margin-bottom: 5px;
+                    min-height: 34px;
+                }
+
+                #dashboardCharts p {
+                    font-size: .72rem;
+                    line-height: 1.4;
+                    min-height: 32px;
+                    margin-bottom: 8px;
+                }
+
+                /* Tamaño uniforme de los gráficos */
+                #dashboardCharts .dashboard-chart-container {
                     position: relative;
                     width: 100%;
-                    height: 280px;
+                    height: 175px;
                 }
 
-                .dashboard-chart-container.chart-large {
-                    height: 330px;
+                #dashboardCharts canvas {
+                    max-width: 100%;
                 }
 
-                @media (max-width: 576px) {
-                    .dashboard-chart-container {
-                        height: 240px;
-                    }
-
-                    .dashboard-chart-container.chart-large {
-                        height: 270px;
+                /* Tablet */
+                @media (max-width: 991.98px) {
+                    #dashboardCharts .dashboard-chart-container {
+                        height: 185px;
                     }
                 }
+
+                /* Móvil */
+                @media (max-width: 575.98px) {
+                    #dashboardCharts .dashboard-chart-container {
+                        height: 195px;
+                    }
+
+                    #dashboardCharts .card-body {
+                        padding: 12px;
+                    }
+                }
+
             </style>
 
+                        
             <!-- ÚLTIMOS REGISTROS -->
             <div class="card border-0 shadow-sm mb-4">
 
