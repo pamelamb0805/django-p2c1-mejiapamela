@@ -1,5 +1,7 @@
-#Entrega Eva3 --> PM --> corrección paginador
-#ordenamiento de paginadores: más antiguo, más nuevo, alfabético, numérico
+
+# Entrega Eva3 --> PM --> corrección paginador
+
+# Opciones de ordenamiento y paginación.
 PAGE_SIZE_OPTIONS = (5, 10, 15)
 DEFAULT_PAGE_SIZE = 10
 
@@ -43,7 +45,6 @@ class PageSizeMixin:
         """
         Ordenamiento compartido para los mantenedores.
         """
-
         orden = get_order_option(self.request)
 
         if orden == "antiguo":
@@ -58,15 +59,15 @@ class PageSizeMixin:
         # Predeterminado: más nuevo a más antiguo.
         return queryset.order_by("-created_at", "-pk")
 
-        def get_context_data(self, **kwargs):
-            context = super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-            context["page_size"] = get_page_size(
-                self.request,
-                self.page_size_session_key,
-            )
-            context["page_size_options"] = PAGE_SIZE_OPTIONS
-            context["orden_seleccionado"] = get_order_option(self.request)
-            context["orden_options"] = ORDER_OPTIONS
+        context["page_size"] = get_page_size(
+            self.request,
+            self.page_size_session_key,
+        )
+        context["page_size_options"] = PAGE_SIZE_OPTIONS
+        context["orden_seleccionado"] = get_order_option(self.request)
+        context["orden_options"] = ORDER_OPTIONS
 
-            return context
+        return context
