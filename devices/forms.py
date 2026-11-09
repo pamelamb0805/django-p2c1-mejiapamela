@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 
 from organizations.models import Zone
 from .models import Catalog, Product, Device, Measurement, History, AlertEvent, AlertRule, MaintenanceRequest
+from core.validators import FormLimitsMixin
+
 class ArchiveDevicesForm(forms.Form):
     """Valida que los dispositivos elegidos pertenezcan al ámbito del usuario."""
 
@@ -20,7 +22,7 @@ class ArchiveDevicesForm(forms.Form):
 
 # ModelForm de Device: se reutiliza para Crear y Editar. Define campos, widgets Bootstrap y validaciones.
 # Clase 8 - Alexander
-class DeviceForm(forms.ModelForm):
+class DeviceForm(FormLimitsMixin,forms.ModelForm):
     class Meta:
         model = Device
         fields = [
@@ -126,7 +128,7 @@ class DeviceForm(forms.ModelForm):
         return cleaned_data
 #clases formulario categoria y producto - preentrega eva3 --> PM 
 # ModelForm de Categoría (modelo Catalog): se reutiliza para Crear y Editar.
-class CategoryForm(forms.ModelForm):
+class CategoryForm(FormLimitsMixin,forms.ModelForm):
     class Meta:
         model = Catalog
         fields = ["catalog_id", "name", "description", "status"]
@@ -156,7 +158,7 @@ class CategoryForm(forms.ModelForm):
 
 
 # ModelForm de Producto: se reutiliza para Crear y Editar.
-class ProductForm(forms.ModelForm):
+class ProductForm(FormLimitsMixin,forms.ModelForm):
     class Meta:
         model = Product
         fields = [
@@ -218,7 +220,7 @@ class ProductForm(forms.ModelForm):
     
 #def Measurement --> preentrega eva3 --> PM
 # ModelForm de Measurement: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
-class MeasurementForm(forms.ModelForm):
+class MeasurementForm(FormLimitsMixin,forms.ModelForm):
     class Meta:
         model = Measurement
         fields = [
@@ -271,7 +273,7 @@ class MeasurementForm(forms.ModelForm):
         return value
     
 #preentrega eva3 - PM Formulario Catalogo
-class CatalogForm(forms.ModelForm):
+class CatalogForm(FormLimitsMixin,forms.ModelForm):
     class Meta:
         model = Catalog
         fields = ["catalog_id", "name", "description", "status"]
@@ -293,7 +295,7 @@ ALERT_STATUS_CHOICES = [
 
 # ModelForm de AlertEvent: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
 # Quién reconoce o resuelve (y cuándo) lo decide el servidor, no el formulario.
-class AlertEventForm(forms.ModelForm):
+class AlertEventForm(FormLimitsMixin,forms.ModelForm):
     status = forms.ChoiceField(
         choices=ALERT_STATUS_CHOICES,
         initial="abierta",
@@ -397,7 +399,7 @@ MAINTENANCE_STATUS_CHOICES = [
 
 # ModelForm de MaintenanceRequest: se reutiliza para Crear y Editar (mismo patrón que DeviceForm).
 # La organización, quién la solicita y la fecha de cierre las decide el servidor, no el formulario.
-class MaintenanceRequestForm(forms.ModelForm):
+class MaintenanceRequestForm(FormLimitsMixin,forms.ModelForm):
     request_type = forms.ChoiceField(
         choices=MAINTENANCE_TYPE_CHOICES,
         label="Tipo de solicitud",

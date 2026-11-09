@@ -1,0 +1,13 @@
+
+<div class="col-md-3">
+    <label for="orden" class="form-label">Ordenar por</label>
+
+    <select class="form-select" id="orden" name="orden">
+        {% for valor, etiqueta in orden_options %}
+            <option value="{{ valor }}"
+                {% if orden_seleccionado == valor %}selected{% endif %}>
+                {{ etiqueta }}
+            </option>
+        {% endfor %}
+    </select>
+</div>

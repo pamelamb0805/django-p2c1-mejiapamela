@@ -90,7 +90,6 @@ class OrganizationListView(PageSizeMixin,OrganizationAccessMixin, ListView):
     page_size_session_key = "organization_page_size"
 
     def get_queryset(self):
-        # Solo organizaciones activas y autorizadas para el usuario.
         queryset = get_visible_organizations(self.request.user)
 
         # Buscador general.
@@ -105,12 +104,12 @@ class OrganizationListView(PageSizeMixin,OrganizationAccessMixin, ListView):
                 | Q(contact__icontains=buscar)
             )
 
-        # Filtro por estado: "1" = activas, "0" = inactivas.
+        # Filtro por estado: 1 = activas, 0 = inactivas.
         estado = self.request.GET.get("estado", "").strip()
         if estado in ("0", "1"):
             queryset = queryset.filter(status=(estado == "1"))
 
-        return queryset.order_by("legal_name")
+        return self.apply_ordering(queryset, "legal_name")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -298,12 +297,12 @@ class DepartmentListView(PageSizeMixin, DepartmentAccessMixin, ListView):
                 | Q(user__username__icontains=buscar)
             )
 
-        # Filtro por estado: "1" = activos, "0" = inactivos.
+        # Filtro por estado.
         estado = self.request.GET.get("estado", "").strip()
         if estado in ("0", "1"):
             queryset = queryset.filter(status=(estado == "1"))
 
-        return queryset.order_by("name")
+        return self.apply_ordering(queryset, "name")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -493,7 +492,7 @@ class ZoneListView(PageSizeMixin, ZoneAccessMixin, ListView):
                 | Q(department__name__icontains=buscar)
             )
 
-        # Filtro por estado: "1" = activas, "0" = inactivas.
+        # Filtro por estado.
         estado = self.request.GET.get("estado", "").strip()
         if estado in ("0", "1"):
             queryset = queryset.filter(status=(estado == "1"))
@@ -501,9 +500,11 @@ class ZoneListView(PageSizeMixin, ZoneAccessMixin, ListView):
         # Filtro por departamento.
         departamento = self.request.GET.get("departamento", "").strip()
         if departamento.isdigit():
-            queryset = queryset.filter(department_id=int(departamento))
+            queryset = queryset.filter(
+                department_id=int(departamento)
+            )
 
-        return queryset.order_by("name")
+        return self.apply_ordering(queryset, "name")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

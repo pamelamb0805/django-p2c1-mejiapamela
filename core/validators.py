@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator
 from django.utils import timezone
+from django import forms
 
 #correccion eva 3 --> PM --> Validadores Formularios
 # Códigos: letras, números, guion, guion bajo y punto; sin espacios (ej.: ORG-001, DEV_12).
@@ -77,32 +78,52 @@ def validate_planned_datetime(value, max_years=5):
     return value
 
 
+#Corrección Eva 3 --> PM --> Validadores Formularios --> limite formularios.
 class FormLimitsMixin:
-    """Pone tope a campos que el modelo no limita (TextField, números).
+    """
+    Establece límites de caracteres en todos los campos de texto
+    de un formulario y valida también en el servidor.
 
-    Se usa primero en la herencia del formulario y se declara en su clase:
-        text_limits   = {"description": 500}
-        number_limits = {"kwh": (0, 100000)}
-    Ajusta el atributo HTML (maxlength / min / max) y valida también en el servidor.
+    Los CharField respetan el max_length del modelo.
+    Los TextField sin límite reciben 1000 caracteres por defecto.
+    Se pueden definir excepciones mediante text_limits.
     """
 
     text_limits = {}
     number_limits = {}
+    default_text_limit = 1000
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for name, limit in self.text_limits.items():
-            field = self.fields.get(name)
-            if field is None:
-                continue
-            field.max_length = limit
-            field.widget.attrs["maxlength"] = limit
-            field.validators.append(MaxLengthValidator(limit))
+
+        for name, field in self.fields.items():
+
+            if isinstance(field, forms.CharField):
+                limit = self.text_limits.get(
+                    name,
+                    field.max_length or self.default_text_limit,
+                )
+
+                field.max_length = limit
+                field.widget.attrs["maxlength"] = limit
+
+                validator = MaxLengthValidator(limit)
+
+                if not any(
+                    isinstance(existing, MaxLengthValidator)
+                    and existing.limit_value == limit
+                    for existing in field.validators
+                ):
+                    field.validators.append(validator)
+
         for name, (minimo, maximo) in self.number_limits.items():
             field = self.fields.get(name)
+
             if field is None:
                 continue
+
             field.widget.attrs["min"] = minimo
             field.widget.attrs["max"] = maximo
+
             field.validators.append(MinValueValidator(minimo))
             field.validators.append(MaxValueValidator(maximo))
