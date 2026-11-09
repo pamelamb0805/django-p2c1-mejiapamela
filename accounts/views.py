@@ -32,23 +32,89 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 
-#preentrega eva 3 - PM
+#Eva 3 - PM
 def registro(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'El nombre de usuario ya está en uso.')
-        else:
-            User.objects.create_user(username=username, email=email, password=password)
-            messages.success(request, '¡Cuenta creada con éxito!')
-            # Redirige a la URL nombrada 'login' (/accounts/login/)
-            return redirect('login')
-            
-    return render(request, 'registration/registro.html')
+    if request.method == "POST":
 
+        # Datos enviados desde registro.html
+        nombre = request.POST.get("nombre", "").strip()
+        apellido = request.POST.get("apellido", "").strip()
+        email = request.POST.get("email", "").strip().lower()
+        password = request.POST.get("pswd", "")
+        password_confirm = request.POST.get("pswd-repeat", "")
+        idperfil = request.POST.get("idperfil", "")
+
+        # Validaciones del lado del servidor.
+        if not nombre or not apellido or not email or not password:
+            messages.error(
+                request,
+                "Debes completar todos los campos obligatorios."
+            )
+            return render(request, "registration/registro.html")
+
+        if User.objects.filter(email__iexact=email).exists():
+            messages.error(
+                request,
+                "Este correo electrónico ya está registrado."
+            )
+            return render(request, "registration/registro.html")
+
+        if User.objects.filter(username__iexact=email).exists():
+            messages.error(
+                request,
+                "Este correo electrónico ya está asociado a una cuenta."
+            )
+            return render(request, "registration/registro.html")
+
+        if password != password_confirm:
+            messages.error(
+                request,
+                "Las contraseñas no coinciden."
+            )
+            return render(request, "registration/registro.html")
+
+        # El correo se utiliza como nombre de usuario.
+        nuevo_usuario = User(
+            username=email,
+            email=email,
+            first_name=nombre,
+            last_name=apellido,
+        )
+
+        # Aplicar validadores de contraseña configurados en Django.
+        try:
+            validate_password(password, nuevo_usuario)
+        except ValidationError as error:
+            for mensaje in error.messages:
+                messages.error(request, mensaje)
+
+            return render(request, "registration/registro.html")
+
+        # Crear la cuenta utilizando el mecanismo seguro de Django.
+        nuevo_usuario = User.objects.create_user(
+            username=email,
+            email=email,
+            password=password,
+            first_name=nombre,
+            last_name=apellido,
+            is_active= False,
+        )
+
+        # Asignar el grupo indicado por el formulario, si existe.
+        if idperfil.isdigit():
+            grupo = Group.objects.filter(pk=int(idperfil)).first()
+
+            if grupo:
+                nuevo_usuario.groups.add(grupo)
+
+        messages.success(
+            request,
+            "¡Cuenta creada con éxito! Ya puedes iniciar sesión."
+        )
+
+        return redirect("login")
+
+    return render(request, "registration/registro.html")
 
 # ==========================================
 # M02 · USUARIOS Y PERFILES - CRUD con modal y SweetAlert2
