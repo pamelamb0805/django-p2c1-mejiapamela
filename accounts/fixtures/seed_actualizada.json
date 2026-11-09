@@ -266,7 +266,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can add Organización",
+    "name": "Can add Organizaciï¿½n",
     "content_type": [
       "organizations",
       "organization"
@@ -277,7 +277,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can change Organización",
+    "name": "Can change Organizaciï¿½n",
     "content_type": [
       "organizations",
       "organization"
@@ -288,7 +288,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can delete Organización",
+    "name": "Can delete Organizaciï¿½n",
     "content_type": [
       "organizations",
       "organization"
@@ -299,7 +299,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can view Organización",
+    "name": "Can view Organizaciï¿½n",
     "content_type": [
       "organizations",
       "organization"
@@ -486,7 +486,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can add Catálogo",
+    "name": "Can add Catï¿½logo",
     "content_type": [
       "devices",
       "catalog"
@@ -497,7 +497,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can change Catálogo",
+    "name": "Can change Catï¿½logo",
     "content_type": [
       "devices",
       "catalog"
@@ -508,7 +508,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can delete Catálogo",
+    "name": "Can delete Catï¿½logo",
     "content_type": [
       "devices",
       "catalog"
@@ -519,7 +519,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can view Catálogo",
+    "name": "Can view Catï¿½logo",
     "content_type": [
       "devices",
       "catalog"
@@ -662,7 +662,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can add Medición",
+    "name": "Can add Mediciï¿½n",
     "content_type": [
       "devices",
       "measurement"
@@ -673,7 +673,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can change Medición",
+    "name": "Can change Mediciï¿½n",
     "content_type": [
       "devices",
       "measurement"
@@ -684,7 +684,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can delete Medición",
+    "name": "Can delete Mediciï¿½n",
     "content_type": [
       "devices",
       "measurement"
@@ -695,7 +695,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can view Medición",
+    "name": "Can view Mediciï¿½n",
     "content_type": [
       "devices",
       "measurement"
@@ -838,7 +838,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can add delegación",
+    "name": "Can add delegaciï¿½n",
     "content_type": [
       "organizations",
       "delegacion"
@@ -849,7 +849,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can change delegación",
+    "name": "Can change delegaciï¿½n",
     "content_type": [
       "organizations",
       "delegacion"
@@ -860,7 +860,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can delete delegación",
+    "name": "Can delete delegaciï¿½n",
     "content_type": [
       "organizations",
       "delegacion"
@@ -871,7 +871,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can view delegación",
+    "name": "Can view delegaciï¿½n",
     "content_type": [
       "organizations",
       "delegacion"
@@ -926,7 +926,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can add ítem medible",
+    "name": "Can add ï¿½tem medible",
     "content_type": [
       "organizations",
       "itemmedible"
@@ -937,7 +937,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can change ítem medible",
+    "name": "Can change ï¿½tem medible",
     "content_type": [
       "organizations",
       "itemmedible"
@@ -948,7 +948,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can delete ítem medible",
+    "name": "Can delete ï¿½tem medible",
     "content_type": [
       "organizations",
       "itemmedible"
@@ -959,7 +959,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can view ítem medible",
+    "name": "Can view ï¿½tem medible",
     "content_type": [
       "organizations",
       "itemmedible"
@@ -1146,7 +1146,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can add elemento de catálogo",
+    "name": "Can add elemento de catï¿½logo",
     "content_type": [
       "catalogs",
       "catalogo"
@@ -1157,7 +1157,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can change elemento de catálogo",
+    "name": "Can change elemento de catï¿½logo",
     "content_type": [
       "catalogs",
       "catalogo"
@@ -1168,7 +1168,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can delete elemento de catálogo",
+    "name": "Can delete elemento de catï¿½logo",
     "content_type": [
       "catalogs",
       "catalogo"
@@ -1179,7 +1179,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can view elemento de catálogo",
+    "name": "Can view elemento de catï¿½logo",
     "content_type": [
       "catalogs",
       "catalogo"
@@ -1630,7 +1630,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can add atención social",
+    "name": "Can add atenciï¿½n social",
     "content_type": [
       "social",
       "atencionsocial"
@@ -1641,7 +1641,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can change atención social",
+    "name": "Can change atenciï¿½n social",
     "content_type": [
       "social",
       "atencionsocial"
@@ -1652,7 +1652,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can delete atención social",
+    "name": "Can delete atenciï¿½n social",
     "content_type": [
       "social",
       "atencionsocial"
@@ -1663,7 +1663,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can view atención social",
+    "name": "Can view atenciï¿½n social",
     "content_type": [
       "social",
       "atencionsocial"
@@ -1674,7 +1674,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can add evento de auditoría",
+    "name": "Can add evento de auditorï¿½a",
     "content_type": [
       "audit",
       "auditoria"
@@ -1685,7 +1685,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can change evento de auditoría",
+    "name": "Can change evento de auditorï¿½a",
     "content_type": [
       "audit",
       "auditoria"
@@ -1696,7 +1696,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can delete evento de auditoría",
+    "name": "Can delete evento de auditorï¿½a",
     "content_type": [
       "audit",
       "auditoria"
@@ -1707,7 +1707,7 @@
 {
   "model": "auth.permission",
   "fields": {
-    "name": "Can view evento de auditoría",
+    "name": "Can view evento de auditorï¿½a",
     "content_type": [
       "audit",
       "auditoria"
@@ -1761,13 +1761,19 @@
         "measurement"
       ],
       [
+        "change_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
         "view_measurement",
         "devices",
         "measurement"
       ]
     ]
   }
-},
+}
+  ,
 {
   "model": "auth.group",
   "fields": {
@@ -3796,7 +3802,7 @@
     "is_superuser": false,
     "username": "norte.admin01",
     "first_name": "Carolina",
-    "last_name": "Muñoz Rojas",
+    "last_name": "Muï¿½oz Rojas",
     "email": "norte.admin01@example.com",
     "is_staff": false,
     "is_active": true,
@@ -3812,8 +3818,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "norte.admin02",
-    "first_name": "Sebastián",
-    "last_name": "Araya López",
+    "first_name": "Sebastiï¿½n",
+    "last_name": "Araya Lï¿½pez",
     "email": "norte.admin02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -3830,7 +3836,7 @@
     "is_superuser": false,
     "username": "norte.admin03",
     "first_name": "Valentina",
-    "last_name": "Castro Díaz",
+    "last_name": "Castro Dï¿½az",
     "email": "norte.admin03@example.com",
     "is_staff": false,
     "is_active": true,
@@ -3847,7 +3853,7 @@
     "is_superuser": false,
     "username": "norte.admin04",
     "first_name": "Felipe",
-    "last_name": "González Soto",
+    "last_name": "Gonzï¿½lez Soto",
     "email": "norte.admin04@example.com",
     "is_staff": false,
     "is_active": true,
@@ -3881,7 +3887,7 @@
     "is_superuser": false,
     "username": "norte.energia01",
     "first_name": "Camila",
-    "last_name": "Fernández Ruiz",
+    "last_name": "Fernï¿½ndez Ruiz",
     "email": "norte.energia01@example.com",
     "is_staff": false,
     "is_active": true,
@@ -3897,8 +3903,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "norte.energia02",
-    "first_name": "Nicolás",
-    "last_name": "Pérez Silva",
+    "first_name": "Nicolï¿½s",
+    "last_name": "Pï¿½rez Silva",
     "email": "norte.energia02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -3915,7 +3921,7 @@
     "is_superuser": false,
     "username": "norte.energia03",
     "first_name": "Javiera",
-    "last_name": "Torres Méndez",
+    "last_name": "Torres Mï¿½ndez",
     "email": "norte.energia03@example.com",
     "is_staff": false,
     "is_active": true,
@@ -3931,7 +3937,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "norte.energia04",
-    "first_name": "Matías",
+    "first_name": "Matï¿½as",
     "last_name": "Herrera Campos",
     "email": "norte.energia04@example.com",
     "is_staff": false,
@@ -3949,7 +3955,7 @@
     "is_superuser": false,
     "username": "norte.energia05",
     "first_name": "Francisca",
-    "last_name": "Vargas Núñez",
+    "last_name": "Vargas Nï¿½ï¿½ez",
     "email": "norte.energia05@example.com",
     "is_staff": false,
     "is_active": true,
@@ -3966,7 +3972,7 @@
     "is_superuser": false,
     "username": "norte.oper01",
     "first_name": "Rodrigo",
-    "last_name": "Ramírez Fuentes",
+    "last_name": "Ramï¿½rez Fuentes",
     "email": "norte.oper01@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4000,7 +4006,7 @@
     "is_superuser": false,
     "username": "norte.oper03",
     "first_name": "Diego",
-    "last_name": "Sepúlveda Pizarro",
+    "last_name": "Sepï¿½lveda Pizarro",
     "email": "norte.oper03@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4033,8 +4039,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "norte.oper05",
-    "first_name": "Tomás",
-    "last_name": "Valdés Romero",
+    "first_name": "Tomï¿½s",
+    "last_name": "Valdï¿½s Romero",
     "email": "norte.oper05@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4068,7 +4074,7 @@
     "is_superuser": false,
     "username": "norte.opnorte02",
     "first_name": "Fernanda",
-    "last_name": "Díaz Castillo",
+    "last_name": "Dï¿½az Castillo",
     "email": "norte.opnorte02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4084,7 +4090,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "norte.opnorte03",
-    "first_name": "Benjamín",
+    "first_name": "Benjamï¿½n",
     "last_name": "Flores Tapia",
     "email": "norte.opnorte03@example.com",
     "is_staff": false,
@@ -4102,7 +4108,7 @@
     "is_superuser": false,
     "username": "norte.opnorte04",
     "first_name": "Catalina",
-    "last_name": "Núñez Salas",
+    "last_name": "Nï¿½ï¿½ez Salas",
     "email": "norte.opnorte04@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4136,7 +4142,7 @@
     "is_superuser": false,
     "username": "norte.rrhh01",
     "first_name": "Paula",
-    "last_name": "Sánchez León",
+    "last_name": "Sï¿½nchez Leï¿½n",
     "email": "norte.rrhh01@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4152,7 +4158,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "norte.rrhh02",
-    "first_name": "Martín",
+    "first_name": "Martï¿½n",
     "last_name": "Aguilera Paz",
     "email": "norte.rrhh02@example.com",
     "is_staff": false,
@@ -4170,7 +4176,7 @@
     "is_superuser": false,
     "username": "norte.rrhh03",
     "first_name": "Isidora",
-    "last_name": "Bravo Cortés",
+    "last_name": "Bravo Cortï¿½s",
     "email": "norte.rrhh03@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4237,8 +4243,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "norte.ti02",
-    "first_name": "Sofía",
-    "last_name": "Cabrera Peña",
+    "first_name": "Sofï¿½a",
+    "last_name": "Cabrera Peï¿½a",
     "email": "norte.ti02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4254,7 +4260,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "norte.ti03",
-    "first_name": "Cristóbal",
+    "first_name": "Cristï¿½bal",
     "last_name": "Molina Vera",
     "email": "norte.ti03@example.com",
     "is_staff": false,
@@ -4289,7 +4295,7 @@
     "is_superuser": false,
     "username": "norte.ti05",
     "first_name": "Esteban",
-    "last_name": "Núñez Arancibia",
+    "last_name": "Nï¿½ï¿½ez Arancibia",
     "email": "norte.ti05@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4305,7 +4311,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "centro.admin01",
-    "first_name": "María José",
+    "first_name": "Marï¿½a Josï¿½",
     "last_name": "Fuentes Rojas",
     "email": "centro.admin01@example.com",
     "is_staff": false,
@@ -4322,8 +4328,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "centro.admin02",
-    "first_name": "Andrés",
-    "last_name": "López Castro",
+    "first_name": "Andrï¿½s",
+    "last_name": "Lï¿½pez Castro",
     "email": "centro.admin02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4340,7 +4346,7 @@
     "is_superuser": false,
     "username": "centro.admin03",
     "first_name": "Valeria",
-    "last_name": "Méndez Silva",
+    "last_name": "Mï¿½ndez Silva",
     "email": "centro.admin03@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4357,7 +4363,7 @@
     "is_superuser": false,
     "username": "centro.admin04",
     "first_name": "Pablo",
-    "last_name": "Soto Ramírez",
+    "last_name": "Soto Ramï¿½rez",
     "email": "centro.admin04@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4408,7 +4414,7 @@
     "is_superuser": false,
     "username": "centro.rrhh02",
     "first_name": "Jorge",
-    "last_name": "Pizarro Díaz",
+    "last_name": "Pizarro Dï¿½az",
     "email": "centro.rrhh02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4442,7 +4448,7 @@
     "is_superuser": false,
     "username": "centro.rrhh04",
     "first_name": "Felipe",
-    "last_name": "Carrasco Núñez",
+    "last_name": "Carrasco Nï¿½ï¿½ez",
     "email": "centro.rrhh04@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4493,7 +4499,7 @@
     "is_superuser": false,
     "username": "centro.oper02",
     "first_name": "Camila",
-    "last_name": "Valdés Ortiz",
+    "last_name": "Valdï¿½s Ortiz",
     "email": "centro.oper02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4509,8 +4515,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "centro.oper03",
-    "first_name": "Sebastián",
-    "last_name": "Tapia León",
+    "first_name": "Sebastiï¿½n",
+    "last_name": "Tapia Leï¿½n",
     "email": "centro.oper03@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4527,7 +4533,7 @@
     "is_superuser": false,
     "username": "centro.oper04",
     "first_name": "Francisca",
-    "last_name": "Godoy Peña",
+    "last_name": "Godoy Peï¿½a",
     "email": "centro.oper04@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4543,7 +4549,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "centro.oper05",
-    "first_name": "Tomás",
+    "first_name": "Tomï¿½s",
     "last_name": "Aguilera Paz",
     "email": "centro.oper05@example.com",
     "is_staff": false,
@@ -4595,7 +4601,7 @@
     "is_superuser": false,
     "username": "centro.ti03",
     "first_name": "Valentina",
-    "last_name": "Sepúlveda Ruiz",
+    "last_name": "Sepï¿½lveda Ruiz",
     "email": "centro.ti03@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4611,8 +4617,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "centro.ti04",
-    "first_name": "Matías",
-    "last_name": "Fernández Soto",
+    "first_name": "Matï¿½as",
+    "last_name": "Fernï¿½ndez Soto",
     "email": "centro.ti04@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4629,7 +4635,7 @@
     "is_superuser": false,
     "username": "centro.ti05",
     "first_name": "Javiera",
-    "last_name": "Castro Méndez",
+    "last_name": "Castro Mï¿½ndez",
     "email": "centro.ti05@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4646,7 +4652,7 @@
     "is_superuser": false,
     "username": "centro.energia01",
     "first_name": "Ignacio",
-    "last_name": "Vargas López",
+    "last_name": "Vargas Lï¿½pez",
     "email": "centro.energia01@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4662,8 +4668,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "centro.energia02",
-    "first_name": "Sofía",
-    "last_name": "Muñoz Díaz",
+    "first_name": "Sofï¿½a",
+    "last_name": "Muï¿½oz Dï¿½az",
     "email": "centro.energia02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4679,7 +4685,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "centro.energia03",
-    "first_name": "Benjamín",
+    "first_name": "Benjamï¿½n",
     "last_name": "Ortega Reyes",
     "email": "centro.energia03@example.com",
     "is_staff": false,
@@ -4765,7 +4771,7 @@
     "is_superuser": false,
     "username": "sur.admin03",
     "first_name": "Paula",
-    "last_name": "Cortés Molina",
+    "last_name": "Cortï¿½s Molina",
     "email": "sur.admin03@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4782,7 +4788,7 @@
     "is_superuser": false,
     "username": "sur.admin04",
     "first_name": "Esteban",
-    "last_name": "Navarro Díaz",
+    "last_name": "Navarro Dï¿½az",
     "email": "sur.admin04@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4832,7 +4838,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "sur.rrhh02",
-    "first_name": "Héctor",
+    "first_name": "Hï¿½ctor",
     "last_name": "Salinas Rojas",
     "email": "sur.rrhh02@example.com",
     "is_staff": false,
@@ -4866,8 +4872,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "sur.rrhh04",
-    "first_name": "Cristóbal",
-    "last_name": "Vera González",
+    "first_name": "Cristï¿½bal",
+    "last_name": "Vera Gonzï¿½lez",
     "email": "sur.rrhh04@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4901,7 +4907,7 @@
     "is_superuser": false,
     "username": "sur.oper01",
     "first_name": "Rodrigo",
-    "last_name": "Cáceres Silva",
+    "last_name": "Cï¿½ceres Silva",
     "email": "sur.oper01@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4918,7 +4924,7 @@
     "is_superuser": false,
     "username": "sur.oper02",
     "first_name": "Valentina",
-    "last_name": "Olivares Peña",
+    "last_name": "Olivares Peï¿½a",
     "email": "sur.oper02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4934,7 +4940,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "sur.oper03",
-    "first_name": "Matías",
+    "first_name": "Matï¿½as",
     "last_name": "Espinoza Torres",
     "email": "sur.oper03@example.com",
     "is_staff": false,
@@ -4952,7 +4958,7 @@
     "is_superuser": false,
     "username": "sur.oper04",
     "first_name": "Javiera",
-    "last_name": "Carrasco Muñoz",
+    "last_name": "Carrasco Muï¿½oz",
     "email": "sur.oper04@example.com",
     "is_staff": false,
     "is_active": true,
@@ -4968,7 +4974,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "sur.oper05",
-    "first_name": "Nicolás",
+    "first_name": "Nicolï¿½s",
     "last_name": "Bravo Castillo",
     "email": "sur.oper05@example.com",
     "is_staff": false,
@@ -4986,7 +4992,7 @@
     "is_superuser": false,
     "username": "sur.ti01",
     "first_name": "Camila",
-    "last_name": "Arancibia López",
+    "last_name": "Arancibia Lï¿½pez",
     "email": "sur.ti01@example.com",
     "is_staff": false,
     "is_active": true,
@@ -5003,7 +5009,7 @@
     "is_superuser": false,
     "username": "sur.ti02",
     "first_name": "Felipe",
-    "last_name": "Sanhueza Díaz",
+    "last_name": "Sanhueza Dï¿½az",
     "email": "sur.ti02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -5071,7 +5077,7 @@
     "is_superuser": false,
     "username": "sur.energia01",
     "first_name": "Ignacio",
-    "last_name": "Peña Morales",
+    "last_name": "Peï¿½a Morales",
     "email": "sur.energia01@example.com",
     "is_staff": false,
     "is_active": true,
@@ -5087,8 +5093,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "sur.energia02",
-    "first_name": "Sofía",
-    "last_name": "Alarcón Reyes",
+    "first_name": "Sofï¿½a",
+    "last_name": "Alarcï¿½n Reyes",
     "email": "sur.energia02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -5104,7 +5110,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "sur.energia03",
-    "first_name": "Benjamín",
+    "first_name": "Benjamï¿½n",
     "last_name": "Cisternas Vega",
     "email": "sur.energia03@example.com",
     "is_staff": false,
@@ -5173,7 +5179,7 @@
     "is_superuser": false,
     "username": "sur.opnorte02",
     "first_name": "Fernanda",
-    "last_name": "Sepúlveda León",
+    "last_name": "Sepï¿½lveda Leï¿½n",
     "email": "sur.opnorte02@example.com",
     "is_staff": false,
     "is_active": true,
@@ -5189,7 +5195,7 @@
     "last_login": null,
     "is_superuser": false,
     "username": "sur.opnorte03",
-    "first_name": "Tomás",
+    "first_name": "Tomï¿½s",
     "last_name": "Contreras Paz",
     "email": "sur.opnorte03@example.com",
     "is_staff": false,
@@ -5207,7 +5213,7 @@
     "is_superuser": false,
     "username": "sur.opnorte04",
     "first_name": "Isidora",
-    "last_name": "Valenzuela Díaz",
+    "last_name": "Valenzuela Dï¿½az",
     "email": "sur.opnorte04@example.com",
     "is_staff": false,
     "is_active": true,
@@ -5223,8 +5229,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "sur.opnorte05",
-    "first_name": "Martín",
-    "last_name": "Godoy Fernández",
+    "first_name": "Martï¿½n",
+    "last_name": "Godoy Fernï¿½ndez",
     "email": "sur.opnorte05@example.com",
     "is_staff": false,
     "is_active": true,
@@ -5335,8 +5341,8 @@
     "updated_at": "2026-11-02T22:49:18.428Z",
     "deleted_at": null,
     "department_id": "DEP-N-01",
-    "name": "Administración",
-    "description": "Administración General",
+    "name": "Administraciï¿½n",
+    "description": "Administraciï¿½n General",
     "status": true,
     "organization": 1,
     "user": null
@@ -5380,8 +5386,8 @@
     "updated_at": "2026-11-02T22:50:33.110Z",
     "deleted_at": null,
     "department_id": "DEP-N-04",
-    "name": "Tecnología e Informática",
-    "description": "Tecnología e Informática",
+    "name": "Tecnologï¿½a e Informï¿½tica",
+    "description": "Tecnologï¿½a e Informï¿½tica",
     "status": true,
     "organization": 1,
     "user": null
@@ -5395,8 +5401,8 @@
     "updated_at": "2026-11-02T22:50:59.170Z",
     "deleted_at": null,
     "department_id": "DEP-N-05",
-    "name": "Gestión Energética",
-    "description": "Gestión Energética",
+    "name": "Gestiï¿½n Energï¿½tica",
+    "description": "Gestiï¿½n Energï¿½tica",
     "status": true,
     "organization": 1,
     "user": null
@@ -5410,8 +5416,8 @@
     "updated_at": "2026-11-02T22:51:36.467Z",
     "deleted_at": null,
     "department_id": "DEP-C-01",
-    "name": "Administración",
-    "description": "Administración General",
+    "name": "Administraciï¿½n",
+    "description": "Administraciï¿½n General",
     "status": true,
     "organization": 12,
     "user": null
@@ -5455,8 +5461,8 @@
     "updated_at": "2026-11-02T22:53:15.345Z",
     "deleted_at": null,
     "department_id": "DEP-C-04",
-    "name": "Tecnología e Informática",
-    "description": "Tecnología e Informática",
+    "name": "Tecnologï¿½a e Informï¿½tica",
+    "description": "Tecnologï¿½a e Informï¿½tica",
     "status": true,
     "organization": 12,
     "user": null
@@ -5470,8 +5476,8 @@
     "updated_at": "2026-11-02T22:54:05.655Z",
     "deleted_at": null,
     "department_id": "DEP-C-05",
-    "name": "Gestión Energética",
-    "description": "Gestión Energética",
+    "name": "Gestiï¿½n Energï¿½tica",
+    "description": "Gestiï¿½n Energï¿½tica",
     "status": true,
     "organization": 12,
     "user": null
@@ -5485,8 +5491,8 @@
     "updated_at": "2026-11-02T22:54:31.446Z",
     "deleted_at": null,
     "department_id": "DEP-S-01",
-    "name": "Administración",
-    "description": "Administración General",
+    "name": "Administraciï¿½n",
+    "description": "Administraciï¿½n General",
     "status": true,
     "organization": 2,
     "user": null
@@ -5530,8 +5536,8 @@
     "updated_at": "2026-11-02T22:55:35.846Z",
     "deleted_at": null,
     "department_id": "DEP-S-04",
-    "name": "Tecnología e Informática",
-    "description": "Tecnología e Informática",
+    "name": "Tecnologï¿½a e Informï¿½tica",
+    "description": "Tecnologï¿½a e Informï¿½tica",
     "status": true,
     "organization": 2,
     "user": null
@@ -5545,8 +5551,8 @@
     "updated_at": "2026-11-02T22:55:55.344Z",
     "deleted_at": null,
     "department_id": "DEP-S-05",
-    "name": "Gestión Energética",
-    "description": "Gestión Energética",
+    "name": "Gestiï¿½n Energï¿½tica",
+    "description": "Gestiï¿½n Energï¿½tica",
     "status": true,
     "organization": 2,
     "user": null
@@ -5590,8 +5596,8 @@
     "updated_at": "2026-09-30T19:27:02.232Z",
     "deleted_at": null,
     "catalog_id": "CAT-001",
-    "name": "Medidores de energía",
-    "description": "Medidores inteligentes de consumo eléctrico para monitoreo en instalaciones industriales y comerciales.",
+    "name": "Medidores de energï¿½a",
+    "description": "Medidores inteligentes de consumo elï¿½ctrico para monitoreo en instalaciones industriales y comerciales.",
     "status": "activo"
   }
 },
@@ -5603,8 +5609,8 @@
     "updated_at": "2026-10-27T13:57:14.795Z",
     "deleted_at": null,
     "catalog_id": "CAT-002",
-    "name": "Medidor Trifásico",
-    "description": "Dispositivos para la medición de energía eléctrica trifásica en instalaciones industriales y de alta demanda.",
+    "name": "Medidor Trifï¿½sico",
+    "description": "Dispositivos para la mediciï¿½n de energï¿½a elï¿½ctrica trifï¿½sica en instalaciones industriales y de alta demanda.",
     "status": "Activo"
   }
 },
@@ -5616,8 +5622,8 @@
     "updated_at": "2026-10-27T13:57:47.609Z",
     "deleted_at": null,
     "catalog_id": "CAT-003",
-    "name": "Medidor Monofásico",
-    "description": "Equipos destinados al registro y control de consumo eléctrico monofásico en sectores específicos.",
+    "name": "Medidor Monofï¿½sico",
+    "description": "Equipos destinados al registro y control de consumo elï¿½ctrico monofï¿½sico en sectores especï¿½ficos.",
     "status": "Activo"
   }
 },
@@ -5629,8 +5635,8 @@
     "updated_at": "2026-10-27T13:58:19.674Z",
     "deleted_at": null,
     "catalog_id": "CAT-004",
-    "name": "Sensor de Flujo Térmico",
-    "description": "Sensores de alta precisión para la medición de caudal y flujo en sistemas térmicos y de fluidos.",
+    "name": "Sensor de Flujo Tï¿½rmico",
+    "description": "Sensores de alta precisiï¿½n para la mediciï¿½n de caudal y flujo en sistemas tï¿½rmicos y de fluidos.",
     "status": "Activo"
   }
 },
@@ -5643,7 +5649,7 @@
     "deleted_at": "2026-11-01T18:17:26.590Z",
     "catalog_id": "CAT-005",
     "name": "Analizador de Calidad de Red",
-    "description": "Instrumentos avanzados para el monitoreo de armónicos, fluctuaciones de voltaje y calidad general del suministro.",
+    "description": "Instrumentos avanzados para el monitoreo de armï¿½nicos, fluctuaciones de voltaje y calidad general del suministro.",
     "status": "Activo"
   }
 },
@@ -5656,7 +5662,7 @@
     "deleted_at": null,
     "catalog_id": "CAT-006",
     "name": "Transformador de Corriente",
-    "description": "Transformadores diseñados para la reducción proporcional y segura de corrientes eléctricas elevadas.",
+    "description": "Transformadores diseï¿½ados para la reducciï¿½n proporcional y segura de corrientes elï¿½ctricas elevadas.",
     "status": "Activo"
   }
 },
@@ -5669,7 +5675,7 @@
     "deleted_at": null,
     "catalog_id": "CAT-007",
     "name": "Gateway IoT Industrial",
-    "description": "Pasarelas de comunicación industrial para la integración, recolección y transmisión de datos IoT.",
+    "description": "Pasarelas de comunicaciï¿½n industrial para la integraciï¿½n, recolecciï¿½n y transmisiï¿½n de datos IoT.",
     "status": "Activo"
   }
 },
@@ -5682,7 +5688,7 @@
     "deleted_at": null,
     "catalog_id": "CAT-008",
     "name": "Sensor de Temperatura IoT",
-    "description": "Sensores inalámbricos de temperatura con tecnología LoRaWAN para el control ambiental y de cámaras de frío.",
+    "description": "Sensores inalï¿½mbricos de temperatura con tecnologï¿½a LoRaWAN para el control ambiental y de cï¿½maras de frï¿½o.",
     "status": "Inactivo"
   }
 },
@@ -5694,8 +5700,8 @@
     "updated_at": "2026-10-27T14:01:07.955Z",
     "deleted_at": null,
     "catalog_id": "CAT-009",
-    "name": "Medidor Energético Inteligente",
-    "description": "Medidores avanzados con memoria interna y capacidades de comunicación Ethernet para análisis en tiempo real.",
+    "name": "Medidor Energï¿½tico Inteligente",
+    "description": "Medidores avanzados con memoria interna y capacidades de comunicaciï¿½n Ethernet para anï¿½lisis en tiempo real.",
     "status": "Activo"
   }
 },
@@ -5707,8 +5713,8 @@
     "updated_at": "2026-10-27T14:01:44.068Z",
     "deleted_at": null,
     "catalog_id": "CAT-010",
-    "name": "Sensor de Corriente de Núcleo Partido",
-    "description": "Sensores de corriente de fácil instalación que permiten mediciones sin necesidad de interrumpir el cableado.",
+    "name": "Sensor de Corriente de Nï¿½cleo Partido",
+    "description": "Sensores de corriente de fï¿½cil instalaciï¿½n que permiten mediciones sin necesidad de interrumpir el cableado.",
     "status": "Activo"
   }
 },
@@ -5721,7 +5727,7 @@
     "deleted_at": null,
     "catalog_id": "CAT-011",
     "name": "Data Logger Solar",
-    "description": "Registradores de datos específicos para inversores y plantas de generación solar fotovoltaica.",
+    "description": "Registradores de datos especï¿½ficos para inversores y plantas de generaciï¿½n solar fotovoltaica.",
     "status": "Activo"
   }
 },
@@ -5733,8 +5739,8 @@
     "updated_at": "2026-10-27T14:06:42.093Z",
     "deleted_at": null,
     "product_id": "PROD-001",
-    "name": "Medidor trifásico iEM3155",
-    "description": "Medidor de energía trifásico con comunicación Modbus, para monitoreo de consumo por sector.",
+    "name": "Medidor trifï¿½sico iEM3155",
+    "description": "Medidor de energï¿½a trifï¿½sico con comunicaciï¿½n Modbus, para monitoreo de consumo por sector.",
     "kwh": "0.24",
     "manufacturer": "Schneider Electric",
     "model": "iEM3155",
@@ -5751,7 +5757,7 @@
     "deleted_at": null,
     "product_id": "PROD-002",
     "name": "Analizador de red PAC3200",
-    "description": "Analizador de red multifunción para medir potencia, energía y calidad de suministro.",
+    "description": "Analizador de red multifunciï¿½n para medir potencia, energï¿½a y calidad de suministro.",
     "kwh": "0.36",
     "manufacturer": "Siemens",
     "model": "SENTRON PAC3200",
@@ -5767,8 +5773,8 @@
     "updated_at": "2026-10-27T14:06:15.889Z",
     "deleted_at": null,
     "product_id": "PROD-003",
-    "name": "Medidor Trifásico IEM3000",
-    "description": "Medidor trifásico de alta precisión para control de energía industrial.",
+    "name": "Medidor Trifï¿½sico IEM3000",
+    "description": "Medidor trifï¿½sico de alta precisiï¿½n para control de energï¿½a industrial.",
     "kwh": "150.50",
     "manufacturer": "Schneider Electric",
     "model": "IEM3000",
@@ -5784,8 +5790,8 @@
     "updated_at": "2026-10-27T14:07:39.226Z",
     "deleted_at": null,
     "product_id": "PROD-004",
-    "name": "Medidor Monofásico PAC3100",
-    "description": "Medidor monofásico compacto para sectores específicos.",
+    "name": "Medidor Monofï¿½sico PAC3100",
+    "description": "Medidor monofï¿½sico compacto para sectores especï¿½ficos.",
     "kwh": "45.00",
     "manufacturer": "Siemens",
     "model": "PAC3100",
@@ -5801,8 +5807,8 @@
     "updated_at": "2026-10-27T14:09:08.855Z",
     "deleted_at": null,
     "product_id": "PROD-005",
-    "name": "Sensor de Flujo Térmico FMT400",
-    "description": "Sensor de caudal de alta precisión con interfaz Modbus.",
+    "name": "Sensor de Flujo Tï¿½rmico FMT400",
+    "description": "Sensor de caudal de alta precisiï¿½n con interfaz Modbus.",
     "kwh": "15.00",
     "manufacturer": "ABB",
     "model": "FMT400",
@@ -5853,7 +5859,7 @@
     "deleted_at": null,
     "product_id": "PROD-008",
     "name": "Gateway IoT ECU-1051",
-    "description": "Gateway industrial para recolección y transmisión de datos IoT.",
+    "description": "Gateway industrial para recolecciï¿½n y transmisiï¿½n de datos IoT.",
     "kwh": "25.00",
     "manufacturer": "Advantech",
     "model": "ECU-1051",
@@ -5870,7 +5876,7 @@
     "deleted_at": null,
     "product_id": "PROD-009",
     "name": "Sensor Temperatura EM300-TH",
-    "description": "Sensor inalámbrico LoRaWAN para cámaras de frío.",
+    "description": "Sensor inalï¿½mbrico LoRaWAN para cï¿½maras de frï¿½o.",
     "kwh": "5.00",
     "manufacturer": "Milesight",
     "model": "EM300-TH",
@@ -5887,7 +5893,7 @@
     "deleted_at": null,
     "product_id": "PROD-010",
     "name": "Medidor Inteligente UMG 96-PA",
-    "description": "Medidor energético con conectividad Ethernet y memoria interna.",
+    "description": "Medidor energï¿½tico con conectividad Ethernet y memoria interna.",
     "kwh": "120.00",
     "manufacturer": "Janitza",
     "model": "UMG 96-PA",
@@ -5904,7 +5910,7 @@
     "deleted_at": null,
     "product_id": "PROD-011",
     "name": "Sensor de Corriente ATO-75",
-    "description": "Sensor de corriente de núcleo partido para medición sin corte.",
+    "description": "Sensor de corriente de nï¿½cleo partido para mediciï¿½n sin corte.",
     "kwh": "8.00",
     "manufacturer": "LEM",
     "model": "ATO-75",
@@ -5921,7 +5927,7 @@
     "deleted_at": null,
     "product_id": "PROD-012",
     "name": "Data Logger Datamanager 2.0",
-    "description": "Registrador de datos específico para inversores y plantas solares.",
+    "description": "Registrador de datos especï¿½fico para inversores y plantas solares.",
     "kwh": "30.00",
     "manufacturer": "Fronius",
     "model": "Datamanager 2.0",
@@ -6174,7 +6180,7 @@
     "employee_code": "EN-TEST-001",
     "rut": "20000001-3",
     "phone": "+56950000001",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6192,7 +6198,7 @@
     "employee_code": "EN-TEST-002",
     "rut": "20000002-1",
     "phone": "+56950000002",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6210,7 +6216,7 @@
     "employee_code": "EN-TEST-003",
     "rut": "20000003-K",
     "phone": "+56950000003",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6228,7 +6234,7 @@
     "employee_code": "EN-TEST-004",
     "rut": "20000004-8",
     "phone": "+56950000004",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6246,7 +6252,7 @@
     "employee_code": "EN-TEST-005",
     "rut": "20000005-6",
     "phone": "+56950000005",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6264,7 +6270,7 @@
     "employee_code": "EN-TEST-006",
     "rut": "20000006-4",
     "phone": "+56950000006",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6282,7 +6288,7 @@
     "employee_code": "EN-TEST-007",
     "rut": "20000007-2",
     "phone": "+56950000007",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6300,7 +6306,7 @@
     "employee_code": "EN-TEST-008",
     "rut": "20000008-0",
     "phone": "+56950000008",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6318,7 +6324,7 @@
     "employee_code": "EN-TEST-009",
     "rut": "20000009-9",
     "phone": "+56950000009",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6336,7 +6342,7 @@
     "employee_code": "EN-TEST-010",
     "rut": "20000010-2",
     "phone": "+56950000010",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6354,7 +6360,7 @@
     "employee_code": "EN-TEST-011",
     "rut": "20000011-0",
     "phone": "+56950000011",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6372,7 +6378,7 @@
     "employee_code": "EN-TEST-012",
     "rut": "20000012-9",
     "phone": "+56950000012",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6390,7 +6396,7 @@
     "employee_code": "EN-TEST-013",
     "rut": "20000013-7",
     "phone": "+56950000013",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6408,7 +6414,7 @@
     "employee_code": "EN-TEST-014",
     "rut": "20000014-5",
     "phone": "+56950000014",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6426,7 +6432,7 @@
     "employee_code": "EN-TEST-015",
     "rut": "20000015-3",
     "phone": "+56950000015",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6444,7 +6450,7 @@
     "employee_code": "EN-TEST-016",
     "rut": "20000016-1",
     "phone": "+56950000016",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6462,7 +6468,7 @@
     "employee_code": "EN-TEST-017",
     "rut": "20000017-K",
     "phone": "+56950000017",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6480,7 +6486,7 @@
     "employee_code": "EN-TEST-018",
     "rut": "20000018-8",
     "phone": "+56950000018",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6498,7 +6504,7 @@
     "employee_code": "EN-TEST-019",
     "rut": "20000019-6",
     "phone": "+56950000019",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6516,7 +6522,7 @@
     "employee_code": "EN-TEST-020",
     "rut": "20000020-K",
     "phone": "+56950000020",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6534,7 +6540,7 @@
     "employee_code": "EN-TEST-021",
     "rut": "20000021-8",
     "phone": "+56950000021",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6552,7 +6558,7 @@
     "employee_code": "EN-TEST-022",
     "rut": "20000022-6",
     "phone": "+56950000022",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6570,7 +6576,7 @@
     "employee_code": "EN-TEST-023",
     "rut": "20000023-4",
     "phone": "+56950000023",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6588,7 +6594,7 @@
     "employee_code": "EN-TEST-024",
     "rut": "20000024-2",
     "phone": "+56950000024",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6606,7 +6612,7 @@
     "employee_code": "EN-TEST-025",
     "rut": "20000025-0",
     "phone": "+56950000025",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6624,7 +6630,7 @@
     "employee_code": "EN-TEST-026",
     "rut": "20000026-9",
     "phone": "+56950000026",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6642,7 +6648,7 @@
     "employee_code": "EN-TEST-027",
     "rut": "20000027-7",
     "phone": "+56950000027",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6660,7 +6666,7 @@
     "employee_code": "EN-TEST-028",
     "rut": "20000028-5",
     "phone": "+56950000028",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6678,7 +6684,7 @@
     "employee_code": "EN-TEST-029",
     "rut": "20000029-3",
     "phone": "+56950000029",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6696,7 +6702,7 @@
     "employee_code": "EN-TEST-030",
     "rut": "20000030-7",
     "phone": "+56950000030",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6714,7 +6720,7 @@
     "employee_code": "EC-TEST-001",
     "rut": "21000001-0",
     "phone": "+56951000001",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6732,7 +6738,7 @@
     "employee_code": "EC-TEST-002",
     "rut": "21000002-9",
     "phone": "+56951000002",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6750,7 +6756,7 @@
     "employee_code": "EC-TEST-003",
     "rut": "21000003-7",
     "phone": "+56951000003",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6768,7 +6774,7 @@
     "employee_code": "EC-TEST-004",
     "rut": "21000004-5",
     "phone": "+56951000004",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6786,7 +6792,7 @@
     "employee_code": "EC-TEST-005",
     "rut": "21000005-3",
     "phone": "+56951000005",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6804,7 +6810,7 @@
     "employee_code": "EC-TEST-006",
     "rut": "21000006-1",
     "phone": "+56951000006",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6822,7 +6828,7 @@
     "employee_code": "EC-TEST-007",
     "rut": "21000007-K",
     "phone": "+56951000007",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6840,7 +6846,7 @@
     "employee_code": "EC-TEST-008",
     "rut": "21000008-8",
     "phone": "+56951000008",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6858,7 +6864,7 @@
     "employee_code": "EC-TEST-009",
     "rut": "21000009-6",
     "phone": "+56951000009",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6876,7 +6882,7 @@
     "employee_code": "EC-TEST-010",
     "rut": "21000010-K",
     "phone": "+56951000010",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6894,7 +6900,7 @@
     "employee_code": "EC-TEST-011",
     "rut": "21000011-8",
     "phone": "+56951000011",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6912,7 +6918,7 @@
     "employee_code": "EC-TEST-012",
     "rut": "21000012-6",
     "phone": "+56951000012",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6930,7 +6936,7 @@
     "employee_code": "EC-TEST-013",
     "rut": "21000013-4",
     "phone": "+56951000013",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6948,7 +6954,7 @@
     "employee_code": "EC-TEST-014",
     "rut": "21000014-2",
     "phone": "+56951000014",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6966,7 +6972,7 @@
     "employee_code": "EC-TEST-015",
     "rut": "21000015-0",
     "phone": "+56951000015",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -6984,7 +6990,7 @@
     "employee_code": "EC-TEST-016",
     "rut": "21000016-9",
     "phone": "+56951000016",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7002,7 +7008,7 @@
     "employee_code": "EC-TEST-017",
     "rut": "21000017-7",
     "phone": "+56951000017",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7020,7 +7026,7 @@
     "employee_code": "EC-TEST-018",
     "rut": "21000018-5",
     "phone": "+56951000018",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7038,7 +7044,7 @@
     "employee_code": "EC-TEST-019",
     "rut": "21000019-3",
     "phone": "+56951000019",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7056,7 +7062,7 @@
     "employee_code": "EC-TEST-020",
     "rut": "21000020-1",
     "phone": "+56951000020",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7074,7 +7080,7 @@
     "employee_code": "EC-TEST-021",
     "rut": "21000021-K",
     "phone": "+56951000021",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7092,7 +7098,7 @@
     "employee_code": "EC-TEST-022",
     "rut": "21000022-8",
     "phone": "+56951000022",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7110,7 +7116,7 @@
     "employee_code": "EC-TEST-023",
     "rut": "21000023-6",
     "phone": "+56951000023",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7128,7 +7134,7 @@
     "employee_code": "EC-TEST-024",
     "rut": "21000024-4",
     "phone": "+56951000024",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7146,7 +7152,7 @@
     "employee_code": "EC-TEST-025",
     "rut": "21000025-2",
     "phone": "+56951000025",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7164,7 +7170,7 @@
     "employee_code": "ES-TEST-001",
     "rut": "22000001-K",
     "phone": "+56952000001",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7182,7 +7188,7 @@
     "employee_code": "ES-TEST-002",
     "rut": "22000002-8",
     "phone": "+56952000002",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7200,7 +7206,7 @@
     "employee_code": "ES-TEST-003",
     "rut": "22000003-6",
     "phone": "+56952000003",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7218,7 +7224,7 @@
     "employee_code": "ES-TEST-004",
     "rut": "22000004-4",
     "phone": "+56952000004",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7236,7 +7242,7 @@
     "employee_code": "ES-TEST-005",
     "rut": "22000005-2",
     "phone": "+56952000005",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7254,7 +7260,7 @@
     "employee_code": "ES-TEST-006",
     "rut": "22000006-0",
     "phone": "+56952000006",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7272,7 +7278,7 @@
     "employee_code": "ES-TEST-007",
     "rut": "22000007-9",
     "phone": "+56952000007",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7290,7 +7296,7 @@
     "employee_code": "ES-TEST-008",
     "rut": "22000008-7",
     "phone": "+56952000008",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7308,7 +7314,7 @@
     "employee_code": "ES-TEST-009",
     "rut": "22000009-5",
     "phone": "+56952000009",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7326,7 +7332,7 @@
     "employee_code": "ES-TEST-010",
     "rut": "22000010-9",
     "phone": "+56952000010",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7344,7 +7350,7 @@
     "employee_code": "ES-TEST-011",
     "rut": "22000011-7",
     "phone": "+56952000011",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7362,7 +7368,7 @@
     "employee_code": "ES-TEST-012",
     "rut": "22000012-5",
     "phone": "+56952000012",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7380,7 +7386,7 @@
     "employee_code": "ES-TEST-013",
     "rut": "22000013-3",
     "phone": "+56952000013",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7398,7 +7404,7 @@
     "employee_code": "ES-TEST-014",
     "rut": "22000014-1",
     "phone": "+56952000014",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7416,7 +7422,7 @@
     "employee_code": "ES-TEST-015",
     "rut": "22000015-K",
     "phone": "+56952000015",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7434,7 +7440,7 @@
     "employee_code": "ES-TEST-016",
     "rut": "22000016-8",
     "phone": "+56952000016",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7452,7 +7458,7 @@
     "employee_code": "ES-TEST-017",
     "rut": "22000017-6",
     "phone": "+56952000017",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7470,7 +7476,7 @@
     "employee_code": "ES-TEST-018",
     "rut": "22000018-4",
     "phone": "+56952000018",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7488,7 +7494,7 @@
     "employee_code": "ES-TEST-019",
     "rut": "22000019-2",
     "phone": "+56952000019",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7506,7 +7512,7 @@
     "employee_code": "ES-TEST-020",
     "rut": "22000020-6",
     "phone": "+56952000020",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7524,7 +7530,7 @@
     "employee_code": "ES-TEST-021",
     "rut": "22000021-4",
     "phone": "+56952000021",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7542,7 +7548,7 @@
     "employee_code": "ES-TEST-022",
     "rut": "22000022-2",
     "phone": "+56952000022",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7560,7 +7566,7 @@
     "employee_code": "ES-TEST-023",
     "rut": "22000023-0",
     "phone": "+56952000023",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7578,7 +7584,7 @@
     "employee_code": "ES-TEST-024",
     "rut": "22000024-9",
     "phone": "+56952000024",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7596,7 +7602,7 @@
     "employee_code": "ES-TEST-025",
     "rut": "22000025-7",
     "phone": "+56952000025",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7614,7 +7620,7 @@
     "employee_code": "ES-TEST-026",
     "rut": "22000026-5",
     "phone": "+56952000026",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7632,7 +7638,7 @@
     "employee_code": "ES-TEST-027",
     "rut": "22000027-3",
     "phone": "+56952000027",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7650,7 +7656,7 @@
     "employee_code": "ES-TEST-028",
     "rut": "22000028-1",
     "phone": "+56952000028",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7668,7 +7674,7 @@
     "employee_code": "ES-TEST-029",
     "rut": "22000029-K",
     "phone": "+56952000029",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 },
 {
@@ -7686,7 +7692,7 @@
     "employee_code": "ES-TEST-030",
     "rut": "22000030-3",
     "phone": "+56952000030",
-    "address": "Dirección de prueba, La Serena"
+    "address": "Direcciï¿½n de prueba, La Serena"
   }
 }
 ]
