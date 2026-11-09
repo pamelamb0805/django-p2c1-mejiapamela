@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
@@ -70,6 +69,136 @@
             background: rgba(255,255,255,.13);
         }
 
+        /* NOTIFICACIONES */
+
+        .eco-notification-dropdown {
+            position: relative;
+        }
+
+        .eco-notification-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 0;
+            border-radius: 50%;
+            background: transparent;
+            color: #fff;
+            font-size: 1.3rem;
+            transition: background .2s ease;
+        }
+
+        .eco-notification-button:hover,
+        .eco-notification-button:focus {
+            background: rgba(255,255,255,.15);
+            color: #fff;
+        }
+
+        .eco-notification-count {
+            position: absolute;
+            top: 0;
+            right: -2px;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 4px;
+            border-radius: 20px;
+            background: #dc3545;
+            color: #fff;
+            font-size: .68rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #034159;
+        }
+
+        .eco-notification-count.d-none {
+            display: none !important;
+        }
+
+        .eco-notification-menu {
+            width: 370px;
+            max-width: calc(100vw - 25px);
+            max-height: 480px;
+            overflow-y: auto;
+            padding: 0;
+            border: 0;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.2);
+        }
+
+        .eco-notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: #034159;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .eco-notification-item {
+            padding: 13px 15px;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+            transition: background .2s ease;
+        }
+
+        .eco-notification-item:hover {
+            background: #f5faf8;
+        }
+
+        .eco-notification-item:last-child {
+            border-bottom: 0;
+        }
+
+        .eco-notification-item.is-new {
+            background: #edf8f4;
+            border-left: 3px solid #087c68;
+        }
+
+        .eco-notification-title {
+            font-size: .86rem;
+            font-weight: 700;
+            color: #034159;
+            margin-bottom: 4px;
+        }
+
+        .eco-notification-detail {
+            font-size: .78rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .eco-notification-meta {
+            font-size: .7rem;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        .eco-notification-empty {
+            padding: 30px 15px;
+            text-align: center;
+            color: #888;
+            font-size: .85rem;
+        }
+
+        .eco-notification-clear {
+            border: 0;
+            background: transparent;
+            color: #cde8df;
+            font-size: .75rem;
+            text-decoration: underline;
+        }
+
+        .eco-notification-clear:hover {
+            color: #fff;
+        }
+
         .eco-sidebar {
             min-height: calc(100vh - 56px);
             background: #002b27;
@@ -111,7 +240,7 @@
             padding-left: 12px;
         }
 
-        /* TARJETAS ESTADÍSTICAS DEL DASHBOARD */
+        /* TARJETAS ESTADÍSTICAS */
 
         .dashboard-stat-card {
             border-radius: 13px;
@@ -152,6 +281,14 @@
                 position: static;
                 margin-top: 5px;
             }
+
+            .eco-notification-menu {
+                position: fixed !important;
+                top: 65px !important;
+                right: 10px !important;
+                left: auto !important;
+                transform: none !important;
+            }
         }
 
         @media (max-width: 575.98px) {
@@ -177,13 +314,102 @@
             <span class="eco-brand-text">Mi Panel</span>
         </a>
 
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2">
 
             <span class="text-white d-none d-md-inline">
                 <i class="bi bi-person-circle me-1"></i>
                 {{ request.user.first_name|default:request.user.username }}
             </span>
 
+            <!-- CAMPANITA DE NOTIFICACIONES -->
+            <div class="dropdown eco-notification-dropdown">
+
+                <button
+                    class="eco-notification-button"
+                    type="button"
+                    id="notificationDropdown"
+                    data-bs-toggle="dropdown"
+                    data-bs-auto-close="outside"
+                    aria-expanded="false"
+                    title="Notificaciones">
+
+                    <i class="bi bi-bell-fill"></i>
+
+                    <span
+                        id="notificationCount"
+                        class="eco-notification-count d-none">
+                        0
+                    </span>
+                </button>
+
+                <div
+                    class="dropdown-menu dropdown-menu-end eco-notification-menu"
+                    aria-labelledby="notificationDropdown">
+
+                    <div class="eco-notification-header">
+                        <div>
+                            <i class="bi bi-bell-fill me-2"></i>
+                            <strong>Notificaciones</strong>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="eco-notification-clear"
+                            id="clearNotifications">
+                            Marcar como leídas
+                        </button>
+                    </div>
+
+                    <div id="notificationList">
+
+                        {% for registro in actividad %}
+                        <div class="eco-notification-item">
+
+                            <div class="eco-notification-title">
+                                {{ registro.get_module_display }}
+                                · {{ registro.get_action_display }}
+                            </div>
+
+                            <div class="eco-notification-detail">
+                                <strong>{{ registro.object_label }}</strong>
+                                <br>
+
+                                {{ registro.object_type }}
+                                · ID: {{ registro.object_pk }}
+                                <br>
+
+                                <i class="bi bi-person-circle me-1"></i>
+                                {{ registro.actor_name|default:"Usuario no disponible" }}
+
+                                <br>
+
+                                {% if registro.organization %}
+                                    <i class="bi bi-building me-1"></i>
+                                    {{ registro.organization.comercial_name|default:registro.organization.legal_name }}
+                                {% else %}
+                                    <span class="text-muted">Global</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="eco-notification-meta">
+                                <i class="bi bi-clock me-1"></i>
+                                {{ registro.created_at|date:"d/m/Y H:i" }}
+                            </div>
+
+                        </div>
+
+                        {% empty %}
+                        <div class="eco-notification-empty" id="notificationEmpty">
+                            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                            No hay notificaciones disponibles.
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERFIL -->
             <div class="eco-profile-dropdown">
 
                 <a href="{% url 'accounts:perfil' %}"
@@ -225,7 +451,6 @@
 
             <ul class="nav flex-column gap-1">
 
-                <!-- INICIO -->
                 <li class="nav-item">
                     <a class="nav-link active" href="{% url 'dashboard:dashboard' %}">
                         <i class="bi bi-house-door-fill"></i>
@@ -414,7 +639,6 @@
                     <div class="d-flex align-items-center gap-3">
 
                         {% if avatar_url %}
-
                             <a href="{% url 'accounts:perfil' %}" title="Mi perfil">
                                 <img src="{{ avatar_url }}"
                                      alt="Foto de {{ request.user.username }}"
@@ -423,16 +647,13 @@
                                      height="55"
                                      style="object-fit:cover;">
                             </a>
-
                         {% else %}
-
                             <img src="{% static 'img/default.png' %}"
                                  alt="Usuario"
                                  class="rounded-circle border border-2 border-success"
                                  width="55"
                                  height="55"
                                  style="object-fit:cover;">
-
                         {% endif %}
 
                     </div>
@@ -612,11 +833,10 @@
                 {% endif %}
 
             </div>
-                       
+
             <!-- GRÁFICOS ECOENERGY -->
             <div class="mb-4">
 
-                <!-- ENCABEZADO -->
                 <div class="mb-3">
                     <h4 class="fw-bold mb-1">
                         <i class="bi bi-graph-up-arrow text-success me-2"></i>
@@ -628,12 +848,10 @@
                     </p>
                 </div>
 
-                <!-- CONTENEDOR DE TODOS LOS GRÁFICOS -->
                 <div class="row g-3" id="dashboardCharts">
 
                     {% if mostrar_mediciones %}
 
-                    <!-- 1. CONSUMO HISTÓRICO -->
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
@@ -641,7 +859,6 @@
                                 <p class="text-muted small">
                                     Consumo diario registrado en kWh.
                                 </p>
-
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartConsumoHistorico"></canvas>
                                 </div>
@@ -649,7 +866,6 @@
                         </div>
                     </div>
 
-                    <!-- 2. CONSUMO POR DEPARTAMENTO -->
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
@@ -657,7 +873,6 @@
                                 <p class="text-muted small">
                                     Comparación de consumo energético.
                                 </p>
-
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartDepartamento"></canvas>
                                 </div>
@@ -665,7 +880,6 @@
                         </div>
                     </div>
 
-                    <!-- 3. CONSUMO POR ZONA -->
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
@@ -673,7 +887,6 @@
                                 <p class="text-muted small">
                                     Participación del consumo energético.
                                 </p>
-
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartZona"></canvas>
                                 </div>
@@ -681,7 +894,6 @@
                         </div>
                     </div>
 
-                    <!-- 4. TOP DISPOSITIVOS -->
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
@@ -689,7 +901,6 @@
                                 <p class="text-muted small">
                                     Cinco equipos con mayor consumo.
                                 </p>
-
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartTopDispositivos"></canvas>
                                 </div>
@@ -697,7 +908,6 @@
                         </div>
                     </div>
 
-                    <!-- 5. DEMANDA HORARIA -->
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
@@ -705,7 +915,6 @@
                                 <p class="text-muted small">
                                     Lecturas según hora del día.
                                 </p>
-
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartDemanda"></canvas>
                                 </div>
@@ -716,8 +925,6 @@
                     {% endif %}
 
                     {% if mostrar_dispositivos %}
-
-                    <!-- 6. ESTADO DE DISPOSITIVOS -->
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
@@ -725,19 +932,15 @@
                                 <p class="text-muted small">
                                     Distribución de unidades instaladas.
                                 </p>
-
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartEstadoDispositivos"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     {% endif %}
 
                     {% if mostrar_alertas %}
-
-                    <!-- 7. ESTADO DE ALERTAS -->
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
@@ -745,19 +948,15 @@
                                 <p class="text-muted small">
                                     Eventos abiertos, reconocidos y resueltos.
                                 </p>
-
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartEstadoAlertas"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     {% endif %}
 
                     {% if mostrar_mantenimientos %}
-
-                    <!-- 8. ESTADO DE MANTENIMIENTOS -->
                     <div class="col-12 col-sm-6 col-xl-3">
                         <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
                             <div class="card-body">
@@ -765,14 +964,12 @@
                                 <p class="text-muted small">
                                     Distribución según estado de solicitudes.
                                 </p>
-
                                 <div class="dashboard-chart-container">
                                     <canvas id="chartEstadoMantenimientos"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     {% endif %}
 
                 </div>
@@ -780,8 +977,6 @@
 
             <!-- ESTILOS DE GRÁFICOS COMPACTOS -->
             <style>
-
-                /* Tarjetas de gráficos */
                 #dashboardCharts .dashboard-chart-card {
                     border-radius: 12px;
                     min-width: 0;
@@ -810,7 +1005,6 @@
                     margin-bottom: 8px;
                 }
 
-                /* Tamaño uniforme de los gráficos */
                 #dashboardCharts .dashboard-chart-container {
                     position: relative;
                     width: 100%;
@@ -821,14 +1015,12 @@
                     max-width: 100%;
                 }
 
-                /* Tablet */
                 @media (max-width: 991.98px) {
                     #dashboardCharts .dashboard-chart-container {
                         height: 185px;
                     }
                 }
 
-                /* Móvil */
                 @media (max-width: 575.98px) {
                     #dashboardCharts .dashboard-chart-container {
                         height: 195px;
@@ -838,10 +1030,8 @@
                         padding: 12px;
                     }
                 }
-
             </style>
 
-                        
             <!-- ÚLTIMOS REGISTROS -->
             <div class="card border-0 shadow-sm mb-4">
 
@@ -885,40 +1075,33 @@
                                 {% for registro in actividad %}
                                 <tr>
 
-                                    <!-- FECHA -->
                                     <td class="text-nowrap">
                                         <small>
                                             {{ registro.created_at|date:"d/m/Y" }}
                                         </small>
-
                                         <br>
-
                                         <small class="text-muted">
                                             {{ registro.created_at|date:"H:i" }}
                                         </small>
                                     </td>
 
-                                    <!-- MÓDULO -->
                                     <td>
                                         <span class="badge bg-light text-dark border">
                                             {{ registro.get_module_display }}
                                         </span>
                                     </td>
 
-                                    <!-- ACCIÓN -->
                                     <td>
                                         {% if registro.action == "creado" %}
                                             <span class="badge bg-success">
                                                 <i class="bi bi-plus-circle me-1"></i>
                                                 Creación
                                             </span>
-
                                         {% elif registro.action == "actualizado" %}
                                             <span class="badge bg-primary">
                                                 <i class="bi bi-pencil-square me-1"></i>
                                                 Modificación
                                             </span>
-
                                         {% elif registro.action == "eliminado" %}
                                             <span class="badge bg-danger">
                                                 <i class="bi bi-trash me-1"></i>
@@ -927,27 +1110,20 @@
                                         {% endif %}
                                     </td>
 
-                                    <!-- REGISTRO -->
                                     <td>
-                                        <strong>
-                                            {{ registro.object_label }}
-                                        </strong>
-
+                                        <strong>{{ registro.object_label }}</strong>
                                         <br>
-
                                         <small class="text-muted">
                                             {{ registro.object_type }}
                                             · ID: {{ registro.object_pk }}
                                         </small>
                                     </td>
 
-                                    <!-- RESPONSABLE -->
                                     <td>
                                         <i class="bi bi-person-circle me-1 text-secondary"></i>
                                         {{ registro.actor_name|default:"Usuario no disponible" }}
                                     </td>
 
-                                    <!-- ORGANIZACIÓN -->
                                     <td>
                                         {% if registro.organization %}
                                             {{ registro.organization.comercial_name|default:registro.organization.legal_name }}
@@ -964,7 +1140,6 @@
                                 <tr>
                                     <td colspan="6" class="text-center text-muted py-5">
                                         <i class="bi bi-inbox fs-2 d-block mb-2"></i>
-
                                         No existen operaciones registradas
                                         para los módulos que puedes consultar.
                                     </td>
@@ -999,178 +1174,397 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    const dataElement = document.getElementById(
-        "dashboard-chart-data"
-    );
+    /* ==========================================
+       GRÁFICOS DEL DASHBOARD
+    ========================================== */
 
-    if (!dataElement) return;
+    const dataElement = document.getElementById("dashboard-chart-data");
 
-    const charts = JSON.parse(dataElement.textContent);
+    if (dataElement) {
+        const charts = JSON.parse(dataElement.textContent);
 
-    const palette = [
-        "#087C68",
-        "#16A085",
-        "#58BFA5",
-        "#F0B429",
-        "#3498DB",
-        "#E67E22",
-        "#9B59B6",
-        "#D9534F"
-    ];
+        const palette = [
+            "#087C68",
+            "#16A085",
+            "#58BFA5",
+            "#F0B429",
+            "#3498DB",
+            "#E67E22",
+            "#9B59B6",
+            "#D9534F"
+        ];
 
-    function crearGrafico(id, tipo, datos, etiqueta) {
+        function crearGrafico(id, tipo, datos, etiqueta) {
 
-        const canvas = document.getElementById(id);
+            const canvas = document.getElementById(id);
 
-        if (!canvas || !datos) return;
+            if (!canvas || !datos) return;
 
-        if (!datos.labels || datos.labels.length === 0) {
-            const parent = canvas.parentElement;
+            if (!datos.labels || datos.labels.length === 0) {
+                const parent = canvas.parentElement;
 
-            parent.innerHTML = `
-                <div class="h-100 d-flex flex-column
-                            align-items-center justify-content-center
-                            text-muted">
-                    <i class="bi bi-bar-chart fs-2 mb-2"></i>
-                    <span class="small">
-                        No existen datos disponibles para este gráfico.
-                    </span>
-                </div>
-            `;
+                parent.innerHTML = `
+                    <div class="h-100 d-flex flex-column
+                                align-items-center justify-content-center
+                                text-muted">
+                        <i class="bi bi-bar-chart fs-2 mb-2"></i>
+                        <span class="small">
+                            No existen datos disponibles para este gráfico.
+                        </span>
+                    </div>
+                `;
 
-            return;
-        }
+                return;
+            }
 
-        const circular = tipo === "doughnut";
+            const circular = tipo === "doughnut";
 
-        new Chart(canvas, {
-            type: tipo,
+            new Chart(canvas, {
+                type: tipo,
 
-            data: {
-                labels: datos.labels,
+                data: {
+                    labels: datos.labels,
 
-                datasets: [{
-                    label: etiqueta,
-                    data: datos.values,
+                    datasets: [{
+                        label: etiqueta,
+                        data: datos.values,
 
-                    backgroundColor: circular
-                        ? palette
-                        : "rgba(8, 124, 104, 0.18)",
+                        backgroundColor: circular
+                            ? palette
+                            : "rgba(8, 124, 104, 0.18)",
 
-                    borderColor: circular
-                        ? "#ffffff"
-                        : "#087C68",
+                        borderColor: circular
+                            ? "#ffffff"
+                            : "#087C68",
 
-                    borderWidth: circular ? 2 : 2,
-
-                    borderRadius: tipo === "bar" ? 6 : 0,
-
-                    fill: tipo === "line",
-
-                    tension: 0.35,
-
-                    pointRadius: tipo === "line" ? 4 : 0,
-
-                    pointBackgroundColor: "#087C68"
-                }]
-            },
-
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-
-                plugins: {
-                    legend: {
-                        display: circular,
-                        position: "bottom"
-                    },
-
-                    tooltip: {
-                        enabled: true
-                    }
+                        borderWidth: 2,
+                        borderRadius: tipo === "bar" ? 6 : 0,
+                        fill: tipo === "line",
+                        tension: 0.35,
+                        pointRadius: tipo === "line" ? 4 : 0,
+                        pointBackgroundColor: "#087C68"
+                    }]
                 },
 
-                scales: circular ? {} : {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: "rgba(0,0,0,0.05)"
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                        legend: {
+                            display: circular,
+                            position: "bottom"
+                        },
+
+                        tooltip: {
+                            enabled: true
                         }
                     },
 
-                    x: {
-                        grid: {
-                            display: false
+                    scales: circular ? {} : {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: "rgba(0,0,0,0.05)"
+                            }
+                        },
+
+                        x: {
+                            grid: {
+                                display: false
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
+
+        crearGrafico(
+            "chartConsumoHistorico",
+            "line",
+            charts.consumo_historico,
+            "Consumo kWh"
+        );
+
+        crearGrafico(
+            "chartDepartamento",
+            "bar",
+            charts.consumo_departamento,
+            "Consumo kWh"
+        );
+
+        crearGrafico(
+            "chartZona",
+            "doughnut",
+            charts.consumo_zona,
+            "Consumo kWh"
+        );
+
+        crearGrafico(
+            "chartTopDispositivos",
+            "bar",
+            charts.top_dispositivos,
+            "Consumo kWh"
+        );
+
+        crearGrafico(
+            "chartDemanda",
+            "line",
+            charts.demanda_horaria,
+            "Consumo kWh"
+        );
+
+        crearGrafico(
+            "chartEstadoDispositivos",
+            "doughnut",
+            charts.estado_dispositivos,
+            "Dispositivos"
+        );
+
+        crearGrafico(
+            "chartEstadoAlertas",
+            "doughnut",
+            charts.estado_alertas,
+            "Alertas"
+        );
+
+        crearGrafico(
+            "chartEstadoMantenimientos",
+            "doughnut",
+            charts.estado_mantenimientos,
+            "Mantenimientos"
+        );
     }
 
-    // 1. Consumo histórico
-    crearGrafico(
-        "chartConsumoHistorico",
-        "line",
-        charts.consumo_historico,
-        "Consumo kWh"
-    );
 
-    // 2. Consumo por departamento
-    crearGrafico(
-        "chartDepartamento",
-        "bar",
-        charts.consumo_departamento,
-        "Consumo kWh"
-    );
+    /* ==========================================
+       NOTIFICACIONES EN TIEMPO REAL - WEBSOCKET
+    ========================================== */
 
-    // 3. Consumo por zona
-    crearGrafico(
-        "chartZona",
-        "doughnut",
-        charts.consumo_zona,
-        "Consumo kWh"
-    );
+    const notificationList = document.getElementById("notificationList");
+    const notificationCount = document.getElementById("notificationCount");
+    const notificationDropdown = document.getElementById("notificationDropdown");
+    const clearNotifications = document.getElementById("clearNotifications");
 
-    // 4. Dispositivos con mayor consumo
-    crearGrafico(
-        "chartTopDispositivos",
-        "bar",
-        charts.top_dispositivos,
-        "Consumo kWh"
-    );
+    if (!notificationList || !notificationCount || !notificationDropdown) {
+        return;
+    }
 
-    // 5. Demanda horaria
-    crearGrafico(
-        "chartDemanda",
-        "line",
-        charts.demanda_horaria,
-        "Consumo kWh"
-    );
+    let unreadNotifications = 0;
+    const MAX_NOTIFICATIONS = 15;
 
-    // 6. Estado de dispositivos
-    crearGrafico(
-        "chartEstadoDispositivos",
-        "doughnut",
-        charts.estado_dispositivos,
-        "Dispositivos"
-    );
+    function actualizarContador() {
+        if (unreadNotifications > 0) {
+            notificationCount.textContent =
+                unreadNotifications > 99 ? "99+" : unreadNotifications;
 
-    // 7. Estado de alertas
-    crearGrafico(
-        "chartEstadoAlertas",
-        "doughnut",
-        charts.estado_alertas,
-        "Alertas"
-    );
+            notificationCount.classList.remove("d-none");
+        } else {
+            notificationCount.classList.add("d-none");
+        }
+    }
 
-    // 8. Estado de mantenimientos
-    crearGrafico(
-        "chartEstadoMantenimientos",
-        "doughnut",
-        charts.estado_mantenimientos,
-        "Mantenimientos"
-    );
+    function crearElemento(tag, className, content) {
+        const element = document.createElement(tag);
+
+        if (className) {
+            element.className = className;
+        }
+
+        if (content !== undefined && content !== null) {
+            element.textContent = content;
+        }
+
+        return element;
+    }
+
+    function obtenerFecha(fecha) {
+        if (!fecha) {
+            return new Date().toLocaleString("es-CL");
+        }
+
+        const parsed = new Date(fecha);
+
+        if (Number.isNaN(parsed.getTime())) {
+            return fecha;
+        }
+
+        return parsed.toLocaleString("es-CL");
+    }
+
+    function agregarNotificacion(data) {
+
+        const emptyMessage = document.getElementById("notificationEmpty");
+
+        if (emptyMessage) {
+            emptyMessage.remove();
+        }
+
+        const item = crearElemento(
+            "div",
+            "eco-notification-item is-new"
+        );
+
+        const moduleName =
+            data.module_display || data.module || "Registro";
+
+        const actionName =
+            data.action_display || traducirAccion(data.action);
+
+        const title = crearElemento(
+            "div",
+            "eco-notification-title",
+            moduleName + " · " + actionName
+        );
+
+        const detail = crearElemento(
+            "div",
+            "eco-notification-detail"
+        );
+
+        const objectLabel = crearElemento(
+            "strong",
+            "",
+            data.object_label || "Registro actualizado"
+        );
+
+        const objectInfo = crearElemento(
+            "div",
+            "",
+            (data.object_type || "Registro") +
+            " · ID: " + (data.object_pk || "—")
+        );
+
+        const actorInfo = crearElemento(
+            "div",
+            "",
+            "Responsable: " + (data.actor_name || "Usuario no disponible")
+        );
+
+        const organizationInfo = crearElemento(
+            "div",
+            "",
+            "Organización: " + (data.organization_name || "Global")
+        );
+
+        const meta = crearElemento(
+            "div",
+            "eco-notification-meta",
+            obtenerFecha(data.created_at)
+        );
+
+        const clockIcon = document.createElement("i");
+        clockIcon.className = "bi bi-clock me-1";
+        meta.prepend(clockIcon);
+
+        detail.appendChild(objectLabel);
+        detail.appendChild(objectInfo);
+        detail.appendChild(actorInfo);
+        detail.appendChild(organizationInfo);
+
+        item.appendChild(title);
+        item.appendChild(detail);
+        item.appendChild(meta);
+
+        notificationList.prepend(item);
+
+        /* Mantener máximo 15 notificaciones visibles */
+        while (notificationList.children.length > MAX_NOTIFICATIONS) {
+            notificationList.lastElementChild.remove();
+        }
+
+        unreadNotifications++;
+        actualizarContador();
+    }
+
+    function traducirAccion(action) {
+        const acciones = {
+            "creado": "Creación",
+            "actualizado": "Modificación",
+            "eliminado": "Eliminación",
+            "created": "Creación",
+            "updated": "Modificación",
+            "deleted": "Eliminación"
+        };
+
+        return acciones[action] || action || "Operación";
+    }
+
+    /* Marcar notificaciones como leídas */
+    clearNotifications.addEventListener("click", function () {
+
+        unreadNotifications = 0;
+        actualizarContador();
+
+        document.querySelectorAll(".eco-notification-item.is-new")
+            .forEach(function (item) {
+                item.classList.remove("is-new");
+            });
+    });
+
+    /* Al abrir la campanita se consideran leídas */
+    notificationDropdown.addEventListener("shown.bs.dropdown", function () {
+
+        unreadNotifications = 0;
+        actualizarContador();
+
+        document.querySelectorAll(".eco-notification-item.is-new")
+            .forEach(function (item) {
+                item.classList.remove("is-new");
+            });
+    });
+
+    /* Conexión WebSocket */
+    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+    const socketUrl = protocol + window.location.host + "/ws/chat/";
+
+    let socket = null;
+    let reconnectTimeout = null;
+
+    function conectarWebSocket() {
+
+        socket = new WebSocket(socketUrl);
+
+        socket.onopen = function () {
+            console.log("WebSocket del dashboard conectado.");
+        };
+
+        socket.onmessage = function (event) {
+
+            let data;
+
+            try {
+                data = JSON.parse(event.data);
+            } catch (error) {
+                console.error("No se pudo interpretar el mensaje WebSocket:", error);
+                return;
+            }
+
+            if (data.type === "crud_update") {
+
+                console.log("Nueva operación CRUD recibida:", data);
+
+                agregarNotificacion(data);
+            }
+        };
+
+        socket.onclose = function () {
+            console.warn("WebSocket desconectado. Reintentando conexión...");
+
+            clearTimeout(reconnectTimeout);
+
+            reconnectTimeout = setTimeout(function () {
+                conectarWebSocket();
+            }, 3000);
+        };
+
+        socket.onerror = function (error) {
+            console.error("Error en WebSocket:", error);
+            socket.close();
+        };
+    }
+
+    conectarWebSocket();
 
 });
 </script>

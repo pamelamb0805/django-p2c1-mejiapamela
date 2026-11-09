@@ -81,13 +81,14 @@ class WebSocketCrudEventsMixin:
 
     def save_crud_activity(self, action=None):
         """
-        Guarda una operación CRUD en la bitácora permanente.
+        Guarda una operación CRUD en la bitácora permanente
+        y devuelve el registro creado.
         """
 
         obj = getattr(self, "object", None)
 
         if obj is None:
-            return
+            return None
 
         action = (
             action
@@ -96,10 +97,9 @@ class WebSocketCrudEventsMixin:
         )
 
         user = self.request.user
-
         organization_id = self.get_crud_organization_id()
 
-        ActivityLog.objects.create(
+        activity = ActivityLog.objects.create(
             actor=user,
             actor_name=(
                 user.get_full_name()
@@ -108,16 +108,16 @@ class WebSocketCrudEventsMixin:
             organization_id=organization_id,
             module=self.crud_module,
             action=action,
-            object_type=str(
-                obj._meta.verbose_name
-            ),
+            object_type=str(obj._meta.verbose_name),
             object_label=str(obj)[:255],
             object_pk=str(obj.pk),
         )
 
+        return activity
+
     def publish_crud_notification(self, action=None):
         """
-        Guarda la actividad y después publica la notificación WebSocket.
+        Guarda la actividad y publica la notificación WebSocket.
         """
 
         obj = getattr(self, "object", None)
@@ -133,18 +133,20 @@ class WebSocketCrudEventsMixin:
 
         organization_id = self.get_crud_organization_id()
 
-        # 1. Guardar permanentemente la operación.
-        self.save_crud_activity(action)
+        # Guardar la actividad.
+        activity = self.save_crud_activity(action)
 
-        # 2. Mantener el comportamiento WebSocket existente.
-        # Los registros globales no se envían a grupos de organizaciones.
-        if organization_id:
-            publish_crud_event(
-                module=self.crud_module,
-                action=action,
-                actor_id=self.request.user.pk,
-                organization_id=organization_id,
-            )
+        if activity is None:
+            return
+
+        # Publicar a la organización y a ROOT.
+        publish_crud_event(
+            module=self.crud_module,
+            action=action,
+            actor_id=self.request.user.pk,
+            organization_id=organization_id,
+            activity=activity,
+        )
 
     def form_valid(self, form):
         """
