@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from core.models import BaseModel
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 # Create your models here.
 # accounts/models.py
@@ -58,3 +59,24 @@ class UserProfile(BaseModel):
 
     def __str__(self):
         return f"{self.user.username} · {self.organization}"
+
+#EVA3 -- Recuperar contrasenia --> PM
+class PasswordResetCode(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="password_reset_codes"
+    )
+    code_hash = models.CharField(max_length=64)
+    created_at = models.DateTimeField(default=timezone.now)
+    expires_at = models.DateTimeField()
+    attempts = models.PositiveIntegerField(default=0)
+    is_used = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Código de recuperación"
+        verbose_name_plural = "Códigos de recuperación"
+
+    def __str__(self):
+        return f"Código de recuperación de {self.user}"

@@ -16,7 +16,7 @@ from organizations.models import Department, Organization
 from organizations.views import CrudAccessMixin
 
 from .forms import ProfileAvatarForm, UserProfileForm
-from .models import UserProfile
+from .models import UserProfile, PasswordResetCode
 from core.pagination import PageSizeMixin
 
 from websocket.mixins import WebSocketCrudEventsMixin
@@ -31,6 +31,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
+from django.db import transaction
 
 #Eva 3 - PM
 def registro(request):
@@ -410,19 +411,17 @@ def perfil(request):
     return render(request, "accounts/perfil.html", {"profile": profile, "form": form})
 
 #Eva3 recuperar contrasenia --> PM
+
 # ============================================================
 # RECUPERACIÓN DE CONTRASEÑA - ECOENERGY
-# Código temporal de 6 dígitos, con vencimiento y límite
-# de intentos.
+# Códigos persistentes en base de datos.
 # ============================================================
 
 RESET_SESSION_KEY = "ecoenergy_password_reset"
-RESET_EXPIRATION_MINUTES = 10
-RESET_MAX_ATTEMPTS = 5
 
 
 def _enmascarar_correo(email):
-    """Oculta parte del correo para no mostrarlo completo."""
+    """Oculta parte del correo electrónico."""
     try:
         usuario, dominio = email.split("@", 1)
 
@@ -433,29 +432,41 @@ def _enmascarar_correo(email):
 
         return f"{usuario_oculto}@{dominio}"
 
-    except ValueError:
+    except (ValueError, IndexError):
         return email
 
 
 def _generar_hash_codigo(codigo):
-    """Genera un hash del código usando la SECRET_KEY del proyecto."""
+    """Genera un hash seguro del código usando la SECRET_KEY."""
     contenido = f"{codigo}{settings.SECRET_KEY}"
     return hashlib.sha256(contenido.encode("utf-8")).hexdigest()
 
 
+def _obtener_ttl_reset():
+    """Duración del código en segundos, configurable desde settings.py."""
+    return getattr(settings, "PASSWORD_RESET_CODE_TTL", 120)
+
+
+def _obtener_max_intentos():
+    """Cantidad máxima de intentos permitidos por código."""
+    return getattr(settings, "PASSWORD_RESET_MAX_ATTEMPTS", 5)
+
+
 def recuperar_password(request):
     """
-    Paso 1: solicita el correo y envía un código de recuperación.
-    También permite reenviar el código desde el paso de verificación.
+    Paso 1: recibe el correo y genera un código de recuperación.
+    Los códigos anteriores del usuario quedan invalidados.
     """
 
     if request.method == "POST":
 
         email = request.POST.get("email", "").strip().lower()
-        accion = request.POST.get("accion", "enviar")
 
         if not email:
-            messages.error(request, "Debes ingresar un correo electrónico.")
+            messages.error(
+                request,
+                "Debes ingresar un correo electrónico."
+            )
             return render(
                 request,
                 "registration/recover_password.html",
@@ -469,56 +480,63 @@ def recuperar_password(request):
             is_active=True
         ).first()
 
-        # Código aleatorio de seis dígitos.
-        codigo = f"{secrets.randbelow(900000) + 100000:06d}"
+        # Reiniciar los datos anteriores de esta solicitud.
+        request.session.pop(RESET_SESSION_KEY, None)
 
-        # Se guarda la información en la sesión, nunca el código en texto plano.
-        request.session[RESET_SESSION_KEY] = {
-            "email": email,
-            "user_id": usuario.pk if usuario else None,
-            "codigo_hash": _generar_hash_codigo(codigo) if usuario else None,
-            "expira": (
-                timezone.now() + timedelta(
-                    minutes=RESET_EXPIRATION_MINUTES
-                )
-            ).timestamp(),
-            "intentos": 0,
-            "verificado": False,
-        }
+        codigo_id = None
 
-        # Solo se envía correo si existe una cuenta activa.
         if usuario:
 
+            ahora = timezone.now()
+
+            # Invalidar códigos anteriores que todavía no se han usado.
+            PasswordResetCode.objects.filter(
+                user=usuario,
+                is_used=False
+            ).update(is_used=True)
+
+            # Generar código aleatorio de seis dígitos.
+            codigo = f"{secrets.randbelow(900000) + 100000:06d}"
+
+            # Crear el registro persistente.
+            registro_codigo = PasswordResetCode.objects.create(
+                user=usuario,
+                code_hash=_generar_hash_codigo(codigo),
+                expires_at=ahora + timedelta(
+                    seconds=_obtener_ttl_reset()
+                ),
+            )
+
+            # Enviar el código al correo registrado.
             enviado = send_mail(
                 subject="Código de recuperación - EcoEnergy",
                 message=(
                     f"Hola {usuario.get_username()},\n\n"
                     f"Tu código de recuperación es: {codigo}\n\n"
                     f"Este código vence en "
-                    f"{RESET_EXPIRATION_MINUTES} minutos.\n\n"
+                    f"{_obtener_ttl_reset()} segundos.\n\n"
                     "Si no solicitaste este cambio, puedes ignorar "
                     "este correo."
                 ),
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[usuario.email],
-                fail_silently=False,
+                fail_silently=True,
             )
 
-            if not enviado:
-                request.session.pop(RESET_SESSION_KEY, None)
+            # Si el envío falla, eliminar el código recién creado.
+            if enviado:
+                codigo_id = registro_codigo.pk
+            else:
+                registro_codigo.delete()
 
-                messages.error(
-                    request,
-                    "No fue posible enviar el correo. Inténtalo nuevamente."
-                )
+        # Solo se guarda el identificador, nunca el código en texto plano.
+        request.session[RESET_SESSION_KEY] = {
+            "codigo_id": codigo_id,
+            "email": email,
+            "verificado": False,
+        }
 
-                return render(
-                    request,
-                    "registration/recover_password.html",
-                    {"paso": "ingresar_correo"},
-                )
-
-        # Se utiliza el mismo mensaje para evitar revelar si existe la cuenta.
+        # Mensaje genérico para no revelar si existe la cuenta.
         messages.success(
             request,
             "Si el correo está registrado, recibirás un código de recuperación."
@@ -542,7 +560,10 @@ def recuperar_password(request):
 
 
 def verificar_codigo_reset(request):
-    """Paso 2: verifica el código temporal enviado al correo."""
+    """
+    Paso 2: verifica el código almacenado en la base de datos.
+    Controla expiración, uso único e intentos.
+    """
 
     if request.method != "POST":
         return redirect("accounts:recuperar_password")
@@ -556,102 +577,144 @@ def verificar_codigo_reset(request):
         )
         return redirect("accounts:recuperar_password")
 
-    # Verificar vencimiento.
-    if timezone.now().timestamp() > datos.get("expira", 0):
-        request.session.pop(RESET_SESSION_KEY, None)
+    codigo_id = datos.get("codigo_id")
 
+    if not codigo_id:
         messages.error(
             request,
-            "El código expiró. Solicita uno nuevo."
+            "El código no es válido. Solicita uno nuevo."
         )
-
-        return redirect("accounts:recuperar_password")
-
-    # Verificar cantidad de intentos.
-    intentos = datos.get("intentos", 0)
-
-    if intentos >= RESET_MAX_ATTEMPTS:
-        request.session.pop(RESET_SESSION_KEY, None)
-
-        messages.error(
-            request,
-            "Superaste el máximo de intentos. Solicita un nuevo código."
-        )
-
         return redirect("accounts:recuperar_password")
 
     codigo_ingresado = request.POST.get("codigo", "").strip()
 
     if not codigo_ingresado.isdigit() or len(codigo_ingresado) != 6:
-        datos["intentos"] = intentos + 1
-        request.session[RESET_SESSION_KEY] = datos
-
         messages.error(
             request,
             "Debes ingresar un código válido de 6 dígitos."
         )
-
         return render(
             request,
             "registration/recover_password.html",
             {
                 "paso": "verificar_codigo",
-                "email": datos["email"],
+                "email": datos.get("email"),
                 "email_enmascarado": _enmascarar_correo(
-                    datos["email"]
+                    datos.get("email", "")
                 ),
             },
         )
 
-    # Comparar el hash del código ingresado.
-    hash_ingresado = _generar_hash_codigo(codigo_ingresado)
-    hash_guardado = datos.get("codigo_hash")
+    resultado = None
 
-    codigo_valido = (
-        hash_guardado is not None
-        and hmac.compare_digest(hash_ingresado, hash_guardado)
-    )
+    # Bloquear temporalmente el registro durante la validación.
+    with transaction.atomic():
 
-    # Si no hay cuenta asociada o el código no coincide, se rechaza.
-    if not datos.get("user_id") or not codigo_valido:
+        registro_codigo = (
+            PasswordResetCode.objects
+            .select_for_update()
+            .filter(pk=codigo_id)
+            .first()
+        )
 
-        datos["intentos"] = intentos + 1
-        request.session[RESET_SESSION_KEY] = datos
+        if not registro_codigo:
+            resultado = "invalido"
 
-        mensajes_restantes = RESET_MAX_ATTEMPTS - datos["intentos"]
+        elif registro_codigo.is_used:
+            resultado = "usado"
 
+        elif timezone.now() >= registro_codigo.expires_at:
+            resultado = "expirado"
+
+        elif registro_codigo.attempts >= _obtener_max_intentos():
+            resultado = "intentos"
+
+        else:
+            usuario = registro_codigo.user
+
+            if not usuario.is_active:
+                resultado = "invalido"
+
+            else:
+                hash_ingresado = _generar_hash_codigo(
+                    codigo_ingresado
+                )
+
+                codigo_valido = hmac.compare_digest(
+                    hash_ingresado,
+                    registro_codigo.code_hash
+                )
+
+                if not codigo_valido:
+                    registro_codigo.attempts += 1
+                    registro_codigo.save(
+                        update_fields=["attempts"]
+                    )
+
+                    if registro_codigo.attempts >= _obtener_max_intentos():
+                        resultado = "intentos"
+                    else:
+                        resultado = "incorrecto"
+
+                else:
+                    resultado = "correcto"
+
+    if resultado == "expirado":
+        request.session.pop(RESET_SESSION_KEY, None)
         messages.error(
             request,
-            f"Código incorrecto. Intentos restantes: {mensajes_restantes}."
+            "El código expiró. Solicita uno nuevo."
         )
+        return redirect("accounts:recuperar_password")
 
+    if resultado == "usado":
+        request.session.pop(RESET_SESSION_KEY, None)
+        messages.error(
+            request,
+            "Este código ya fue utilizado. Solicita uno nuevo."
+        )
+        return redirect("accounts:recuperar_password")
+
+    if resultado == "intentos":
+        request.session.pop(RESET_SESSION_KEY, None)
+        messages.error(
+            request,
+            "Superaste el máximo de intentos. Solicita un nuevo código."
+        )
+        return redirect("accounts:recuperar_password")
+
+    if resultado != "correcto":
+        messages.error(
+            request,
+            "Código incorrecto. Verifica el código e inténtalo nuevamente."
+        )
         return render(
             request,
             "registration/recover_password.html",
             {
                 "paso": "verificar_codigo",
-                "email": datos["email"],
+                "email": datos.get("email"),
                 "email_enmascarado": _enmascarar_correo(
-                    datos["email"]
+                    datos.get("email", "")
                 ),
             },
         )
 
-    # Código correcto: se autoriza el cambio de contraseña.
+    # La autorización queda asociada a esta sesión.
     datos["verificado"] = True
     request.session[RESET_SESSION_KEY] = datos
 
     return render(
         request,
         "registration/recover_password.html",
-        {
-            "paso": "cambiar_password",
-        },
+        {"paso": "cambiar_password"},
     )
 
 
 def confirmar_password_reset(request):
-    """Paso 3: valida y guarda la nueva contraseña."""
+    """
+    Paso 3: guarda la nueva contraseña y marca el código como utilizado.
+    """
 
     if request.method != "POST":
         return redirect("accounts:recuperar_password")
@@ -665,15 +728,14 @@ def confirmar_password_reset(request):
         )
         return redirect("accounts:recuperar_password")
 
-    # Comprobar que la autorización no haya expirado.
-    if timezone.now().timestamp() > datos.get("expira", 0):
-        request.session.pop(RESET_SESSION_KEY, None)
+    codigo_id = datos.get("codigo_id")
 
+    if not codigo_id:
+        request.session.pop(RESET_SESSION_KEY, None)
         messages.error(
             request,
-            "La autorización expiró. Solicita un nuevo código."
+            "La solicitud de recuperación no es válida."
         )
-
         return redirect("accounts:recuperar_password")
 
     password = request.POST.get("password", "")
@@ -684,37 +746,58 @@ def confirmar_password_reset(request):
             request,
             "Las contraseñas no coinciden."
         )
-
         return render(
             request,
             "registration/recover_password.html",
             {"paso": "cambiar_password"},
         )
 
-    User = get_user_model()
+    resultado = None
 
-    usuario = User.objects.filter(
-        pk=datos.get("user_id"),
-        email__iexact=datos.get("email"),
-        is_active=True,
-    ).first()
+    with transaction.atomic():
 
-    if not usuario:
-        request.session.pop(RESET_SESSION_KEY, None)
-
-        messages.error(
-            request,
-            "No fue posible completar la recuperación."
+        registro_codigo = (
+            PasswordResetCode.objects
+            .select_for_update()
+            .select_related("user")
+            .filter(pk=codigo_id)
+            .first()
         )
 
-        return redirect("accounts:recuperar_password")
+        if not registro_codigo:
+            resultado = "invalido"
 
-    # Aplicar validadores de contraseña configurados en settings.py.
-    try:
-        validate_password(password, usuario)
+        elif registro_codigo.is_used:
+            resultado = "usado"
 
-    except ValidationError as error:
-        for mensaje in error.messages:
+        elif timezone.now() >= registro_codigo.expires_at:
+            resultado = "expirado"
+
+        elif not registro_codigo.user.is_active:
+            resultado = "invalido"
+
+        else:
+            usuario = registro_codigo.user
+
+            try:
+                validate_password(password, usuario)
+
+            except ValidationError as error:
+                resultado = "password_invalida"
+                errores_password = error.messages
+
+            else:
+                usuario.set_password(password)
+                usuario.save(update_fields=["password"])
+
+                # Marcar el código como utilizado.
+                registro_codigo.is_used = True
+                registro_codigo.save(update_fields=["is_used"])
+
+                resultado = "correcto"
+
+    if resultado == "password_invalida":
+        for mensaje in errores_password:
             messages.error(request, mensaje)
 
         return render(
@@ -723,11 +806,23 @@ def confirmar_password_reset(request):
             {"paso": "cambiar_password"},
         )
 
-    # Guardar la contraseña utilizando el mecanismo seguro de Django.
-    usuario.set_password(password)
-    usuario.save(update_fields=["password"])
+    if resultado == "expirado":
+        request.session.pop(RESET_SESSION_KEY, None)
+        messages.error(
+            request,
+            "La autorización expiró. Solicita un nuevo código."
+        )
+        return redirect("accounts:recuperar_password")
 
-    # Eliminar los datos temporales de recuperación.
+    if resultado != "correcto":
+        request.session.pop(RESET_SESSION_KEY, None)
+        messages.error(
+            request,
+            "No fue posible completar la recuperación. Solicita un nuevo código."
+        )
+        return redirect("accounts:recuperar_password")
+
+    # Eliminar los datos temporales de la sesión.
     request.session.pop(RESET_SESSION_KEY, None)
 
     messages.success(
