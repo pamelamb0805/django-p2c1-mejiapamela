@@ -612,64 +612,175 @@
                 {% endif %}
 
             </div>
-
-            <!-- PRODUCTOS POR ZONA -->
-            {% if mostrar_dispositivos %}
-
-            <div class="card border-0 shadow-sm mb-4">
-
-                <div class="card-header eco-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <span>
-                        <i class="bi bi-geo-alt-fill me-2"></i>
-                        Productos por zona
-                    </span>
-
-                    <small class="text-white-50">
-                        Distribución de unidades instaladas
-                    </small>
+        
+            <!-- GRÁFICOS ECOENERGY -->
+            <div class="mb-4">
+                <div class="mb-3">
+                    <h4 class="fw-bold mb-1">
+                        <i class="bi bi-graph-up-arrow text-success me-2"></i>
+                        Monitoreo energético
+                    </h4>
+                    <p class="text-muted small mb-0">
+                        Análisis de consumo, dispositivos, alertas y mantenimiento.
+                    </p>
                 </div>
 
-                <div class="card-body">
-                    <div class="table-responsive">
+                <div class="row g-3">
 
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Zona</th>
-                                    <th class="text-end">Cantidad de productos</th>
-                                </tr>
-                            </thead>
+                    {% if mostrar_mediciones %}
 
-                            <tbody>
-                                {% for zona in productos_por_zona %}
-                                <tr>
-                                    <td>
-                                        <i class="bi bi-pin-map text-success me-2"></i>
-                                        {{ zona.zone__name }}
-                                    </td>
-
-                                    <td class="text-end">
-                                        <span class="badge bg-success-subtle text-success fs-6">
-                                            {{ zona.total }}
-                                        </span>
-                                    </td>
-                                </tr>
-
-                                {% empty %}
-                                <tr>
-                                    <td colspan="2" class="text-center text-muted py-4">
-                                        No existen productos instalados en las zonas disponibles.
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-
+                    <!-- 1. CONSUMO HISTÓRICO -->
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Consumo energético histórico</h6>
+                                <p class="text-muted small">
+                                    Consumo diario registrado en kWh.
+                                </p>
+                                <div class="dashboard-chart-container chart-large">
+                                    <canvas id="chartConsumoHistorico"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- 2. CONSUMO POR DEPARTAMENTO -->
+                    <div class="col-12 col-xl-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Consumo por departamento</h6>
+                                <p class="text-muted small">
+                                    Comparación de consumo energético.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartDepartamento"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. CONSUMO POR ZONA -->
+                    <div class="col-12 col-xl-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Distribución por zona</h6>
+                                <p class="text-muted small">
+                                    Participación del consumo energético.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartZona"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. TOP DISPOSITIVOS -->
+                    <div class="col-12 col-xl-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Dispositivos con mayor consumo</h6>
+                                <p class="text-muted small">
+                                    Los cinco equipos con mayor consumo acumulado.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartTopDispositivos"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. DEMANDA HORARIA -->
+                    <div class="col-12 col-xl-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Demanda energética por hora</h6>
+                                <p class="text-muted small">
+                                    Distribución de las lecturas según hora del día.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartDemanda"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
+
+                    {% if mostrar_dispositivos %}
+                    <!-- 6. ESTADO DE DISPOSITIVOS -->
+                    <div class="col-12 col-xl-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Estado de dispositivos</h6>
+                                <p class="text-muted small">
+                                    Distribución de unidades instaladas.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartEstadoDispositivos"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if mostrar_alertas %}
+                    <!-- 7. ESTADO DE ALERTAS -->
+                    <div class="col-12 col-xl-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Alertas por estado</h6>
+                                <p class="text-muted small">
+                                    Eventos abiertos, reconocidos y resueltos.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartEstadoAlertas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if mostrar_mantenimientos %}
+                    <!-- 8. MANTENIMIENTOS -->
+                    <div class="col-12 col-xl-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Solicitudes de mantenimiento</h6>
+                                <p class="text-muted small">
+                                    Distribución según estado de las solicitudes.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartEstadoMantenimientos"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
                 </div>
             </div>
 
-            {% endif %}
+            <style>
+                .dashboard-chart-container {
+                    position: relative;
+                    width: 100%;
+                    height: 280px;
+                }
+
+                .dashboard-chart-container.chart-large {
+                    height: 330px;
+                }
+
+                @media (max-width: 576px) {
+                    .dashboard-chart-container {
+                        height: 240px;
+                    }
+
+                    .dashboard-chart-container.chart-large {
+                        height: 270px;
+                    }
+                }
+            </style>
 
             <!-- ÚLTIMOS REGISTROS -->
             <div class="card border-0 shadow-sm mb-4">
@@ -818,6 +929,191 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- DATOS DE LOS GRÁFICOS GENERADOS POR DJANGO -->
+{{ charts|json_script:"dashboard-chart-data" }}
+
+<!-- LIBRERÍA CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dataElement = document.getElementById(
+        "dashboard-chart-data"
+    );
+
+    if (!dataElement) return;
+
+    const charts = JSON.parse(dataElement.textContent);
+
+    const palette = [
+        "#087C68",
+        "#16A085",
+        "#58BFA5",
+        "#F0B429",
+        "#3498DB",
+        "#E67E22",
+        "#9B59B6",
+        "#D9534F"
+    ];
+
+    function crearGrafico(id, tipo, datos, etiqueta) {
+
+        const canvas = document.getElementById(id);
+
+        if (!canvas || !datos) return;
+
+        if (!datos.labels || datos.labels.length === 0) {
+            const parent = canvas.parentElement;
+
+            parent.innerHTML = `
+                <div class="h-100 d-flex flex-column
+                            align-items-center justify-content-center
+                            text-muted">
+                    <i class="bi bi-bar-chart fs-2 mb-2"></i>
+                    <span class="small">
+                        No existen datos disponibles para este gráfico.
+                    </span>
+                </div>
+            `;
+
+            return;
+        }
+
+        const circular = tipo === "doughnut";
+
+        new Chart(canvas, {
+            type: tipo,
+
+            data: {
+                labels: datos.labels,
+
+                datasets: [{
+                    label: etiqueta,
+                    data: datos.values,
+
+                    backgroundColor: circular
+                        ? palette
+                        : "rgba(8, 124, 104, 0.18)",
+
+                    borderColor: circular
+                        ? "#ffffff"
+                        : "#087C68",
+
+                    borderWidth: circular ? 2 : 2,
+
+                    borderRadius: tipo === "bar" ? 6 : 0,
+
+                    fill: tipo === "line",
+
+                    tension: 0.35,
+
+                    pointRadius: tipo === "line" ? 4 : 0,
+
+                    pointBackgroundColor: "#087C68"
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        display: circular,
+                        position: "bottom"
+                    },
+
+                    tooltip: {
+                        enabled: true
+                    }
+                },
+
+                scales: circular ? {} : {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: "rgba(0,0,0,0.05)"
+                        }
+                    },
+
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // 1. Consumo histórico
+    crearGrafico(
+        "chartConsumoHistorico",
+        "line",
+        charts.consumo_historico,
+        "Consumo kWh"
+    );
+
+    // 2. Consumo por departamento
+    crearGrafico(
+        "chartDepartamento",
+        "bar",
+        charts.consumo_departamento,
+        "Consumo kWh"
+    );
+
+    // 3. Consumo por zona
+    crearGrafico(
+        "chartZona",
+        "doughnut",
+        charts.consumo_zona,
+        "Consumo kWh"
+    );
+
+    // 4. Dispositivos con mayor consumo
+    crearGrafico(
+        "chartTopDispositivos",
+        "bar",
+        charts.top_dispositivos,
+        "Consumo kWh"
+    );
+
+    // 5. Demanda horaria
+    crearGrafico(
+        "chartDemanda",
+        "line",
+        charts.demanda_horaria,
+        "Consumo kWh"
+    );
+
+    // 6. Estado de dispositivos
+    crearGrafico(
+        "chartEstadoDispositivos",
+        "doughnut",
+        charts.estado_dispositivos,
+        "Dispositivos"
+    );
+
+    // 7. Estado de alertas
+    crearGrafico(
+        "chartEstadoAlertas",
+        "doughnut",
+        charts.estado_alertas,
+        "Alertas"
+    );
+
+    // 8. Estado de mantenimientos
+    crearGrafico(
+        "chartEstadoMantenimientos",
+        "doughnut",
+        charts.estado_mantenimientos,
+        "Mantenimientos"
+    );
+
+});
+</script>
 
 </body>
 </html>
