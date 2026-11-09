@@ -20,6 +20,17 @@ from .models import UserProfile
 from core.pagination import PageSizeMixin
 
 from websocket.mixins import WebSocketCrudEventsMixin
+import hashlib
+import hmac
+import secrets
+
+from datetime import timedelta
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 
 #preentrega eva 3 - PM
 def registro(request):
@@ -331,3 +342,331 @@ def perfil(request):
         form = ProfileAvatarForm(instance=profile)
 
     return render(request, "accounts/perfil.html", {"profile": profile, "form": form})
+
+#Eva3 recuperar contrasenia --> PM
+# ============================================================
+# RECUPERACIÓN DE CONTRASEÑA - ECOENERGY
+# Código temporal de 6 dígitos, con vencimiento y límite
+# de intentos.
+# ============================================================
+
+RESET_SESSION_KEY = "ecoenergy_password_reset"
+RESET_EXPIRATION_MINUTES = 10
+RESET_MAX_ATTEMPTS = 5
+
+
+def _enmascarar_correo(email):
+    """Oculta parte del correo para no mostrarlo completo."""
+    try:
+        usuario, dominio = email.split("@", 1)
+
+        if len(usuario) <= 2:
+            usuario_oculto = usuario[0] + "*"
+        else:
+            usuario_oculto = usuario[:2] + "*" * (len(usuario) - 2)
+
+        return f"{usuario_oculto}@{dominio}"
+
+    except ValueError:
+        return email
+
+
+def _generar_hash_codigo(codigo):
+    """Genera un hash del código usando la SECRET_KEY del proyecto."""
+    contenido = f"{codigo}{settings.SECRET_KEY}"
+    return hashlib.sha256(contenido.encode("utf-8")).hexdigest()
+
+
+def recuperar_password(request):
+    """
+    Paso 1: solicita el correo y envía un código de recuperación.
+    También permite reenviar el código desde el paso de verificación.
+    """
+
+    if request.method == "POST":
+
+        email = request.POST.get("email", "").strip().lower()
+        accion = request.POST.get("accion", "enviar")
+
+        if not email:
+            messages.error(request, "Debes ingresar un correo electrónico.")
+            return render(
+                request,
+                "registration/recover_password.html",
+                {"paso": "ingresar_correo"},
+            )
+
+        User = get_user_model()
+
+        usuario = User.objects.filter(
+            email__iexact=email,
+            is_active=True
+        ).first()
+
+        # Código aleatorio de seis dígitos.
+        codigo = f"{secrets.randbelow(900000) + 100000:06d}"
+
+        # Se guarda la información en la sesión, nunca el código en texto plano.
+        request.session[RESET_SESSION_KEY] = {
+            "email": email,
+            "user_id": usuario.pk if usuario else None,
+            "codigo_hash": _generar_hash_codigo(codigo) if usuario else None,
+            "expira": (
+                timezone.now() + timedelta(
+                    minutes=RESET_EXPIRATION_MINUTES
+                )
+            ).timestamp(),
+            "intentos": 0,
+            "verificado": False,
+        }
+
+        # Solo se envía correo si existe una cuenta activa.
+        if usuario:
+
+            enviado = send_mail(
+                subject="Código de recuperación - EcoEnergy",
+                message=(
+                    f"Hola {usuario.get_username()},\n\n"
+                    f"Tu código de recuperación es: {codigo}\n\n"
+                    f"Este código vence en "
+                    f"{RESET_EXPIRATION_MINUTES} minutos.\n\n"
+                    "Si no solicitaste este cambio, puedes ignorar "
+                    "este correo."
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[usuario.email],
+                fail_silently=False,
+            )
+
+            if not enviado:
+                request.session.pop(RESET_SESSION_KEY, None)
+
+                messages.error(
+                    request,
+                    "No fue posible enviar el correo. Inténtalo nuevamente."
+                )
+
+                return render(
+                    request,
+                    "registration/recover_password.html",
+                    {"paso": "ingresar_correo"},
+                )
+
+        # Se utiliza el mismo mensaje para evitar revelar si existe la cuenta.
+        messages.success(
+            request,
+            "Si el correo está registrado, recibirás un código de recuperación."
+        )
+
+        return render(
+            request,
+            "registration/recover_password.html",
+            {
+                "paso": "verificar_codigo",
+                "email": email,
+                "email_enmascarado": _enmascarar_correo(email),
+            },
+        )
+
+    return render(
+        request,
+        "registration/recover_password.html",
+        {"paso": "ingresar_correo"},
+    )
+
+
+def verificar_codigo_reset(request):
+    """Paso 2: verifica el código temporal enviado al correo."""
+
+    if request.method != "POST":
+        return redirect("accounts:recuperar_password")
+
+    datos = request.session.get(RESET_SESSION_KEY)
+
+    if not datos:
+        messages.error(
+            request,
+            "La solicitud de recuperación expiró. Solicita un nuevo código."
+        )
+        return redirect("accounts:recuperar_password")
+
+    # Verificar vencimiento.
+    if timezone.now().timestamp() > datos.get("expira", 0):
+        request.session.pop(RESET_SESSION_KEY, None)
+
+        messages.error(
+            request,
+            "El código expiró. Solicita uno nuevo."
+        )
+
+        return redirect("accounts:recuperar_password")
+
+    # Verificar cantidad de intentos.
+    intentos = datos.get("intentos", 0)
+
+    if intentos >= RESET_MAX_ATTEMPTS:
+        request.session.pop(RESET_SESSION_KEY, None)
+
+        messages.error(
+            request,
+            "Superaste el máximo de intentos. Solicita un nuevo código."
+        )
+
+        return redirect("accounts:recuperar_password")
+
+    codigo_ingresado = request.POST.get("codigo", "").strip()
+
+    if not codigo_ingresado.isdigit() or len(codigo_ingresado) != 6:
+        datos["intentos"] = intentos + 1
+        request.session[RESET_SESSION_KEY] = datos
+
+        messages.error(
+            request,
+            "Debes ingresar un código válido de 6 dígitos."
+        )
+
+        return render(
+            request,
+            "registration/recover_password.html",
+            {
+                "paso": "verificar_codigo",
+                "email": datos["email"],
+                "email_enmascarado": _enmascarar_correo(
+                    datos["email"]
+                ),
+            },
+        )
+
+    # Comparar el hash del código ingresado.
+    hash_ingresado = _generar_hash_codigo(codigo_ingresado)
+    hash_guardado = datos.get("codigo_hash")
+
+    codigo_valido = (
+        hash_guardado is not None
+        and hmac.compare_digest(hash_ingresado, hash_guardado)
+    )
+
+    # Si no hay cuenta asociada o el código no coincide, se rechaza.
+    if not datos.get("user_id") or not codigo_valido:
+
+        datos["intentos"] = intentos + 1
+        request.session[RESET_SESSION_KEY] = datos
+
+        mensajes_restantes = RESET_MAX_ATTEMPTS - datos["intentos"]
+
+        messages.error(
+            request,
+            f"Código incorrecto. Intentos restantes: {mensajes_restantes}."
+        )
+
+        return render(
+            request,
+            "registration/recover_password.html",
+            {
+                "paso": "verificar_codigo",
+                "email": datos["email"],
+                "email_enmascarado": _enmascarar_correo(
+                    datos["email"]
+                ),
+            },
+        )
+
+    # Código correcto: se autoriza el cambio de contraseña.
+    datos["verificado"] = True
+    request.session[RESET_SESSION_KEY] = datos
+
+    return render(
+        request,
+        "registration/recover_password.html",
+        {
+            "paso": "cambiar_password",
+        },
+    )
+
+
+def confirmar_password_reset(request):
+    """Paso 3: valida y guarda la nueva contraseña."""
+
+    if request.method != "POST":
+        return redirect("accounts:recuperar_password")
+
+    datos = request.session.get(RESET_SESSION_KEY)
+
+    if not datos or not datos.get("verificado"):
+        messages.error(
+            request,
+            "Primero debes verificar el código de recuperación."
+        )
+        return redirect("accounts:recuperar_password")
+
+    # Comprobar que la autorización no haya expirado.
+    if timezone.now().timestamp() > datos.get("expira", 0):
+        request.session.pop(RESET_SESSION_KEY, None)
+
+        messages.error(
+            request,
+            "La autorización expiró. Solicita un nuevo código."
+        )
+
+        return redirect("accounts:recuperar_password")
+
+    password = request.POST.get("password", "")
+    password_confirm = request.POST.get("password_confirm", "")
+
+    if password != password_confirm:
+        messages.error(
+            request,
+            "Las contraseñas no coinciden."
+        )
+
+        return render(
+            request,
+            "registration/recover_password.html",
+            {"paso": "cambiar_password"},
+        )
+
+    User = get_user_model()
+
+    usuario = User.objects.filter(
+        pk=datos.get("user_id"),
+        email__iexact=datos.get("email"),
+        is_active=True,
+    ).first()
+
+    if not usuario:
+        request.session.pop(RESET_SESSION_KEY, None)
+
+        messages.error(
+            request,
+            "No fue posible completar la recuperación."
+        )
+
+        return redirect("accounts:recuperar_password")
+
+    # Aplicar validadores de contraseña configurados en settings.py.
+    try:
+        validate_password(password, usuario)
+
+    except ValidationError as error:
+        for mensaje in error.messages:
+            messages.error(request, mensaje)
+
+        return render(
+            request,
+            "registration/recover_password.html",
+            {"paso": "cambiar_password"},
+        )
+
+    # Guardar la contraseña utilizando el mecanismo seguro de Django.
+    usuario.set_password(password)
+    usuario.save(update_fields=["password"])
+
+    # Eliminar los datos temporales de recuperación.
+    request.session.pop(RESET_SESSION_KEY, None)
+
+    messages.success(
+        request,
+        "Tu contraseña fue actualizada correctamente. Ya puedes iniciar sesión."
+    )
+
+    return redirect("login")
