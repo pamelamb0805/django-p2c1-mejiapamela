@@ -1,8 +1,9 @@
-
+from core.models import ActivityLog
 from websocket.services import publish_crud_event
 
 
 class WebSocketCrudEventsMixin:
+
     crud_module = "registros"
     crud_action = None
 
@@ -10,9 +11,10 @@ class WebSocketCrudEventsMixin:
         """
         Obtiene la organización propietaria del registro.
 
-        La organización puede estar relacionada directamente
-        o mediante un dispositivo y su zona.
+        Considera relaciones directas y relaciones mediante
+        departamento, zona o dispositivo.
         """
+
         obj = getattr(self, "object", None)
 
         if obj is None:
@@ -22,35 +24,43 @@ class WebSocketCrudEventsMixin:
         if self.crud_module == "organizaciones":
             return obj.pk
 
-        # Relaciones directas con organización.
-        organization_id = getattr(obj, "organization_id", None)
+        # Relación directa con organización.
+        organization_id = getattr(
+            obj,
+            "organization_id",
+            None
+        )
 
         if organization_id:
             return organization_id
 
-        # Registros relacionados directamente con una zona.
+        # Relación mediante zona.
         zone = getattr(obj, "zone", None)
 
         if zone is not None:
-            organization_id = getattr(zone, "organization_id", None)
+            organization_id = getattr(
+                zone,
+                "organization_id",
+                None
+            )
 
             if organization_id:
                 return organization_id
 
-        # Registros relacionados con un departamento.
+        # Relación mediante departamento.
         department = getattr(obj, "department", None)
 
         if department is not None:
             organization_id = getattr(
                 department,
                 "organization_id",
-                None,
+                None
             )
 
             if organization_id:
                 return organization_id
 
-        # Mediciones y alertas: dispositivo -> zona -> organización.
+        # Relación mediante dispositivo.
         device = getattr(obj, "device", None)
 
         if device is not None:
@@ -60,31 +70,88 @@ class WebSocketCrudEventsMixin:
                 organization_id = getattr(
                     device_zone,
                     "organization_id",
-                    None,
+                    None
                 )
 
                 if organization_id:
                     return organization_id
 
-        # Los registros globales, como categorías y productos,
-        # no se difunden a todas las organizaciones.
+        # Los catálogos y productos globales no tienen organización.
         return None
 
-    def publish_crud_notification(self, action=None):
+    def save_crud_activity(self, action=None):
+        """
+        Guarda una operación CRUD en la bitácora permanente.
+        """
+
         obj = getattr(self, "object", None)
 
         if obj is None:
             return
 
-        publish_crud_event(
-            module=self.crud_module,
-            action=action or self.crud_action or "actualizado",
-            actor_id=self.request.user.pk,
-            organization_id=self.get_crud_organization_id(),
+        action = (
+            action
+            or self.crud_action
+            or "actualizado"
         )
 
+        user = self.request.user
+
+        organization_id = self.get_crud_organization_id()
+
+        ActivityLog.objects.create(
+            actor=user,
+            actor_name=(
+                user.get_full_name()
+                or user.username
+            ),
+            organization_id=organization_id,
+            module=self.crud_module,
+            action=action,
+            object_type=str(
+                obj._meta.verbose_name
+            ),
+            object_label=str(obj)[:255],
+            object_pk=str(obj.pk),
+        )
+
+    def publish_crud_notification(self, action=None):
+        """
+        Guarda la actividad y después publica la notificación WebSocket.
+        """
+
+        obj = getattr(self, "object", None)
+
+        if obj is None:
+            return
+
+        action = (
+            action
+            or self.crud_action
+            or "actualizado"
+        )
+
+        organization_id = self.get_crud_organization_id()
+
+        # 1. Guardar permanentemente la operación.
+        self.save_crud_activity(action)
+
+        # 2. Mantener el comportamiento WebSocket existente.
+        # Los registros globales no se envían a grupos de organizaciones.
+        if organization_id:
+            publish_crud_event(
+                module=self.crud_module,
+                action=action,
+                actor_id=self.request.user.pk,
+                organization_id=organization_id,
+            )
+
     def form_valid(self, form):
-        # Identificar la acción antes de guardar.
+        """
+        Registra automáticamente las creaciones y modificaciones
+        después de guardar correctamente el formulario.
+        """
+
         action = self.crud_action
 
         if action is None:
@@ -96,7 +163,6 @@ class WebSocketCrudEventsMixin:
 
         response = super().form_valid(form)
 
-        # Publicar después de guardar correctamente.
         if response.status_code < 400:
             self.publish_crud_notification(action)
 

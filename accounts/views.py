@@ -19,6 +19,8 @@ from .forms import ProfileAvatarForm, UserProfileForm
 from .models import UserProfile
 from core.pagination import PageSizeMixin
 
+from websocket.mixins import WebSocketCrudEventsMixin
+
 #preentrega eva 3 - PM
 def registro(request):
     if request.method == 'POST':
@@ -190,43 +192,121 @@ class UserProfileCreateView(UserProfileAccessMixin, SuccessMessageMixin, UserPro
 
 
 # Editar (UpdateView): exige change_userprofile y reutiliza el mismo UserProfileForm.
-class UserProfileUpdateView(UserProfileAccessMixin, SuccessMessageMixin, UserProfileFormPageMixin, UpdateView):
-    permission_required = ("accounts.view_userprofile", "accounts.change_userprofile")
+# Crear usuario y perfil.
+class UserProfileCreateView(
+    WebSocketCrudEventsMixin,
+    UserProfileAccessMixin,
+    SuccessMessageMixin,
+    UserProfileFormPageMixin,
+    CreateView
+):
+    crud_module = "usuarios"
+    crud_action = "creado"
+
+    permission_required = (
+        "accounts.view_userprofile",
+        "accounts.add_userprofile"
+    )
+
     model = UserProfile
     form_class = UserProfileForm
     template_name = "accounts/user_list.html"
+
     success_url = reverse_lazy("accounts:user_list")
-    success_message = "Usuario y perfil actualizados correctamente."
+
+    success_message = (
+        "Usuario y perfil creados correctamente."
+    )
 
 
-# Eliminar (DeleteView): exige delete_userprofile y recibe un POST con CSRF desde SweetAlert2.
-class UserProfileDeleteView(UserProfileAccessMixin, DeleteView):
-    permission_required = "accounts.delete_userprofile"
+# Modificar usuario y perfil.
+class UserProfileUpdateView(
+    WebSocketCrudEventsMixin,
+    UserProfileAccessMixin,
+    SuccessMessageMixin,
+    UserProfileFormPageMixin,
+    UpdateView
+):
+    crud_module = "usuarios"
+    crud_action = "actualizado"
+
+    permission_required = (
+        "accounts.view_userprofile",
+        "accounts.change_userprofile"
+    )
+
     model = UserProfile
-    http_method_names = ["post"]  # solo POST: la confirmación la hace SweetAlert2
+    form_class = UserProfileForm
+    template_name = "accounts/user_list.html"
+
     success_url = reverse_lazy("accounts:user_list")
 
-    # Borrado lógico del perfil y desactivación de la cuenta (is_active=False) para que
-    # la persona ya no pueda iniciar sesión. Nadie puede eliminar su propio perfil.
+    success_message = (
+        "Usuario y perfil actualizados correctamente."
+    )
+
+
+# Eliminar usuario y perfil.
+class UserProfileDeleteView(
+    WebSocketCrudEventsMixin,
+    UserProfileAccessMixin,
+    DeleteView
+):
+    crud_module = "usuarios"
+    crud_action = "eliminado"
+
+    permission_required = "accounts.delete_userprofile"
+
+    model = UserProfile
+    http_method_names = ["post"]
+
+    success_url = reverse_lazy("accounts:user_list")
+
     def form_valid(self, form):
+
         self.object = self.get_object()
 
+        # Evitar que el usuario elimine su propio perfil.
         if self.object.user_id == self.request.user.id:
-            messages.error(self.request, "No puedes eliminar tu propio perfil.")
-            return HttpResponseRedirect(self.get_success_url())
 
+            messages.error(
+                self.request,
+                "No puedes eliminar tu propio perfil."
+            )
+
+            return HttpResponseRedirect(
+                self.get_success_url()
+            )
+
+        # Guardar el perfil antes de desactivar la cuenta.
         self.object.deleted_at = timezone.now()
-        self.object.save(update_fields=["deleted_at", "updated_at"])
+
+        self.object.save(
+            update_fields=[
+                "deleted_at",
+                "updated_at"
+            ]
+        )
 
         cuenta = self.object.user
+
         cuenta.is_active = False
-        cuenta.save(update_fields=["is_active"])
+
+        cuenta.save(
+            update_fields=["is_active"]
+        )
+
+        # Registrar la eliminación en la bitácora.
+        self.publish_crud_notification("eliminado")
 
         messages.success(
-            self.request, "Perfil eliminado y acceso de la cuenta desactivado correctamente."
+            self.request,
+            "Perfil eliminado y acceso de la cuenta desactivado correctamente."
         )
-        return HttpResponseRedirect(self.get_success_url())
 
+        return HttpResponseRedirect(
+            self.get_success_url()
+        )
 
 # ==========================================
 # Perfil de usuario con foto (Clase 9) --> PM
