@@ -315,6 +315,7 @@ def dashboard(request):
         # 5. Consumo agrupado por hora.
         por_hora = (
             mediciones
+            .filter(datetime__isnull=False)
             .annotate(hora=ExtractHour("datetime"))
             .values("hora")
             .annotate(total=Sum("value"))
@@ -324,6 +325,8 @@ def dashboard(request):
         charts["demanda_horaria"] = {
             "labels": [
                 f"{row['hora']:02d}:00"
+                if row["hora"] is not None
+                else "Sin hora"
                 for row in por_hora
             ],
             "values": [
