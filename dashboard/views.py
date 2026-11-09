@@ -235,6 +235,7 @@ def dashboard(request):
         # 1. Consumo histórico por día: últimos 14 días con lecturas.
         historico = (
             mediciones
+            .filter(datetime__isnull=False)
             .annotate(dia=TruncDate("datetime"))
             .values("dia")
             .annotate(total=Sum("value"))
@@ -245,7 +246,7 @@ def dashboard(request):
 
         charts["consumo_historico"] = {
             "labels": [
-                row["dia"].strftime("%d/%m")
+                row["dia"].strftime("%d/%m") if row["dia"] else "Sin fecha"
                 for row in historico
             ],
             "values": [
