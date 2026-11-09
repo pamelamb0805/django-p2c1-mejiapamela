@@ -6,6 +6,10 @@ from organizations.models import Zone
 from .models import Catalog, Product, Device, Measurement, History, AlertEvent, AlertRule, MaintenanceRequest
 from core.validators import FormLimitsMixin
 
+ACTIVE_INACTIVE_CHOICES = [
+    ("activo", "Activo"),
+    ("inactivo", "Inactivo"),
+]
 class ArchiveDevicesForm(forms.Form):
     """Valida que los dispositivos elegidos pertenezcan al ámbito del usuario."""
 
@@ -23,6 +27,12 @@ class ArchiveDevicesForm(forms.Form):
 # ModelForm de Device: se reutiliza para Crear y Editar. Define campos, widgets Bootstrap y validaciones.
 # Clase 8 - Alexander
 class DeviceForm(FormLimitsMixin,forms.ModelForm):
+        status = forms.ChoiceField(
+        choices=ACTIVE_INACTIVE_CHOICES,
+        initial="activo",
+        label="Estado",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
     class Meta:
         model = Device
         fields = [
@@ -41,7 +51,6 @@ class DeviceForm(FormLimitsMixin,forms.ModelForm):
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
             "reference_power": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
             "serial_number": forms.TextInput(attrs={"class": "form-control"}),
-            "status": forms.TextInput(attrs={"class": "form-control"}),
             "product": forms.Select(attrs={"class": "form-select"}),
             "zone": forms.Select(attrs={"class": "form-select"}),
         }
@@ -129,6 +138,12 @@ class DeviceForm(FormLimitsMixin,forms.ModelForm):
 #clases formulario categoria y producto - preentrega eva3 --> PM 
 # ModelForm de Categoría (modelo Catalog): se reutiliza para Crear y Editar.
 class CategoryForm(FormLimitsMixin,forms.ModelForm):
+        status = forms.ChoiceField(
+        choices=ACTIVE_INACTIVE_CHOICES,
+        initial="activo",
+        label="Estado",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
     class Meta:
         model = Catalog
         fields = ["catalog_id", "name", "description", "status"]
@@ -136,7 +151,6 @@ class CategoryForm(FormLimitsMixin,forms.ModelForm):
             "catalog_id": forms.TextInput(attrs={"class": "form-control"}),
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
-            "status": forms.TextInput(attrs={"class": "form-control"}),
         }
 
     def clean_name(self):
@@ -274,6 +288,12 @@ class MeasurementForm(FormLimitsMixin,forms.ModelForm):
     
 #preentrega eva3 - PM Formulario Catalogo
 class CatalogForm(FormLimitsMixin,forms.ModelForm):
+        status = forms.ChoiceField(
+        choices=ACTIVE_INACTIVE_CHOICES,
+        initial="activo",
+        label="Estado",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
     class Meta:
         model = Catalog
         fields = ["catalog_id", "name", "description", "status"]
@@ -281,7 +301,6 @@ class CatalogForm(FormLimitsMixin,forms.ModelForm):
             "catalog_id": forms.TextInput(attrs={"class": "form-control"}),
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
-            "status": forms.TextInput(attrs={"class": "form-control"}),
         }
 
 #preentrega eva3 - PM Formulario Alertas

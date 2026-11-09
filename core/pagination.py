@@ -41,9 +41,9 @@ class PageSizeMixin:
 
     def apply_ordering(self, queryset, alphabetical_field):
         """
-        Ordena el queryset según el parámetro GET 'orden'.
-        El orden predeterminado es por fecha de creación descendente.
+        Ordenamiento compartido para los mantenedores.
         """
+
         orden = get_order_option(self.request)
 
         if orden == "antiguo":
@@ -55,17 +55,18 @@ class PageSizeMixin:
         if orden == "numerico":
             return queryset.order_by("pk")
 
+        # Predeterminado: más nuevo a más antiguo.
         return queryset.order_by("-created_at", "-pk")
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
 
-        context["page_size"] = get_page_size(
-            self.request,
-            self.page_size_session_key,
-        )
-        context["page_size_options"] = PAGE_SIZE_OPTIONS
-        context["orden_seleccionado"] = get_order_option(self.request)
-        context["orden_options"] = ORDER_OPTIONS
+            context["page_size"] = get_page_size(
+                self.request,
+                self.page_size_session_key,
+            )
+            context["page_size_options"] = PAGE_SIZE_OPTIONS
+            context["orden_seleccionado"] = get_order_option(self.request)
+            context["orden_options"] = ORDER_OPTIONS
 
-        return context
+            return context
