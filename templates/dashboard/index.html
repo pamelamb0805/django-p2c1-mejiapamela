@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
@@ -7,44 +8,162 @@
 
     <title>Dashboard - EcoEnergy</title>
 
-    <!-- Bootstrap 5.3.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-
-    <!-- Estilos EcoEnergy -->
     <link href="{% static 'css/ecoenergy.css' %}" rel="stylesheet">
+
+    <style>
+        .eco-profile-dropdown {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .eco-profile-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            text-decoration: none;
+            padding: 7px 10px;
+            border-radius: 8px;
+        }
+
+        .eco-profile-trigger:hover {
+            color: #fff;
+            background: rgba(255,255,255,.12);
+        }
+
+        .eco-profile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            min-width: 180px;
+            padding: 7px;
+            background: #034159;
+            border-radius: 9px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.2);
+            z-index: 1050;
+        }
+
+        .eco-profile-dropdown:hover .eco-profile-menu,
+        .eco-profile-dropdown:focus-within .eco-profile-menu {
+            display: block;
+        }
+
+        .eco-profile-menu form {
+            margin: 0;
+        }
+
+        .eco-profile-menu-button {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            color: #fff;
+            text-align: left;
+            padding: 10px;
+            border-radius: 7px;
+        }
+
+        .eco-profile-menu-button:hover {
+            background: rgba(255,255,255,.13);
+        }
+
+        .eco-sidebar {
+            min-height: calc(100vh - 56px);
+            background: #002b27;
+        }
+
+        .eco-sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            padding: 12px 14px;
+            border-radius: 10px;
+            transition: background .2s ease;
+        }
+
+        .eco-sidebar .nav-link:hover {
+            background: rgba(0, 180, 145, .25);
+            color: #fff;
+        }
+
+        .eco-sidebar .nav-link.active {
+            background: #087c68;
+            color: #fff;
+        }
+
+        .eco-sidebar .nav-link i {
+            width: 22px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-section {
+            color: #a9d9ce;
+            font-size: .75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            margin: 20px 0 8px;
+            padding-left: 12px;
+        }
+
+        @media (max-width: 767.98px) {
+            .eco-sidebar {
+                min-height: auto;
+            }
+
+            .eco-profile-menu {
+                display: block;
+                position: static;
+                margin-top: 5px;
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-light">
 
-<!-- Navbar -->
+<!-- BARRA SUPERIOR -->
 <nav class="navbar navbar-expand-lg navbar-dark eco-navbar shadow">
     <div class="container-fluid">
 
-        <a class="navbar-brand eco-brand" href="{% url 'dashboard:dashboard' %}">
+        <a class="navbar-brand eco-brand" href="{% url 'home' %}">
             {% include "_brand.html" %}
             <span class="eco-brand-text">Mi Panel</span>
         </a>
 
         <div class="d-flex align-items-center gap-3">
+
             <span class="text-white d-none d-md-inline">
                 <i class="bi bi-person-circle me-1"></i>
                 {{ request.user.first_name|default:request.user.username }}
             </span>
 
-            {# Perfil de usuario con foto (Clase 9) --> PM: acceso a "Mi perfil" #}
-            <a href="{% url 'accounts:perfil' %}" class="btn btn-outline-light btn-sm">
-                <i class="bi bi-person-lines-fill me-1"></i>
-                Mi perfil
-            </a>
+            <div class="eco-profile-dropdown">
 
-            <!-- Ruta nombrada de cierre de sesión (logout) -->
-            <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">
-                <i class="bi bi-box-arrow-right me-1"></i>
-                Cerrar sesión
-            </a>
+                <a href="{% url 'accounts:perfil' %}"
+                   class="eco-profile-trigger"
+                   title="Mi perfil">
+                    <i class="bi bi-person-lines-fill"></i>
+                    <span>Mi perfil</span>
+                    <i class="bi bi-chevron-down small"></i>
+                </a>
+
+                <div class="eco-profile-menu">
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="eco-profile-menu-button">
+                            <i class="bi bi-box-arrow-right me-2"></i>
+                            Cerrar sesión
+                        </button>
+                    </form>
+                </div>
+
+            </div>
         </div>
     </div>
 </nav>
@@ -52,8 +171,8 @@
 <div class="container-fluid">
     <div class="row">
 
-        <!-- Sidebar -->
-        <aside class="col-md-2 eco-sidebar text-white p-3">
+        <!-- BARRA LATERAL -->
+        <aside class="col-md-3 col-lg-2 eco-sidebar text-white p-3">
 
             <div class="sidebar-heading mb-4">
                 <div class="d-flex align-items-center gap-2">
@@ -65,85 +184,170 @@
 
             <ul class="nav flex-column gap-1">
 
+                <!-- INICIO: visible para todos los usuarios autenticados -->
                 <li class="nav-item">
-                    <a class="nav-link text-white active" href="{% url 'dashboard:dashboard' %}">
-                        <i class="bi bi-house-door-fill me-2"></i>
+                    <a class="nav-link active" href="{% url 'dashboard:dashboard' %}">
+                        <i class="bi bi-house-door-fill"></i>
                         Inicio
                     </a>
                 </li>
 
-                {% if es_administrador %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'accounts:user_list' %}">
-                        <i class="bi bi-people-fill me-2"></i>
-                        Usuarios
-                    </a>
-                </li>
+                <!-- 1. ADMINISTRADOR DE PLATAFORMA -->
+                {% if user.is_superuser %}
+                    <li class="sidebar-section">Administración de plataforma</li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">
+                            <i class="bi bi-shield-lock-fill"></i>
+                            Panel de administración
+                        </a>
+                    </li>
                 {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'organizations:organization_list' %}">
-                        <i class="bi bi-buildings-fill me-2"></i>
-                        Organizaciones
-                    </a>
-                </li>
+                {% if perms.organizations.view_organization %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'organizations:organization_list' %}">
+                            <i class="bi bi-buildings-fill"></i>
+                            Organizaciones cliente
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'organizations:zone_list' %}">
-                        <i class="bi bi-geo-alt-fill me-2"></i>
-                        Zonas
-                    </a>
-                </li>
+                {% if perms.devices.view_catalog %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:category_list' %}">
+                            <i class="bi bi-journal-bookmark-fill"></i>
+                            Catálogo global
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'devices:device_list' %}">
-                        <i class="bi bi-cpu-fill me-2"></i>
-                        Dispositivos
-                    </a>
-                </li>
+                {% if perms.devices.view_product %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:product_list' %}">
+                            <i class="bi bi-box-seam-fill"></i>
+                            Productos
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'devices:maintenance_list' %}">
-                        <i class="bi bi-tools me-2"></i>
-                        Mantenimiento
-                    </a>
-                </li>
+                <!-- 2. ADMINISTRADOR DE ORGANIZACIÓN -->
+                {% if perms.accounts.view_userprofile or perms.organizations.view_department or perms.organizations.view_zone %}
+                    <li class="sidebar-section">Gestión de organización</li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'devices:measurement_list' %}">
-                        <i class="bi bi-speedometer2 me-2"></i>
-                        Mediciones
-                    </a>
-                </li>
+                {% if perms.accounts.view_userprofile %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:user_list' %}">
+                            <i class="bi bi-people-fill"></i>
+                            Usuarios y perfiles
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'devices:alert_list' %}">
-                        <i class="bi bi-bell-fill me-2"></i>
-                        Alertas
-                    </a>
-                </li>
+                {% if perms.organizations.view_department %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'organizations:department_list' %}">
+                            <i class="bi bi-diagram-3-fill"></i>
+                            Departamentos
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">
-                        <i class="bi bi-bar-chart-fill me-2"></i>
-                        Reportes
-                    </a>
-                </li>
+                {% if perms.organizations.view_zone %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'organizations:zone_list' %}">
+                            <i class="bi bi-pin-map-fill"></i>
+                            Zonas físicas
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">
-                        <i class="bi bi-gear-fill me-2"></i>
-                        Configuración
-                    </a>
-                </li>
+                <!-- 3. JEFATURA DE DEPARTAMENTO -->
+                {% if perms.devices.view_measurement or perms.devices.view_maintenancerequest %}
+                    <li class="sidebar-section">Supervisión</li>
+                {% endif %}
+
+                {% if perms.devices.view_measurement %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard:indicators' %}">
+                            <i class="bi bi-bar-chart-fill"></i>
+                            Indicadores de consumo
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if perms.devices.view_maintenancerequest %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:maintenance_list' %}">
+                            <i class="bi bi-tools"></i>
+                            Mantenimiento
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- 4. OPERADOR -->
+                {% if perms.devices.view_device or perms.devices.view_measurement or perms.devices.view_alertevent %}
+                    <li class="sidebar-section">Operación diaria</li>
+                {% endif %}
+
+                {% if perms.devices.view_device %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:device_list' %}">
+                            <i class="bi bi-cpu-fill"></i>
+                            Dispositivos
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if perms.devices.view_measurement %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:measurement_list' %}">
+                            <i class="bi bi-speedometer2"></i>
+                            Mediciones
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if perms.devices.view_alertevent %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:alert_list' %}">
+                            <i class="bi bi-bell-fill"></i>
+                            Alertas
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- 5. AUDITOR / LECTOR -->
+                {% if perms.organizations.view_zone or perms.devices.view_history %}
+                    <li class="sidebar-section">Consulta y auditoría</li>
+                {% endif %}
+
+                {% if perms.organizations.view_zone %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:zone_list' %}">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            Zonas
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if perms.devices.view_history %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:history_list' %}">
+                            <i class="bi bi-clock-history"></i>
+                            Historial
+                        </a>
+                    </li>
+                {% endif %}
 
             </ul>
         </aside>
 
-        <!-- Contenido -->
-        <main class="col-md-10 p-4 eco-dashboard-content">
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="col-md-9 col-lg-10 p-4 eco-dashboard-content">
 
-            <!-- Encabezado usuario -->
+            <!-- BIENVENIDA -->
             <div class="card shadow-sm mb-4 border-0">
                 <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
 
@@ -153,7 +357,8 @@
                         </span>
 
                         <h4 class="mb-1 mt-1">
-                            Bienvenido, {{ request.user.first_name|default:request.user.username }}
+                            Bienvenido,
+                            {{ request.user.first_name|default:request.user.username }}
                         </h4>
 
                         <small class="text-muted">
@@ -163,7 +368,6 @@
 
                     <div class="d-flex align-items-center gap-3">
 
-                        {# Clase 9 --> PM: si el usuario subió una foto de perfil se muestra aquí; si no, queda lo de antes. #}
                         {% if request.user.profile.avatar %}
                             <a href="{% url 'accounts:perfil' %}" title="Mi perfil">
                                 <img src="{{ request.user.profile.avatar.url }}"
@@ -189,152 +393,11 @@
                                  style="object-fit:cover;">
                         {% endif %}
 
-                        {% if es_administrador %}
-                            <a href="{% url 'accounts:user_list' %}" class="btn btn-primary">
-                                <i class="bi bi-person-gear me-1"></i>
-                                Gestionar usuarios
-                            </a>
-                        {% endif %}
-
                     </div>
                 </div>
             </div>
 
-            {# ------------------------------------------------------------------ #}
-            {# Tarjetas según permisos, en orden de rol:                          #}
-            {# 1 Administrador de plataforma · 2 Administrador de organización ·   #}
-            {# 3 Jefatura · 4 Operador · 5 Auditor / lector                       #}
-            {# ------------------------------------------------------------------ #}
-
-            {# 1 · ADMINISTRADOR DE PLATAFORMA (solo superusuario) #}
-            {% if user.is_superuser %}
-
-            <h2 class="h5 mt-4 mb-3 section-title">
-                <i class="bi bi-shield-lock-fill me-2"></i>
-                Administración de la plataforma
-            </h2>
-
-            <div class="row g-3 mb-4">
-
-                {% url 'admin:index' as admin_url %}
-                {% include "dashboard/_card.html" with icon="bi-shield-lock-fill" title="Panel de administración" text="Django Admin: usuarios, grupos y permisos." url=admin_url %}
-
-                {% if perms.organizations.view_organization %}
-                    {% url 'organizations:organization_list' as organizations_url %}
-                    {% include "dashboard/_card.html" with icon="bi-buildings-fill" title="Organizaciones cliente" text="Empresas cliente y su estado." url=organizations_url %}
-                {% endif %}
-
-                {% if perms.devices.view_catalog %}
-                    {% url 'devices:category_list' as catalog_url %}
-                    {% include "dashboard/_card.html" with icon="bi-journal-bookmark-fill" title="Catálogo global" text="Categorías de equipos energéticos del catálogo global." url=catalog_url %}
-                {% endif %}
-
-                {% if perms.devices.view_product %}
-                    {% url 'devices:product_list' as products_url %}
-                    {% include "dashboard/_card.html" with icon="bi-box-seam-fill" title="Productos" text="Productos del catálogo global por categoría." url=products_url %}
-                {% endif %}
-
-            </div>
-            {% endif %}
-
-            {# 2 · ADMINISTRADOR DE ORGANIZACIÓN #}
-            {% if perms.accounts.view_userprofile or perms.organizations.view_department or perms.organizations.view_zone %}
-
-            <h2 class="h5 mt-4 mb-3 section-title">
-                <i class="bi bi-buildings me-2"></i>
-                Gestión de la organización
-            </h2>
-
-            <div class="row g-3 mb-4">
-
-                {% if perms.accounts.view_userprofile %}
-                    {% url 'accounts:user_list' as users_url %}
-                    {% include "dashboard/_card.html" with icon="bi-people-fill" title="Usuarios y perfiles" text="Personas de tu organización y sus roles." url=users_url %}
-                {% endif %}
-
-                {% if perms.organizations.view_department %}
-                    {% url 'organizations:department_list' as departments_url %}
-                    {% include "dashboard/_card.html" with icon="bi-diagram-3-fill" title="Departamentos" text="Unidades internas y jefaturas." url=departments_url %}
-                {% endif %}
-
-                {% if perms.organizations.view_zone %}
-                    {% url 'organizations:zone_list' as physical_zones_url %}
-                    {% include "dashboard/_card.html" with icon="bi-pin-map-fill" title="Zonas físicas" text="Salas, bodegas y oficinas." url=physical_zones_url %}
-                {% endif %}
-
-            </div>
-            {% endif %}
-
-            {# 3 · JEFATURA DE DEPARTAMENTO #}
-            {% if perms.devices.view_maintenancerequest or perms.devices.view_measurement %}
-
-            <h2 class="h5 mt-4 mb-3 section-title">
-                <i class="bi bi-clipboard-data me-2"></i>
-                Supervisión
-            </h2>
-
-            <div class="row g-3 mb-4">
-
-                {% if perms.devices.view_measurement %}
-                    {% url 'dashboard:indicators' as indicators_url %}
-                    {% include "dashboard/_card.html" with icon="bi-bar-chart-fill" title="Indicadores de consumo" text="Consumo por período, departamento y zona." url=indicators_url %}
-                {% endif %}
-
-                {% if perms.devices.view_maintenancerequest %}
-                    {% url 'devices:maintenance_list' as maintenance_url %}
-                    {% include "dashboard/_card.html" with icon="bi-tools" title="Mantenimiento" text="Solicitudes preventivas y correctivas." url=maintenance_url %}
-                {% endif %}
-
-            </div>
-            {% endif %}
-
-            {# 4 · OPERADOR #}
-            {% if perms.devices.view_device or perms.devices.view_measurement or perms.devices.add_measurement or perms.devices.view_alertevent %}
-
-            <h2 class="h5 mt-4 mb-3 section-title">
-                <i class="bi bi-activity me-2"></i>
-                Operación diaria
-            </h2>
-
-            <div class="row g-3 mb-4">
-
-                {% if perms.devices.view_device %}
-                    {% url 'devices:device_list' as devices_url %}
-                    {% include "dashboard/_card.html" with icon="bi-cpu-fill" title="Dispositivos" text="Equipos instalados en tu organización." url=devices_url %}
-                {% endif %}
-
-                {% if perms.devices.view_measurement %}
-                    {% url 'devices:measurement_list' as measurements_url %}
-                    {% include "dashboard/_card.html" with icon="bi-speedometer2" title="Mediciones" text="Lecturas por dispositivo y período." url=measurements_url %}
-                {% endif %}
-
-                {% if perms.devices.view_alertevent %}
-                    {% url 'devices:alert_list' as alerts_url %}
-                    {% include "dashboard/_card.html" with icon="bi-bell-fill" title="Alertas" text="Eventos fuera de rango y su atención." url=alerts_url %}
-                {% endif %}
-
-            </div>
-            {% endif %}
-
-            {# 5 · AUDITOR / LECTOR #}
-            <h2 class="h5 mt-4 mb-3 section-title">
-                <i class="bi bi-search me-2"></i>
-                Consulta y auditoría
-            </h2>
-
-            <div class="row g-3 mb-4">
-
-                {% url 'devices:zone_list' as zones_url %}
-                {% include "dashboard/_card.html" with icon="bi-geo-alt-fill" title="Zonas" text="Consumo por zona y estado." url=zones_url %}
-
-                {% if perms.devices.view_history %}
-                    {% url 'devices:history_list' as history_url %}
-                    {% include "dashboard/_card.html" with icon="bi-clock-history" title="Historial" text="Cambios y trazabilidad de los registros." url=history_url %}
-                {% endif %}
-
-            </div>
-
-            <!-- Tabla de últimos registros -->
+            <!-- ÚLTIMOS REGISTROS -->
             <div class="card shadow-sm border-0 mt-4">
 
                 <div class="card-header eco-card-header d-flex align-items-center gap-2">
@@ -350,7 +413,7 @@
                             <thead>
                                 <tr>
                                     {% if es_administrador %}
-                                    <th>Foto</th>
+                                        <th>Foto</th>
                                     {% endif %}
                                     <th>ID</th>
                                     <th>Nombre</th>
@@ -360,43 +423,48 @@
                             </thead>
 
                             <tbody>
-                                <!-- Iteramos sobre la lista de usuarios enviada desde la vista -->
                                 {% for usuario in usuarios %}
-                                <tr>
+                                    <tr>
 
-                                    {% if es_administrador %}
-                                    <td>
-                                        {% if usuario.foto %}
-                                            <img src="{% static 'img/' %}{{ usuario.foto }}"
-                                                 alt="Foto"
-                                                 class="rounded-circle"
-                                                 width="40"
-                                                 height="40"
-                                                 style="object-fit:cover">
-                                        {% else %}
-                                            <img src="{% static 'img/default.png' %}"
-                                                 alt="Foto"
-                                                 class="rounded-circle"
-                                                 width="40"
-                                                 height="40"
-                                                 style="object-fit:cover">
+                                        {% if es_administrador %}
+                                            <td>
+                                                {% if usuario.foto %}
+                                                    <img src="{% static 'img/' %}{{ usuario.foto }}"
+                                                         alt="Foto"
+                                                         class="rounded-circle"
+                                                         width="40"
+                                                         height="40"
+                                                         style="object-fit:cover">
+                                                {% else %}
+                                                    <img src="{% static 'img/default.png' %}"
+                                                         alt="Foto"
+                                                         class="rounded-circle"
+                                                         width="40"
+                                                         height="40"
+                                                         style="object-fit:cover">
+                                                {% endif %}
+                                            </td>
                                         {% endif %}
-                                    </td>
-                                    {% endif %}
 
-                                    <td>{{ usuario.id }}</td>
-                                    <td>{{ usuario.nombre }}</td>
-                                    <td>{{ usuario.email }}</td>
+                                        <td>{{ usuario.id }}</td>
+                                        <td>{{ usuario.nombre }}</td>
+                                        <td>{{ usuario.email }}</td>
 
-                                    <td>
-                                        {% if usuario.estado == '1' or usuario.estado == True %}
-                                            <span class="badge bg-success">Activo</span>
-                                        {% else %}
-                                            <span class="badge bg-danger">Inactivo</span>
-                                        {% endif %}
-                                    </td>
+                                        <td>
+                                            {% if usuario.estado == '1' or usuario.estado == True %}
+                                                <span class="badge bg-success">Activo</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Inactivo</span>
+                                            {% endif %}
+                                        </td>
 
-                                </tr>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            No hay registros disponibles.
+                                        </td>
+                                    </tr>
                                 {% endfor %}
                             </tbody>
 
