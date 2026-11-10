@@ -6,6 +6,33 @@ from channels.layers import get_channel_layer
 
 logger = logging.getLogger(__name__)
 
+# Clase 11 --> PM: largo máximo de un mensaje del chat. Se usa en la vista, en el Consumer y en el HTML.
+CHAT_MAX_LENGTH = 300
+
+
+def publish_chat_message(user, org_id, message):
+    """
+    Publica un mensaje del chat al grupo de la organización.
+    La vista valida; este servicio publica; el Consumer distribuye; JavaScript presenta.
+    """
+    layer = get_channel_layer()
+    if layer is None:
+        raise RuntimeError("Channel layer no configurado")
+
+    async_to_sync(layer.group_send)(
+        f"chat_org_{org_id}",
+        {
+            # "type" selecciona el método chat_event() del Consumer.
+            "type": "chat_event",
+            # "payload.type" le indica a JavaScript cómo tratar el contenido.
+            "payload": {
+                "type": "chat_message",
+                "username": user.get_username(),
+                "message": message,
+            },
+        },
+    )
+
 
 def publish_crud_event(module, action, actor_id, organization_id=None):
     """

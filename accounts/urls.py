@@ -8,6 +8,8 @@ urlpatterns = [
 
     # Perfil de usuario con foto (Clase 9) --> PM: ruta /accounts/perfil/
     path('perfil/', views.perfil, name='perfil'),
+    # Editar mi perfil (datos, foto con Croppr y contraseña) --> PM
+    path('perfil/editar/', views.perfil_editar, name='perfil_editar'),
 
     # CRUD de usuarios y perfiles (M02): listar, crear, editar y eliminar
     path('users/', views.UserProfileListView.as_view(), name='user_list'),

@@ -1,7 +1,8 @@
-
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 from django.core.exceptions import ObjectDoesNotExist
+
+from .services import CHAT_MAX_LENGTH
 
 
 class ChatConsumer(JsonWebsocketConsumer):
@@ -43,15 +44,16 @@ class ChatConsumer(JsonWebsocketConsumer):
             )
 
     def receive_json(self, content, **kwargs):
-        # Recibir mensajes del chat.
-        mensaje = content.get("mensaje", "")
+        # Recibir mensajes del chat enviados directamente por WebSocket.
+        # (El chat de la clase 11 envía por HTTP; esto se mantiene con el MISMO formato de mensaje y el mismo límite.)
+        mensaje = content.get("message", content.get("mensaje", ""))
 
         if not isinstance(mensaje, str):
             return
 
         mensaje = mensaje.strip()
 
-        if not mensaje or len(mensaje) > 500:
+        if not mensaje or len(mensaje) > CHAT_MAX_LENGTH:
             return
 
         async_to_sync(self.channel_layer.group_send)(
@@ -59,8 +61,9 @@ class ChatConsumer(JsonWebsocketConsumer):
             {
                 "type": "chat_event",
                 "payload": {
-                    "mensaje": mensaje,
-                    "usuario": self.scope["user"].username,
+                    "type": "chat_message",
+                    "username": self.scope["user"].username,
+                    "message": mensaje,
                 },
             },
         )

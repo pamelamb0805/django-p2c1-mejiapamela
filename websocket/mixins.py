@@ -1,3 +1,5 @@
+from django.db import transaction
+from django.views.generic.edit import UpdateView
 
 from websocket.services import publish_crud_event
 
@@ -76,11 +78,21 @@ class WebSocketCrudEventsMixin:
         if obj is None:
             return
 
-        publish_crud_event(
-            module=self.crud_module,
-            action=action or self.crud_action or "actualizado",
-            actor_id=self.request.user.pk,
-            organization_id=self.get_crud_organization_id(),
+        # Clase 11 --> PM: los datos se calculan ahora, pero el aviso se envía recién cuando la transacción se confirma
+        # (transaction.on_commit). Si hay un rollback, el aviso se descarta; si no hay transacción activa, se envía de inmediato.
+        # Como TODAS las vistas pasan por este método (también las de eliminar), todas avisan después de guardar.
+        modulo = self.crud_module
+        accion = action or self.crud_action or "actualizado"
+        actor_id = self.request.user.pk
+        organization_id = self.get_crud_organization_id()
+
+        transaction.on_commit(
+            lambda: publish_crud_event(
+                module=modulo,
+                action=accion,
+                actor_id=actor_id,
+                organization_id=organization_id,
+            )
         )
 
     def form_valid(self, form):
@@ -94,10 +106,15 @@ class WebSocketCrudEventsMixin:
                 else "creado"
             )
 
-        response = super().form_valid(form)
+        # Una edición donde no cambió ningún dato no se anuncia. (Solo aplica a las vistas de edición.)
+        sin_cambios = isinstance(self, UpdateView) and not form.changed_data
 
-        # Publicar después de guardar correctamente.
-        if response.status_code < 400:
-            self.publish_crud_notification(action)
+        # atomic: el guardado y el registro del aviso quedan en la misma transacción; el aviso sale al confirmarla.
+        with transaction.atomic():
+            response = super().form_valid(form)
+
+            # Un formulario inválido nunca llega aquí, así que no se anuncia un cambio que no ocurrió.
+            if response.status_code < 400 and not sin_cambios:
+                self.publish_crud_notification(action)
 
         return response

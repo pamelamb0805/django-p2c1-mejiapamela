@@ -4,6 +4,7 @@ import re
 
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import Group
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -17,7 +18,7 @@ from .models import UserProfile
 
 # Perfil de usuario con foto (Clase 9) --> PM
 # Límite de tamaño que valida el servidor (el atributo accept del HTML solo orienta al navegador).
-MAX_AVATAR = 2 * 1024 * 1024  # 2 MB
+MAX_AVATAR = 2 * 1024 * 1024  # 2 MiB
 
 User = get_user_model()
 
@@ -310,26 +311,182 @@ class UserProfileForm(forms.ModelForm):
         return perfil
 
 
-# Perfil de usuario con foto (Clase 9) --> PM
-# Formulario para que cada usuario cambie SOLO su foto. Con fields explícitos no se exponen
-# organización, departamento, código de empleado ni RUT: esos datos los administra el administrador.
+# ==========================================================================
+# Editar mi perfil (Evaluación Sumativa 3) --> PM
+# Tres formularios independientes, todos sobre el usuario autenticado:
+#   1) ProfileDataForm     -> nombre, apellido y correo (+ ProfileContactForm: teléfono y dirección)
+#   2) ProfileAvatarForm   -> foto de perfil (JPEG/PNG, máx. 2 MiB), ya recortada con Croppr
+#   3) ProfilePasswordForm -> cambio de contraseña (pide la actual)
+# Con fields explícitos nunca se exponen permisos, rol, organización ni otros usuarios.
+# ==========================================================================
+
+# Reglas para que no se puedan escribir datos "al azar" (símbolos, HTML, teclazos repetidos).
+# Solo letras (con tildes y ñ), espacios, guion y apóstrofe.
+NOMBRE_VALIDO = re.compile(r"^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ][A-Za-zÁÉÍÓÚÜÑáéíóúüñ' -]*$")
+# Dirección: letras, números, espacios y . , # - / ° º
+DIRECCION_VALIDA = re.compile(r"^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .,#/°º-]+$")
+# Cuatro o más caracteres idénticos seguidos ("aaaa", "!!!!", "9999") se consideran texto sin sentido.
+REPETIDOS = re.compile(r"(.)\1{3,}", re.IGNORECASE)
+
+# Límites (también se aplican en el HTML con maxlength, pero lo que vale es la validación del servidor).
+MAX_NOMBRE = 50
+MAX_CORREO = 100
+MAX_DIRECCION = 100
+
+
+def _normalizar_espacios(valor):
+    """Quita espacios al inicio/fin y deja un solo espacio entre palabras."""
+    return " ".join((valor or "").split())
+
+
+class ProfileDataForm(forms.ModelForm):
+    # Se declaran los campos para fijar el largo máximo (en el modelo de Django admiten hasta 150 caracteres).
+    first_name = forms.CharField(
+        label="Nombre", min_length=2, max_length=MAX_NOMBRE,
+        help_text=f"Entre 2 y {MAX_NOMBRE} caracteres. Solo letras, espacios, guion y apóstrofe.",
+        widget=forms.TextInput(attrs={"class": "form-control", "autocomplete": "given-name", "maxlength": MAX_NOMBRE}),
+    )
+    last_name = forms.CharField(
+        label="Apellido", min_length=2, max_length=MAX_NOMBRE,
+        help_text=f"Entre 2 y {MAX_NOMBRE} caracteres. Solo letras, espacios, guion y apóstrofe.",
+        widget=forms.TextInput(attrs={"class": "form-control", "autocomplete": "family-name", "maxlength": MAX_NOMBRE}),
+    )
+    email = forms.EmailField(
+        label="Correo electrónico", max_length=MAX_CORREO,
+        help_text=f"Hasta {MAX_CORREO} caracteres. Con este correo también puedes iniciar sesión.",
+        widget=forms.EmailInput(attrs={"class": "form-control", "autocomplete": "email", "maxlength": MAX_CORREO}),
+    )
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "email"]
+
+    def _limpiar_nombre(self, campo, etiqueta):
+        valor = _normalizar_espacios(self.cleaned_data.get(campo))
+        if len(valor) < 2:
+            raise ValidationError(f"{etiqueta} debe tener al menos 2 caracteres.")
+        if not NOMBRE_VALIDO.match(valor):
+            raise ValidationError(f"{etiqueta} debe comenzar con una letra y solo puede contener letras, espacios, guiones y apóstrofes.")
+        if REPETIDOS.search(valor):
+            raise ValidationError(f"{etiqueta} no parece válido: tiene el mismo carácter repetido varias veces.")
+        return valor
+
+    def clean_first_name(self):
+        return self._limpiar_nombre("first_name", "El nombre")
+
+    def clean_last_name(self):
+        return self._limpiar_nombre("last_name", "El apellido")
+
+    # El login acepta correo o usuario, por eso el correo no puede repetirse (sin distinguir mayúsculas).
+    # exclude(pk=...) evita que el propio usuario aparezca como duplicado de sí mismo.
+    def clean_email(self):
+        email = (self.cleaned_data.get("email") or "").strip().lower()
+        if User.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
+            raise ValidationError("Ya existe una cuenta con ese correo electrónico.")
+        return email
+
+
+# Teléfono y dirección son datos de contacto del propio usuario: puede cambiarlos.
+# NO se editan aquí el RUT, el código de empleado, la organización ni el departamento
+# (los administra un administrador) porque definen a qué información tiene acceso la persona.
+class ProfileContactForm(forms.ModelForm):
+    phone = forms.CharField(
+        label="Teléfono", required=False, max_length=20,
+        help_text="Opcional. Número chileno de 9 dígitos, con o sin +56 (ej.: +56 9 1234 5678).",
+        widget=forms.TextInput(attrs={"class": "form-control", "type": "tel", "autocomplete": "tel", "maxlength": 20,
+                                      "placeholder": "+56 9 1234 5678"}),
+    )
+    address = forms.CharField(
+        label="Dirección", required=False, max_length=MAX_DIRECCION,
+        help_text=f"Opcional. Hasta {MAX_DIRECCION} caracteres: letras, números y . , # - /",
+        widget=forms.TextInput(attrs={"class": "form-control", "autocomplete": "street-address", "maxlength": MAX_DIRECCION}),
+    )
+
+    class Meta:
+        model = UserProfile
+        fields = ["phone", "address"]
+
+    def clean_phone(self):
+        bruto = _normalizar_espacios(self.cleaned_data.get("phone"))
+        if not bruto:
+            return ""                                   # el teléfono es opcional
+        if not re.fullmatch(r"\+?[0-9 ()-]+", bruto):
+            raise ValidationError("El teléfono solo puede contener números, espacios, guiones y el signo +.")
+        digitos = re.sub(r"\D", "", bruto)
+        if digitos.startswith("56") and len(digitos) == 11:
+            digitos = digitos[2:]                        # se quita el código de país
+        if len(digitos) != 9 or digitos[0] in "01":
+            raise ValidationError("Ingresa un teléfono chileno de 9 dígitos (ej.: +56 9 1234 5678).")
+        if len(set(digitos)) == 1:
+            raise ValidationError("El teléfono no parece válido.")
+        return "+56" + digitos                           # se guarda siempre en el mismo formato
+
+    def clean_address(self):
+        valor = _normalizar_espacios(self.cleaned_data.get("address"))
+        if not valor:
+            return ""                                   # la dirección es opcional
+        if len(valor) < 5:
+            raise ValidationError("La dirección debe tener al menos 5 caracteres.")
+        if not DIRECCION_VALIDA.match(valor):
+            raise ValidationError("La dirección solo puede contener letras, números, espacios y los signos . , # - /")
+        if not re.search(r"[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]", valor):
+            raise ValidationError("La dirección debe incluir el nombre de la calle o sector.")
+        if REPETIDOS.search(valor):
+            raise ValidationError("La dirección no parece válida: tiene el mismo carácter repetido varias veces.")
+        return valor
+
+
 class ProfileAvatarForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ["avatar"]
         widgets = {
-            # FileInput es el selector simple: no muestra el texto "Actualmente" ni la casilla "Limpiar".
-            # El input queda oculto (d-none) y en la plantilla se usa un botón propio "Elegir imagen" que lo activa.
-            # accept orienta al navegador (solo imágenes); la validación real se hace en clean_avatar.
+            # FileInput es el selector simple (sin "Actualmente" ni "Limpiar"). El input queda oculto (d-none) y la
+            # plantilla usa un botón propio "Elegir imagen". accept solo orienta al navegador: la validación real está en clean_avatar.
             "avatar": forms.FileInput(
-                attrs={"class": "d-none", "accept": "image/*"}
+                attrs={"class": "d-none", "accept": "image/jpeg,image/png"}
             ),
         }
 
-    # ImageField (con Pillow) ya comprueba que sea una imagen válida; aquí se valida el tamaño.
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Mensaje comprensible cuando el archivo no es una imagen (por ejemplo un PDF o un .txt renombrado a .jpg).
+        self.fields["avatar"].error_messages["invalid_image"] = (
+            "El archivo no es una imagen válida. Sube una imagen JPEG o PNG."
+        )
+        # El texto de ayuda se define aquí (no en el modelo) para no generar otra migración.
+        self.fields["avatar"].help_text = "Solo imágenes JPEG o PNG, máximo 2 MiB."
+
+    # Se valida la imagen FINAL que llega al servidor (la ya recortada), no la original.
+    # ImageField (con Pillow) ya comprobó que el contenido sea una imagen; aquí se exige JPEG/PNG y el tamaño.
     # Solo se revisa si es una carga nueva (UploadedFile); si no se sube nada, el valor es la foto ya guardada.
     def clean_avatar(self):
         avatar = self.cleaned_data.get("avatar")
-        if isinstance(avatar, UploadedFile) and avatar.size > MAX_AVATAR:
-            raise ValidationError("La imagen no puede superar los 2 MB.")
+        if isinstance(avatar, UploadedFile):
+            formato = getattr(getattr(avatar, "image", None), "format", None)
+            if formato not in ("JPEG", "PNG"):
+                raise ValidationError("Formato no permitido. Solo se aceptan imágenes JPEG o PNG.")
+            if avatar.size > MAX_AVATAR:
+                raise ValidationError("La imagen no puede superar los 2 MiB.")
         return avatar
+
+
+# Cambio de contraseña: PasswordChangeForm de Django ya pide la contraseña actual, la nueva y su confirmación,
+# y aplica los validadores de AUTH_PASSWORD_VALIDATORS (largo mínimo, similitud, etc.).
+class ProfilePasswordForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        etiquetas = {
+            "old_password": "Contraseña actual",
+            "new_password1": "Nueva contraseña",
+            "new_password2": "Confirmar nueva contraseña",
+        }
+        autocompletar = {
+            "old_password": "current-password",
+            "new_password1": "new-password",
+            "new_password2": "new-password",
+        }
+        for nombre, campo in self.fields.items():
+            campo.label = etiquetas[nombre]
+            campo.widget.attrs.update({"class": "form-control", "autocomplete": autocompletar[nombre]})
+            campo.widget.attrs.pop("autofocus", None)  # evita que la página salte a este campo al cargar
