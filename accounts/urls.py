@@ -11,7 +11,7 @@ urlpatterns = [
         name='registro'
     ),
 
-    # Recuperación de contraseña
+    # Recuperación de contraseña (viene de eva3_dashboard)
     path(
         'recuperar-password/',
         views.recuperar_password,
@@ -28,11 +28,17 @@ urlpatterns = [
         name='confirmar_password_reset'
     ),
 
-    # Perfil de usuario
+    # Perfil de usuario con foto (Clase 9) --> PM: ruta /accounts/perfil/
     path(
         'perfil/',
         views.perfil,
         name='perfil'
+    ),
+    # Editar mi perfil (datos, foto con Croppr y contraseña) --> PM (viene de main)
+    path(
+        'perfil/editar/',
+        views.perfil_editar,
+        name='perfil_editar'
     ),
 
     # CRUD de usuarios y perfiles

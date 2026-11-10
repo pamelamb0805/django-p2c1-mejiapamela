@@ -1,0 +1,257 @@
+{# Clase 11 --> PM: burbuja de chat flotante (abajo a la derecha) con ventana emergente pequeña. #}
+{# Envío por HTTP (POST + CSRF) y recepción por WebSocket (eventos de _ws_client.html). Los mensajes no se guardan en la base de datos. #}
+<style>
+  .eco-chat-bubble {
+    position: fixed; right: 20px; bottom: 20px; z-index: 1080;
+    width: 56px; height: 56px; border: 0; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--eco-mint, #A9FFCB); color: var(--eco-deep, #021D1B);
+    font-size: 1.5rem; cursor: pointer;
+    box-shadow: var(--eco-shadow, 0 6px 22px rgba(0,0,0,.35));
+    transition: transform .15s ease;
+  }
+  .eco-chat-bubble:hover { transform: scale(1.07); }
+  .eco-chat-bubble:focus-visible, .eco-chat-close:focus-visible, .eco-chat-send:focus-visible {
+    outline: 3px solid #fff; outline-offset: 2px;
+  }
+  .eco-chat-unread {
+    position: absolute; top: -4px; right: -4px; min-width: 22px; height: 22px; padding: 0 6px;
+    border-radius: 11px; border: 2px solid var(--eco-deep, #021D1B);
+    background: #dc3545; color: #fff; font-size: .75rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .eco-chat-unread[hidden] { display: none; }
+
+  .eco-chat-panel {
+    position: fixed; right: 20px; bottom: 88px; z-index: 1080;
+    width: 340px; max-width: calc(100vw - 32px);
+    height: 460px; max-height: calc(100vh - 110px);
+    display: flex; flex-direction: column; overflow: hidden;
+    background: var(--bs-tertiary-bg, #02303A); color: var(--eco-text, #EAFBF1);
+    border: 1px solid var(--eco-border, rgba(169,255,203,.18)); border-radius: var(--eco-radius, 14px);
+    box-shadow: var(--eco-shadow, 0 6px 22px rgba(0,0,0,.35));
+    animation: eco-chat-abrir .15s ease;
+  }
+  .eco-chat-panel[hidden] { display: none; }
+  @keyframes eco-chat-abrir { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .eco-chat-panel { animation: none; } .eco-chat-bubble { transition: none; } }
+
+  .eco-chat-header {
+    display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+    padding: .65rem .9rem; color: #fff;
+    background: linear-gradient(90deg, var(--eco-teal, #02735E), var(--eco-cyan, #034159));
+  }
+  .eco-chat-header small { display: block; opacity: .9; }
+  .eco-chat-close { border: 0; background: transparent; color: #fff; font-size: 1.1rem; padding: .25rem .4rem; border-radius: 6px; cursor: pointer; }
+
+  .eco-chat-messages {
+    flex: 1; overflow-y: auto; margin: 0; padding: .75rem; list-style: none;
+    display: flex; flex-direction: column; gap: .5rem;
+  }
+  .eco-chat-vacio { text-align: center; color: var(--eco-muted, #9CC9B8); font-size: .85rem; margin: auto; }
+  .eco-chat-msg {
+    max-width: 85%; padding: .4rem .7rem; border-radius: 14px; font-size: .9rem; overflow-wrap: anywhere;
+  }
+  .eco-chat-msg .eco-chat-autor { display: block; font-size: .72rem; font-weight: 600; color: var(--eco-muted, #9CC9B8); }
+  .eco-chat-msg--otro { align-self: flex-start; background: rgba(255,255,255,.09); border-bottom-left-radius: 4px; }
+  .eco-chat-msg--mio { align-self: flex-end; background: var(--eco-green, #038C65); color: #fff; border-bottom-right-radius: 4px; }
+  .eco-chat-msg--mio .eco-chat-autor { color: rgba(255,255,255,.85); }
+
+  .eco-chat-form { display: flex; gap: .5rem; padding: .6rem; margin: 0; border-top: 1px solid var(--eco-border, rgba(169,255,203,.18)); }
+  .eco-chat-input {
+    flex: 1; min-width: 0; padding: .45rem .85rem; border-radius: 999px;
+    background: var(--eco-input-bg, rgba(2,29,27,.65)); color: var(--eco-text, #EAFBF1);
+    border: 1px solid var(--eco-border, rgba(169,255,203,.18));
+  }
+  .eco-chat-input:focus-visible { outline: 3px solid var(--eco-mint, #A9FFCB); outline-offset: 1px; }
+  .eco-chat-send {
+    width: 38px; height: 38px; flex-shrink: 0; border: 0; border-radius: 50%; cursor: pointer;
+    background: var(--eco-mint, #A9FFCB); color: var(--eco-deep, #021D1B);
+  }
+  .eco-chat-send:disabled { opacity: .45; cursor: not-allowed; }
+  .eco-chat-error { padding: 0 .75rem .5rem; font-size: .8rem; color: #ff8a8a; }
+  .eco-chat-error:empty { display: none; }
+
+  @media (max-width: 480px) { .eco-chat-panel { right: 12px; width: calc(100vw - 24px); bottom: 84px; } .eco-chat-bubble { right: 12px; } }
+</style>
+
+<div id="eco-chat" data-user-id="{{ user.pk }}" data-username="{{ user.get_username }}">
+
+  <button type="button" id="eco-chat-toggle" class="eco-chat-bubble"
+          aria-label="Abrir chat de la organización" aria-expanded="false" aria-controls="eco-chat-panel">
+    <i class="bi bi-chat-dots-fill" aria-hidden="true"></i>
+    <span id="eco-chat-unread" class="eco-chat-unread" hidden></span>
+  </button>
+
+  <section id="eco-chat-panel" class="eco-chat-panel" role="dialog" aria-label="Chat de la organización" hidden>
+    <header class="eco-chat-header">
+      <div>
+        <strong>Chat de la organización</strong>
+        <small id="eco-chat-status" role="status">Conectando…</small>
+      </div>
+      <button type="button" id="eco-chat-close" class="eco-chat-close" aria-label="Cerrar chat">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <ul id="eco-chat-messages" class="eco-chat-messages" aria-live="polite"></ul>
+
+    <form id="eco-chat-form" class="eco-chat-form" action="{% url 'websocket:send' %}" method="post">
+      {% csrf_token %}
+      {# maxlength debe coincidir con CHAT_MAX_LENGTH (websocket/services.py); el servidor lo vuelve a validar. #}
+      <input id="eco-chat-input" class="eco-chat-input" name="message" maxlength="300" required autocomplete="off"
+             placeholder="Escribe un mensaje…" aria-label="Mensaje">
+      <button type="submit" id="eco-chat-send" class="eco-chat-send" aria-label="Enviar mensaje" disabled>
+        <i class="bi bi-send-fill" aria-hidden="true"></i>
+      </button>
+    </form>
+    <div id="eco-chat-error" class="eco-chat-error" role="alert"></div>
+  </section>
+</div>
+
+<script>
+  (function () {
+    const raiz = document.getElementById("eco-chat");
+    if (!raiz) { return; }
+
+    const toggle = document.getElementById("eco-chat-toggle");
+    const panel = document.getElementById("eco-chat-panel");
+    const cerrar = document.getElementById("eco-chat-close");
+    const lista = document.getElementById("eco-chat-messages");
+    const form = document.getElementById("eco-chat-form");
+    const input = document.getElementById("eco-chat-input");
+    const enviar = document.getElementById("eco-chat-send");
+    const estado = document.getElementById("eco-chat-status");
+    const errorBox = document.getElementById("eco-chat-error");
+    const insignia = document.getElementById("eco-chat-unread");
+
+    const miUsuario = raiz.dataset.username;
+    const CLAVE = "ecoChat_" + raiz.dataset.userId;     // mensajes recordados SOLO en esta pestaña, por usuario
+    const MAX_RECORDADOS = 50;
+    let mensajes = [];
+    let sinLeer = 0;
+
+    // Si en esta pestaña hubo otro usuario antes, se borran sus mensajes (privacidad al cambiar de cuenta).
+    try {
+      Object.keys(sessionStorage).forEach((k) => {
+        if (k.indexOf("ecoChat_") === 0 && k !== CLAVE && k !== CLAVE + "_abierto") { sessionStorage.removeItem(k); }
+      });
+      mensajes = JSON.parse(sessionStorage.getItem(CLAVE) || "[]");
+    } catch (e) { mensajes = []; }
+
+    function guardar() {
+      try { sessionStorage.setItem(CLAVE, JSON.stringify(mensajes.slice(-MAX_RECORDADOS))); } catch (e) { /* sin almacenamiento */ }
+    }
+
+    function mostrarVacio() {
+      if (lista.children.length === 0) {
+        const vacio = document.createElement("li");
+        vacio.className = "eco-chat-vacio";
+        vacio.textContent = "Aún no hay mensajes. ¡Escribe el primero!";
+        lista.append(vacio);
+      }
+    }
+
+    // textContent: si alguien escribe HTML, se muestra literalmente y nunca se ejecuta.
+    function pintar(m) {
+      const vacio = lista.querySelector(".eco-chat-vacio");
+      if (vacio) { vacio.remove(); }
+      const item = document.createElement("li");
+      item.className = "eco-chat-msg " + (m.username === miUsuario ? "eco-chat-msg--mio" : "eco-chat-msg--otro");
+      const autor = document.createElement("span");
+      autor.className = "eco-chat-autor";
+      autor.textContent = m.username === miUsuario ? "Tú" : m.username;
+      item.append(autor, document.createTextNode(m.message));
+      lista.append(item);
+      lista.scrollTop = lista.scrollHeight;
+    }
+
+    function actualizarInsignia() {
+      if (sinLeer > 0) {
+        insignia.hidden = false;
+        insignia.textContent = sinLeer > 9 ? "9+" : String(sinLeer);
+        toggle.setAttribute("aria-label", "Abrir chat de la organización (" + sinLeer + " mensajes nuevos)");
+      } else {
+        insignia.hidden = true;
+        toggle.setAttribute("aria-label", panel.hidden ? "Abrir chat de la organización" : "Cerrar chat de la organización");
+      }
+    }
+
+    function abrir(visible, recordar) {
+      panel.hidden = !visible;
+      toggle.setAttribute("aria-expanded", String(visible));
+      if (visible) {
+        sinLeer = 0;
+        lista.scrollTop = lista.scrollHeight;
+        input.focus();
+      }
+      actualizarInsignia();
+      if (recordar !== false) {
+        try { sessionStorage.setItem(CLAVE + "_abierto", visible ? "1" : "0"); } catch (e) { /* sin almacenamiento */ }
+      }
+    }
+
+    function aplicarEstado(conectado) {
+      estado.textContent = conectado ? "En línea" : "Sin conexión: no recibirás mensajes nuevos";
+      enviar.disabled = !conectado;
+    }
+
+    // --- historial de esta pestaña ---
+    mensajes.forEach(pintar);
+    mostrarVacio();
+
+    toggle.addEventListener("click", () => abrir(panel.hidden));
+    cerrar.addEventListener("click", () => { abrir(false); toggle.focus(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !panel.hidden) { abrir(false); toggle.focus(); }
+    });
+
+    // --- recepción: llega por WebSocket (también el mensaje que envió el propio usuario, así se ve una sola vez) ---
+    document.addEventListener("eco:ws", (e) => {
+      const d = e.detail;
+      if (d.type !== "chat_message") { return; }
+      const m = { username: d.username, message: d.message };
+      mensajes.push(m);
+      if (mensajes.length > MAX_RECORDADOS) { mensajes.shift(); }
+      guardar();
+      pintar(m);
+      if (panel.hidden && d.username !== miUsuario) { sinLeer += 1; actualizarInsignia(); }
+    });
+    aplicarEstado(window.ecoWsConectado === true);
+    document.addEventListener("eco:ws-estado", (e) => aplicarEstado(e.detail.conectado));
+
+    // --- envío: HTTP con CSRF. El mensaje NO se agrega aquí; aparecerá cuando llegue por WebSocket ---
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      errorBox.textContent = "";
+      const message = input.value.trim();
+      if (!message || !window.ecoWsConectado) { return; }
+
+      enviar.disabled = true;
+      try {
+        const respuesta = await fetch(form.action, {
+          method: "POST",
+          headers: { "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value },
+          body: new URLSearchParams({ message })
+        });
+        if (respuesta.redirected || !respuesta.ok) {
+          errorBox.textContent = respuesta.status === 403
+            ? "Tu cuenta no tiene una organización asignada."
+            : "No se pudo enviar. Revisa que el mensaje no esté vacío ni supere los 300 caracteres.";
+          return;
+        }
+        input.value = "";
+      } catch (error) {
+        errorBox.textContent = "No se pudo enviar el mensaje. Revisa tu conexión.";
+      } finally {
+        enviar.disabled = !window.ecoWsConectado;
+        input.focus();
+      }
+    });
+
+    // Si estaba abierto antes de cambiar de página, se vuelve a abrir (sin enfocar ni mover la pantalla).
+    try {
+      if (sessionStorage.getItem(CLAVE + "_abierto") === "1") { abrir(true, false); }
+    } catch (e) { /* sin almacenamiento */ }
+  })();
+</script>

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Chat de la organización | EcoEnergy{% endblock %}
+
+{# Esta página ya es el chat completo: se vacía la burbuja flotante para no mostrar el chat dos veces. #}
+{% block chat_widget %}{% endblock %}
+
+{% block content %}
+{# Clase 11 --> PM: chat entre usuarios de la misma organización. #}
+{# Envío: HTTP (fetch POST + CSRF). Recepción: WebSocket. base.html mantiene UNA sola conexión por pestaña y avisa con eventos. #}
+<div class="container py-4">
+
+  <h1 class="h3 mb-1">Chat de la organización</h1>
+  <p class="text-muted">Solo ven estos mensajes las personas de tu organización. Los mensajes no se guardan: se muestran mientras tengas esta pantalla abierta.</p>
+
+  <p id="chat-status" role="status" class="small fw-semibold">Conectando...</p>
+
+  <div class="card border-0 shadow-sm mb-3">
+    <ul id="messages" aria-live="polite" class="list-group list-group-flush" style="min-height: 220px; max-height: 420px; overflow-y: auto;"></ul>
+  </div>
+
+  <form id="chat-form" action="{% url 'websocket:send' %}" method="post">
+    {% csrf_token %}
+    <label for="message" class="form-label fw-semibold">Mensaje</label>
+    <div class="input-group">
+      <input id="message" name="message" maxlength="{{ max_length }}" required autocomplete="off" class="form-control"
+             aria-describedby="chat-ayuda chat-error">
+      <button id="send" class="btn btn-primary" disabled><i class="bi bi-send"></i> Enviar</button>
+    </div>
+    <div id="chat-ayuda" class="form-text">Hasta {{ max_length }} caracteres.</div>
+    <div id="chat-error" class="text-danger small mt-1" role="alert"></div>
+  </form>
+</div>
+
+<script>
+  (function () {
+    const form = document.querySelector("#chat-form");
+    const button = document.querySelector("#send");
+    const input = document.querySelector("#message");
+    const state = document.querySelector("#chat-status");
+    const lista = document.querySelector("#messages");
+    const errorBox = document.querySelector("#chat-error");
+
+    // Estado de la conexión: el texto siempre dice qué pasa (no se comunica solo con color).
+    function aplicarEstado(conectado) {
+      state.textContent = conectado ? "Conectado" : "Desconectado. Los mensajes nuevos no llegarán hasta que se recupere la conexión.";
+      button.disabled = !conectado;
+    }
+    aplicarEstado(window.ecoWsConectado === true);
+    document.addEventListener("eco:ws-estado", (e) => aplicarEstado(e.detail.conectado));
+
+    // Recepción: cada mensaje llega por WebSocket (también el que envió el propio usuario, así se ve una sola vez).
+    document.addEventListener("eco:ws", (e) => {
+      const data = e.detail;
+      if (data.type !== "chat_message") return;
+
+      const item = document.createElement("li");
+      item.className = "list-group-item";
+      const autor = document.createElement("strong");
+      autor.textContent = data.username + ": ";
+      // textContent / createTextNode: si alguien escribe HTML, se muestra literalmente y no se ejecuta.
+      item.append(autor, document.createTextNode(data.message));
+      lista.append(item);
+      lista.scrollTop = lista.scrollHeight;
+    });
+
+    // Envío: HTTP con CSRF. Aquí NO se agrega el mensaje a la lista; llegará por WebSocket.
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      errorBox.textContent = "";
+      const message = input.value.trim();
+      if (!message || !window.ecoWsConectado) return;
+
+      button.disabled = true;
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: { "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value },
+          body: new URLSearchParams({ message })
+        });
+        if (response.redirected || !response.ok) {
+          errorBox.textContent = response.status === 403
+            ? "Tu cuenta no tiene una organización asignada."
+            : "No se pudo enviar el mensaje. Revisa que no esté vacío ni supere el largo permitido.";
+          return;
+        }
+        input.value = "";
+      } catch (error) {
+        errorBox.textContent = "No se pudo enviar el mensaje. Revisa tu conexión.";
+      } finally {
+        button.disabled = !window.ecoWsConectado;
+        input.focus();
+      }
+    });
+  })();
+</script>
+{% endblock %}

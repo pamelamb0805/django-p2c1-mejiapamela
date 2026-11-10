@@ -1,11 +1,14 @@
 from urllib.parse import urlencode
 
 from django.shortcuts import render, redirect
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import SuspiciousOperation
 from django.core.paginator import Paginator
+from django.db import transaction
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -15,7 +18,13 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from organizations.models import Department, Organization
 from organizations.views import CrudAccessMixin
 
-from .forms import ProfileAvatarForm, UserProfileForm
+from .forms import (
+    ProfileAvatarForm,
+    ProfileContactForm,
+    ProfileDataForm,
+    ProfilePasswordForm,
+    UserProfileForm,
+)
 from .models import UserProfile, PasswordResetCode
 from core.pagination import PageSizeMixin
 
@@ -259,17 +268,6 @@ class UserProfileListView(PageSizeMixin, UserProfileAccessMixin, ListView):
         return context
 
 
-# Crear (CreateView): exige add_userprofile y reutiliza el template del listado (modal).
-class UserProfileCreateView(UserProfileAccessMixin, SuccessMessageMixin, UserProfileFormPageMixin, CreateView):
-    permission_required = ("accounts.view_userprofile", "accounts.add_userprofile")
-    model = UserProfile
-    form_class = UserProfileForm
-    template_name = "accounts/user_list.html"
-    success_url = reverse_lazy("accounts:user_list")
-    success_message = "Usuario y perfil creados correctamente."
-
-
-# Editar (UpdateView): exige change_userprofile y reutiliza el mismo UserProfileForm.
 # Crear usuario y perfil.
 class UserProfileCreateView(
     WebSocketCrudEventsMixin,
@@ -387,28 +385,79 @@ class UserProfileDeleteView(
         )
 
 # ==========================================
-# Perfil de usuario con foto (Clase 9) --> PM
-# "Mi perfil": cada usuario ve sus propios datos y puede cambiar su foto.
-# No recibe ningún id por la URL: siempre usa request.user, así nadie puede ver ni editar el perfil de otro.
+# Perfil de usuario (Clase 9 y Evaluación Sumativa 3) --> PM
+# Ninguna de estas vistas recibe un id por la URL: siempre trabajan con request.user,
+# así nadie puede ver ni modificar el perfil, la foto o la contraseña de otra persona.
 # ==========================================
 @login_required
 def perfil(request):
+    """Mi perfil: muestra los datos del usuario autenticado (solo lectura)."""
     # Si la cuenta no tiene perfil (por ejemplo un superusuario recién creado), getattr devuelve None y no se rompe.
     profile = getattr(request.user, "profile", None)
-    if profile is None:
-        return render(request, "accounts/perfil.html", {"profile": None})
+    return render(request, "accounts/perfil.html", {"profile": profile})
+
+
+@login_required
+def perfil_editar(request):
+    """Editar mi perfil: datos personales, foto y contraseña (formularios independientes, una acción por POST)."""
+    # Copia fresca del usuario: si un formulario es inválido, request.user no queda con datos sin guardar
+    # (por ejemplo el menú mostrando un correo que no se guardó).
+    usuario = User.objects.get(pk=request.user.pk)
+    profile = getattr(request.user, "profile", None)
+
+    datos_form = ProfileDataForm(instance=usuario)
+    # Teléfono y dirección viven en el perfil: solo existen si la cuenta tiene perfil.
+    contacto_form = ProfileContactForm(instance=profile) if profile else None
+    foto_form = ProfileAvatarForm(instance=profile) if profile else None
+    password_form = ProfilePasswordForm(usuario)
 
     if request.method == "POST":
-        # request.FILES lleva el archivo subido; el formulario HTML debe tener enctype="multipart/form-data".
-        form = ProfileAvatarForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Tu foto de perfil se actualizó correctamente.")
-            return redirect("accounts:perfil")
-    else:
-        form = ProfileAvatarForm(instance=profile)
+        # El campo oculto "accion" indica cuál de los formularios se envió.
+        accion = request.POST.get("accion")
 
-    return render(request, "accounts/perfil.html", {"profile": profile, "form": form})
+        if accion == "datos":
+            datos_form = ProfileDataForm(request.POST, instance=usuario)
+            contacto_form = ProfileContactForm(request.POST, instance=profile) if profile else None
+            # Se validan ambos para mostrar todos los errores de una vez (sin cortar en el primero).
+            datos_ok = datos_form.is_valid()
+            contacto_ok = contacto_form.is_valid() if contacto_form else True
+            if datos_ok and contacto_ok:
+                # atomic: o se guardan los dos o no se guarda ninguno.
+                with transaction.atomic():
+                    datos_form.save()
+                    if contacto_form:
+                        contacto_form.save()
+                messages.success(request, "Tus datos se actualizaron correctamente.")
+                return redirect("accounts:perfil_editar")
+
+        elif accion == "foto" and profile is not None:
+            # request.FILES lleva la imagen ya recortada; el formulario HTML tiene enctype="multipart/form-data".
+            foto_form = ProfileAvatarForm(request.POST, request.FILES, instance=profile)
+            if foto_form.is_valid():
+                foto_form.save()
+                messages.success(request, "Tu foto de perfil se actualizó correctamente.")
+                return redirect("accounts:perfil_editar")
+
+        elif accion == "password":
+            password_form = ProfilePasswordForm(usuario, request.POST)
+            if password_form.is_valid():
+                usuario = password_form.save()
+                # Cambiar la contraseña invalida la sesión; esto la renueva para que el usuario no sea expulsado.
+                update_session_auth_hash(request, usuario)
+                messages.success(request, "Tu contraseña se cambió correctamente.")
+                return redirect("accounts:perfil_editar")
+
+        else:
+            # Acción inventada o manipulada: Django responde 400 (solicitud inválida).
+            raise SuspiciousOperation("Acción de perfil no válida.")
+
+    return render(request, "accounts/perfil_editar.html", {
+        "profile": profile,
+        "datos_form": datos_form,
+        "contacto_form": contacto_form,
+        "foto_form": foto_form,
+        "password_form": password_form,
+    })
 
 #Eva3 recuperar contrasenia --> PM
 

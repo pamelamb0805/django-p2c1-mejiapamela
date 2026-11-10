@@ -1,3 +1,8 @@
+
+from asgiref.sync import async_to_sync
+from django.db import transaction
+from django.views.generic.edit import UpdateView
+
 from core.models import ActivityLog
 from websocket.services import publish_crud_event
 
@@ -117,7 +122,8 @@ class WebSocketCrudEventsMixin:
 
     def publish_crud_notification(self, action=None):
         """
-        Guarda la actividad y publica la notificación WebSocket.
+        Guarda la actividad y publica la notificación WebSocket
+        después de confirmar la transacción.
         """
 
         obj = getattr(self, "object", None)
@@ -133,19 +139,24 @@ class WebSocketCrudEventsMixin:
 
         organization_id = self.get_crud_organization_id()
 
-        # Guardar la actividad.
+        # Guardar la actividad en la bitácora.
         activity = self.save_crud_activity(action)
 
         if activity is None:
             return
 
-        # Publicar a la organización y a ROOT.
-        publish_crud_event(
-            module=self.crud_module,
-            action=action,
-            actor_id=self.request.user.pk,
-            organization_id=organization_id,
-            activity=activity,
+        # Preparar los datos para publicar después del commit.
+        modulo = self.crud_module
+        actor_id = self.request.user.pk
+
+        transaction.on_commit(
+            lambda: publish_crud_event(
+                module=modulo,
+                action=action,
+                actor_id=actor_id,
+                organization_id=organization_id,
+                activity=activity,
+            )
         )
 
     def form_valid(self, form):
@@ -163,9 +174,20 @@ class WebSocketCrudEventsMixin:
                 else "creado"
             )
 
-        response = super().form_valid(form)
+        # Una edición donde no cambió ningún dato no se anuncia.
+        sin_cambios = (
+            isinstance(self, UpdateView)
+            and not form.changed_data
+        )
 
-        if response.status_code < 400:
-            self.publish_crud_notification(action)
+        # El guardado y el registro de actividad quedan dentro
+        # de la misma transacción.
+        with transaction.atomic():
+            response = super().form_valid(form)
+
+            # Un formulario inválido nunca llega aquí.
+            # No se anuncia una modificación sin cambios.
+            if response.status_code < 400 and not sin_cambios:
+                self.publish_crud_notification(action)
 
         return response
