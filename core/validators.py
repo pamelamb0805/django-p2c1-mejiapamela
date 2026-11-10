@@ -81,17 +81,13 @@ def validate_planned_datetime(value, max_years=5):
 #Corrección Eva 3 --> PM --> Validadores Formularios --> limite formularios.
 class FormLimitsMixin:
     """
-    Establece límites de caracteres en todos los campos de texto
-    de un formulario y valida también en el servidor.
-
-    Los CharField respetan el max_length del modelo.
-    Los TextField sin límite reciben 1000 caracteres por defecto.
-    Se pueden definir excepciones mediante text_limits.
+    Establece un máximo de 500 caracteres en los campos
+    de texto de los formularios CRUD.
     """
 
     text_limits = {}
     number_limits = {}
-    default_text_limit = 1000
+    default_text_limit = 500
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -99,10 +95,14 @@ class FormLimitsMixin:
         for name, field in self.fields.items():
 
             if isinstance(field, forms.CharField):
-                limit = self.text_limits.get(
+
+                limite_configurado = self.text_limits.get(
                     name,
                     field.max_length or self.default_text_limit,
                 )
+
+                # Nunca superar los 500 caracteres.
+                limit = min(limite_configurado, 500)
 
                 field.max_length = limit
                 field.widget.attrs["maxlength"] = limit

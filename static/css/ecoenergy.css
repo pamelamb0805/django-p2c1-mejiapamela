@@ -695,3 +695,85 @@ label {
         flex: 1 1 100%;
     }
 }
+
+
+/* =========================================
+   CORRECCIÓN GLOBAL DE FORMULARIOS CRUD
+   Ajuste a pantalla con zoom del 100 %
+========================================= */
+
+.modal-dialog {
+    width: calc(100% - 1rem);
+    max-width: min(900px, calc(100vw - 1rem));
+    margin: .5rem auto;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 1rem);
+    overflow: hidden;
+}
+
+.modal-header,
+.modal-footer {
+    flex-shrink: 0;
+    padding: .65rem 1rem;
+}
+
+.modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: .75rem 1rem;
+}
+
+.modal-body .row {
+    --bs-gutter-y: .55rem;
+}
+
+.modal-body .mb-3 {
+    margin-bottom: .55rem !important;
+}
+
+.modal-body .form-label {
+    margin-bottom: .25rem;
+    font-size: .88rem;
+}
+
+.modal-body .form-control,
+.modal-body .form-select {
+    min-height: 36px;
+    padding: .4rem .65rem;
+    font-size: .9rem;
+}
+
+.modal-body textarea.form-control {
+    min-height: 65px;
+    max-height: 110px;
+}
+
+.modal-body .form-text {
+    font-size: .75rem;
+}
+
+/* Formularios que no usan ventanas modales */
+form .card-body {
+    padding: 1rem;
+}
+
+@media (max-height: 750px) {
+    .modal-header,
+    .modal-footer {
+        padding: .5rem .85rem;
+    }
+
+    .modal-body {
+        padding: .55rem .85rem;
+    }
+
+    .modal-body .mb-3 {
+        margin-bottom: .4rem !important;
+    }
+}

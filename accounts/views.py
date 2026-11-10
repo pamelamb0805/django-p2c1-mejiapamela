@@ -43,16 +43,17 @@ from django.core.mail import send_mail
 from django.db import transaction
 
 #Eva 3 - PM
+
+# Eva 3 - Registro de usuarios PM
 def registro(request):
     if request.method == "POST":
 
-        # Datos enviados desde registro.html
+        # Datos enviados desde registration/registro.html
         nombre = request.POST.get("nombre", "").strip()
         apellido = request.POST.get("apellido", "").strip()
         email = request.POST.get("email", "").strip().lower()
         password = request.POST.get("pswd", "")
         password_confirm = request.POST.get("pswd-repeat", "")
-        idperfil = request.POST.get("idperfil", "")
 
         # Validaciones del lado del servidor.
         if not nombre or not apellido or not email or not password:
@@ -60,28 +61,40 @@ def registro(request):
                 request,
                 "Debes completar todos los campos obligatorios."
             )
-            return render(request, "registration/registro.html")
+            return render(
+                request,
+                "registration/registro.html"
+            )
 
         if User.objects.filter(email__iexact=email).exists():
             messages.error(
                 request,
                 "Este correo electrónico ya está registrado."
             )
-            return render(request, "registration/registro.html")
+            return render(
+                request,
+                "registration/registro.html"
+            )
 
         if User.objects.filter(username__iexact=email).exists():
             messages.error(
                 request,
                 "Este correo electrónico ya está asociado a una cuenta."
             )
-            return render(request, "registration/registro.html")
+            return render(
+                request,
+                "registration/registro.html"
+            )
 
         if password != password_confirm:
             messages.error(
                 request,
                 "Las contraseñas no coinciden."
             )
-            return render(request, "registration/registro.html")
+            return render(
+                request,
+                "registration/registro.html"
+            )
 
         # El correo se utiliza como nombre de usuario.
         nuevo_usuario = User(
@@ -94,37 +107,59 @@ def registro(request):
         # Aplicar validadores de contraseña configurados en Django.
         try:
             validate_password(password, nuevo_usuario)
+
         except ValidationError as error:
             for mensaje in error.messages:
                 messages.error(request, mensaje)
 
-            return render(request, "registration/registro.html")
+            return render(
+                request,
+                "registration/registro.html"
+            )
 
-        # Crear la cuenta utilizando el mecanismo seguro de Django.
-        nuevo_usuario = User.objects.create_user(
-            username=email,
-            email=email,
-            password=password,
-            first_name=nombre,
-            last_name=apellido,
-            is_active= False,
-        )
+        # Crear usuario y perfil en una sola transacción.
+        try:
+            with transaction.atomic():
 
-        # Asignar el grupo indicado por el formulario, si existe.
-        if idperfil.isdigit():
-            grupo = Group.objects.filter(pk=int(idperfil)).first()
+                nuevo_usuario = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=password,
+                    first_name=nombre,
+                    last_name=apellido,
+                    is_active=False,
+                )
 
-            if grupo:
-                nuevo_usuario.groups.add(grupo)
+                # Crear perfil pendiente de asignación administrativa.
+                UserProfile.objects.create(
+                    user=nuevo_usuario
+                )
 
-        messages.success(
-            request,
-            "¡Cuenta creada con éxito! Ya puedes iniciar sesión."
-        )
+            messages.success(
+                request,
+                "¡Cuenta creada con éxito! "
+                "Tu cuenta está pendiente de aprobación "
+                "por un administrador."
+            )
 
-        return redirect("login")
+            return redirect("login")
 
-    return render(request, "registration/registro.html")
+        except Exception:
+            messages.error(
+                request,
+                "No fue posible completar el registro. "
+                "Inténtalo nuevamente."
+            )
+
+            return render(
+                request,
+                "registration/registro.html"
+            )
+
+    return render(
+        request,
+        "registration/registro.html"
+    )
 
 # ==========================================
 # M02 · USUARIOS Y PERFILES - CRUD con modal y SweetAlert2
