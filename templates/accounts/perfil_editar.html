@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block title %}Editar mi perfil | EcoEnergy{% endblock %}
+
+{% block content %}
+{# Editar mi perfil (Evaluación Sumativa 3) --> PM #}
+{# Tres formularios independientes; cada uno envía un campo oculto "accion" (datos, foto o password) a la misma vista. #}
+{# La foto se recorta en el navegador con Croppr y el servidor guarda y valida la imagen RESULTANTE. #}
+<div class="container py-4">
+
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+      <h1 class="h3 mb-1">Editar mi perfil</h1>
+      <p class="text-muted mb-0">Actualiza tus datos, tu foto y tu contraseña.</p>
+    </div>
+    <a href="{% url 'accounts:perfil' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Volver a mi perfil
+    </a>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- ===================== FOTO DE PERFIL ===================== -->
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white py-3"><strong>Foto de perfil</strong></div>
+        <div class="card-body">
+
+          {% if not foto_form %}
+            <div class="alert alert-warning mb-0">
+              Tu cuenta no tiene un perfil de organización, por eso todavía no puedes subir una foto. Pide a un administrador que lo cree.
+            </div>
+          {% else %}
+            <div class="text-center mb-3">
+              {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}" alt="Foto de perfil actual de {{ user.username }}"
+                     class="rounded-circle border" style="width: 140px; height: 140px; object-fit: cover;">
+              {% else %}
+                <i class="bi bi-person-circle text-secondary" style="font-size: 140px; line-height: 1;" aria-hidden="true"></i>
+                <span class="visually-hidden">Sin foto de perfil</span>
+              {% endif %}
+              <div class="small text-muted mt-1">Foto actual</div>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" novalidate id="fotoForm">
+              {% csrf_token %}
+              <input type="hidden" name="accion" value="foto">
+              {{ foto_form.non_field_errors }}
+
+              <div class="form-label fw-semibold">Nueva foto</div>
+              {{ foto_form.avatar }}
+              <div class="d-flex align-items-center gap-2">
+                <label for="{{ foto_form.avatar.id_for_label }}" class="btn btn-outline-success btn-sm mb-0 flex-shrink-0">
+                  <i class="bi bi-image"></i> Elegir imagen
+                </label>
+                <span id="avatarNombre" class="small text-muted text-truncate">Ninguna imagen seleccionada</span>
+              </div>
+              <div class="form-text">{{ foto_form.avatar.help_text }}</div>
+
+              {# Errores del servidor y errores del navegador se muestran en el mismo lugar, con ícono y texto (no solo color). #}
+              {% for error in foto_form.avatar.errors %}
+                <div class="text-danger small mt-1" role="alert"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> {{ error }}</div>
+              {% endfor %}
+              <div id="errorFoto" class="text-danger small mt-1" role="alert"></div>
+
+              <!-- Zona de recorte (Croppr): aparece al elegir una imagen -->
+              <div id="cropBox" class="mt-3 d-none">
+                <div class="fw-semibold small mb-1">1. Ajusta el recorte</div>
+                <div class="border rounded p-2 bg-dark">
+                  <img id="cropprImage" alt="Imagen seleccionada para recortar" style="max-width: 100%; display: block;">
+                </div>
+                <div class="form-text">Arrastra el recuadro o sus esquinas para elegir la zona. El recorte es cuadrado.</div>
+
+                <div class="fw-semibold small mt-3 mb-1">2. Vista previa del resultado</div>
+                <div class="text-center">
+                  <canvas id="previewCanvas" width="160" height="160" class="rounded-circle border"
+                          role="img" aria-label="Vista previa de la foto recortada"></canvas>
+                </div>
+              </div>
+
+              <div class="d-flex gap-2 mt-3">
+                <button type="submit" id="btnGuardarFoto" class="btn btn-primary flex-grow-1" disabled>
+                  <i class="bi bi-cloud-upload"></i> Guardar foto
+                </button>
+                <button type="button" id="btnCancelarFoto" class="btn btn-outline-secondary">Cancelar</button>
+              </div>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-7 d-flex flex-column gap-4">
+
+      <!-- ===================== DATOS PERSONALES ===================== -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3"><strong>Datos personales</strong></div>
+        <div class="card-body">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="accion" value="datos">
+            {{ datos_form.non_field_errors }}
+            {% for field in datos_form %}
+              <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+                {% for error in field.errors %}
+                  <div class="text-danger small mt-1" role="alert"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> {{ error }}</div>
+                {% endfor %}
+              </div>
+            {% endfor %}
+
+            {# Teléfono y dirección (datos de contacto del propio usuario). Solo aparecen si la cuenta tiene perfil. #}
+            {% if contacto_form %}
+              {{ contacto_form.non_field_errors }}
+              {% for field in contacto_form %}
+                <div class="mb-3">
+                  <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{ field.label }}</label>
+                  {{ field }}
+                  {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+                  {% for error in field.errors %}
+                    <div class="text-danger small mt-1" role="alert"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> {{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+              <p class="small text-muted">
+                El RUT, el código de empleado, la organización y el departamento solo los puede cambiar un administrador.
+              </p>
+            {% endif %}
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Guardar datos</button>
+              <a href="{% url 'accounts:perfil' %}" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ===================== CAMBIAR CONTRASEÑA ===================== -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3"><strong>Cambiar contraseña</strong></div>
+        <div class="card-body">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="accion" value="password">
+            {{ password_form.non_field_errors }}
+            {% for field in password_form %}
+              <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<div class="form-text">{{ field.help_text|safe }}</div>{% endif %}
+                {% for error in field.errors %}
+                  <div class="text-danger small mt-1" role="alert"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> {{ error }}</div>
+                {% endfor %}
+              </div>
+            {% endfor %}
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary"><i class="bi bi-key"></i> Cambiar contraseña</button>
+              <a href="{% url 'accounts:perfil' %}" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% if foto_form %}
+{# Croppr: librería de recorte (CSS y JS desde cdnjs). #}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppr/2.3.1/croppr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppr/2.3.1/croppr.min.js"></script>
+<script>
+  (function () {
+    var input = document.getElementById("id_avatar");
+    var form = document.getElementById("fotoForm");
+    var box = document.getElementById("cropBox");
+    var img = document.getElementById("cropprImage");
+    var canvas = document.getElementById("previewCanvas");
+    var etiqueta = document.getElementById("avatarNombre");
+    var errorBox = document.getElementById("errorFoto");
+    var btnGuardar = document.getElementById("btnGuardarFoto");
+    var btnCancelar = document.getElementById("btnCancelarFoto");
+
+    if (!input || !form || !box || !img || !canvas || typeof Croppr === "undefined") { return; }
+
+    var TIPOS_PERMITIDOS = ["image/jpeg", "image/png"];
+    var MAX_BYTES = 2 * 1024 * 1024;   // 2 MiB (el servidor vuelve a validarlo)
+    var TEXTO_VACIO = "Ninguna imagen seleccionada";
+
+    var croppr = null;
+    var urlTemporal = null;
+    var original = null;     // imagen completa en memoria (para dibujar la vista previa y el recorte final)
+    var region = null;       // zona elegida, en píxeles reales de la imagen original
+    var tipoSalida = "image/jpeg";
+    var nombreSalida = "foto.jpg";
+    var yaRecortada = false;
+
+    // Deja todo como al inicio: la foto guardada NO se toca (así "Cancelar" conserva la imagen anterior).
+    function limpiar() {
+      if (croppr) { croppr.destroy(); croppr = null; }
+      if (urlTemporal) { URL.revokeObjectURL(urlTemporal); urlTemporal = null; }
+      img.removeAttribute("src");
+      box.classList.add("d-none");
+      original = null;
+      region = null;
+      yaRecortada = false;
+      btnGuardar.disabled = true;
+    }
+
+    function rechazar(mensaje) {
+      errorBox.textContent = mensaje;
+      input.value = "";
+      etiqueta.textContent = TEXTO_VACIO;
+    }
+
+    // Dibuja en el canvas la zona recortada: es la vista previa antes de guardar.
+    function dibujarVistaPrevia() {
+      if (!original || !region) { return; }
+      var ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(original, region.x, region.y, region.width, region.height, 0, 0, canvas.width, canvas.height);
+    }
+
+    // 1) Al elegir una imagen: se valida tipo y tamaño y se abre Croppr.
+    input.addEventListener("change", function () {
+      limpiar();
+      errorBox.textContent = "";
+      var archivo = input.files && input.files[0];
+      etiqueta.textContent = archivo ? archivo.name : TEXTO_VACIO;
+      if (!archivo) { return; }
+
+      if (TIPOS_PERMITIDOS.indexOf(archivo.type) === -1) {
+        rechazar("Formato no permitido. Solo se aceptan imágenes JPEG o PNG.");
+        return;
+      }
+      if (archivo.size > MAX_BYTES) {
+        rechazar("La imagen no puede superar los 2 MiB. Elige una más liviana.");
+        return;
+      }
+
+      // PNG se mantiene PNG (conserva transparencia); JPEG se mantiene JPEG.
+      var esPng = archivo.type === "image/png";
+      tipoSalida = esPng ? "image/png" : "image/jpeg";
+      var base = archivo.name.replace(/\.[^.]+$/, "") || "foto";
+      nombreSalida = base + (esPng ? ".png" : ".jpg");
+
+      urlTemporal = URL.createObjectURL(archivo);
+
+      original = new Image();
+      original.onload = dibujarVistaPrevia;
+      original.src = urlTemporal;
+
+      // Croppr necesita que la imagen esté visible y cargada: primero se muestra la zona y se espera el "load".
+      box.classList.remove("d-none");
+      img.onload = function () {
+        img.onload = null;
+        croppr = new Croppr(img, {
+          aspectRatio: 1,                 // recorte cuadrado
+          minSize: [60, 60, "px"],
+          startSize: [80, 80, "%"],
+          // getValue() entrega la región en píxeles de la imagen ORIGINAL (no de la imagen mostrada en pantalla).
+          onInitialize: function (instancia) { region = instancia.getValue(); dibujarVistaPrevia(); },
+          onCropMove: function (valor) { region = valor; dibujarVistaPrevia(); },
+          onCropEnd: function (valor) { region = valor; dibujarVistaPrevia(); }
+        });
+        btnGuardar.disabled = false;
+      };
+      img.src = urlTemporal;
+    });
+
+    // 2) Cancelar: descarta la imagen elegida; la foto anterior sigue guardada.
+    btnCancelar.addEventListener("click", function () {
+      input.value = "";
+      etiqueta.textContent = TEXTO_VACIO;
+      errorBox.textContent = "";
+      limpiar();
+    });
+
+    // 3) Guardar: se genera la imagen RECORTADA y esa es la que viaja al servidor (no basta con ocultar parte con CSS).
+    form.addEventListener("submit", function (e) {
+      if (!croppr || yaRecortada) { return; }   // sin imagen nueva no se interviene el envío
+      e.preventDefault();
+
+      var r = croppr.getValue();
+      var ancho = Math.min(Math.round(r.width), 800);                 // máx. 800 px por lado
+      var alto = Math.round(ancho * r.height / r.width);
+      var salida = document.createElement("canvas");
+      salida.width = ancho;
+      salida.height = alto;
+      salida.getContext("2d").drawImage(original, r.x, r.y, r.width, r.height, 0, 0, ancho, alto);
+
+      salida.toBlob(function (blob) {
+        if (!blob) { errorBox.textContent = "No se pudo generar el recorte. Intenta con otra imagen."; return; }
+        var archivoFinal = new File([blob], nombreSalida, { type: tipoSalida });
+        var contenedor = new DataTransfer();
+        contenedor.items.add(archivoFinal);
+        input.files = contenedor.files;       // la imagen recortada reemplaza a la original en el formulario
+        yaRecortada = true;
+        form.submit();
+      }, tipoSalida, 0.92);
+    });
+  })();
+</script>
+{% endif %}
+{% endblock %}
