@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block title %}Dispositivos | EcoEnergy{% endblock %}
@@ -12,6 +11,10 @@
       <p class="text-muted mb-0">
         Administra los equipos instalados y consulta sus datos.
       </p>
+      {# Clase 11 --> PM: indicador de la conexión en tiempo real (lo actualiza el script de base.html). #}
+      <span id="live-status" class="badge text-bg-secondary mt-2" role="status" aria-live="polite">
+        <i class="bi bi-broadcast" aria-hidden="true"></i> Conectando…
+      </span>
     </div>
 
     {% if perms.devices.add_device %}
@@ -92,7 +95,11 @@
   </div>
 
   <!-- Tabla -->
-  <div class="card border-0 shadow-sm">
+  {# Clase 11 --> PM: este bloque se actualiza solo por WebSocket (sin F5). data-live-modules indica qué avisos lo afectan. #}
+  <div class="card border-0 shadow-sm"
+       data-live-table="devices"
+       data-live-modules="dispositivos"
+       data-live-url="{% url 'devices:device_list' %}">
     <div class="card-header bg-white py-3">
       <strong>Dispositivos registrados</strong>
     </div>

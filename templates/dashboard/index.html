@@ -39,10 +39,10 @@
             top: 100%;
             right: 0;
             min-width: 180px;
-            padding: 7px;
-            background: #034159;
-            border-radius: 9px;
-            box-shadow: 0 5px 15px rgba(0,0,0,.2);
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.15);
+            padding: 8px;
             z-index: 1050;
         }
 
@@ -51,25 +51,19 @@
             display: block;
         }
 
-        .eco-profile-menu form {
-            margin: 0;
-        }
-
         .eco-profile-menu-button {
             width: 100%;
             border: 0;
             background: transparent;
-            color: #fff;
+            color: #dc3545;
             text-align: left;
             padding: 10px;
             border-radius: 7px;
         }
 
         .eco-profile-menu-button:hover {
-            background: rgba(255,255,255,.13);
+            background: #fff1f1;
         }
-
-        /* NOTIFICACIONES */
 
         .eco-notification-dropdown {
             position: relative;
@@ -77,179 +71,161 @@
 
         .eco-notification-button {
             position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
             border: 0;
-            border-radius: 50%;
             background: transparent;
             color: #fff;
-            font-size: 1.3rem;
-            transition: background .2s ease;
+            font-size: 1.25rem;
+            padding: 7px 10px;
+            border-radius: 8px;
         }
 
-        .eco-notification-button:hover,
-        .eco-notification-button:focus {
-            background: rgba(255,255,255,.15);
-            color: #fff;
+        .eco-notification-button:hover {
+            background: rgba(255,255,255,.12);
         }
 
         .eco-notification-count {
             position: absolute;
             top: 0;
-            right: -2px;
+            right: 0;
             min-width: 18px;
             height: 18px;
-            padding: 0 4px;
-            border-radius: 20px;
-            background: #dc3545;
-            color: #fff;
-            font-size: .68rem;
-            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #034159;
-        }
-
-        .eco-notification-count.d-none {
-            display: none !important;
+            background: #dc3545;
+            color: #fff;
+            font-size: .65rem;
+            font-weight: 700;
+            border-radius: 50px;
+            padding: 0 4px;
         }
 
         .eco-notification-menu {
-            width: 370px;
-            max-width: calc(100vw - 25px);
-            max-height: 480px;
+            width: 350px;
+            max-width: calc(100vw - 20px);
+            max-height: 420px;
             overflow-y: auto;
             padding: 0;
             border: 0;
             border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,.2);
+            box-shadow: 0 8px 24px rgba(0,0,0,.15);
         }
 
         .eco-notification-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px;
-            background: #034159;
-            color: #fff;
             position: sticky;
             top: 0;
             z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 15px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .eco-notification-clear {
+            border: 0;
+            background: transparent;
+            color: #087c68;
+            font-size: .75rem;
+            font-weight: 600;
+        }
+
+        .eco-notification-clear:hover {
+            text-decoration: underline;
         }
 
         .eco-notification-item {
-            padding: 13px 15px;
+            padding: 12px 15px;
             border-bottom: 1px solid #eee;
-            background: #fff;
-            transition: background .2s ease;
+            white-space: normal;
         }
 
-        .eco-notification-item:hover {
-            background: #f5faf8;
+        .eco-notification-item.is-new {
+            background: #f0faf7;
         }
 
         .eco-notification-item:last-child {
             border-bottom: 0;
         }
 
-        .eco-notification-item.is-new {
-            background: #edf8f4;
-            border-left: 3px solid #087c68;
-        }
-
         .eco-notification-title {
-            font-size: .86rem;
+            font-size: .85rem;
             font-weight: 700;
-            color: #034159;
-            margin-bottom: 4px;
+            color: #263238;
+            margin-bottom: 5px;
         }
 
         .eco-notification-detail {
             font-size: .78rem;
-            color: #555;
+            color: #59656b;
             line-height: 1.5;
         }
 
         .eco-notification-meta {
             font-size: .7rem;
-            color: #888;
-            margin-top: 6px;
+            color: #899399;
+            margin-top: 7px;
         }
 
         .eco-notification-empty {
-            padding: 30px 15px;
             text-align: center;
-            color: #888;
+            color: #899399;
+            padding: 25px 15px;
             font-size: .85rem;
-        }
-
-        .eco-notification-clear {
-            border: 0;
-            background: transparent;
-            color: #cde8df;
-            font-size: .75rem;
-            text-decoration: underline;
-        }
-
-        .eco-notification-clear:hover {
-            color: #fff;
         }
 
         .eco-sidebar {
             min-height: calc(100vh - 56px);
-            background: #002b27;
+            background: #123c35;
         }
 
         .eco-sidebar .nav-link {
             display: flex;
             align-items: center;
             gap: 10px;
-            color: #fff;
-            padding: 12px 14px;
-            border-radius: 10px;
-            transition: background .2s ease;
+            color: rgba(255,255,255,.8);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: .9rem;
         }
 
-        .eco-sidebar .nav-link:hover {
-            background: rgba(0, 180, 145, .25);
-            color: #fff;
-        }
-
+        .eco-sidebar .nav-link:hover,
         .eco-sidebar .nav-link.active {
-            background: #087c68;
             color: #fff;
+            background: rgba(255,255,255,.14);
         }
 
         .eco-sidebar .nav-link i {
-            width: 22px;
+            width: 20px;
             text-align: center;
-            font-size: 1.1rem;
         }
 
         .sidebar-section {
-            color: #a9d9ce;
-            font-size: .75rem;
+            color: rgba(255,255,255,.55);
+            font-size: .68rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: .7px;
-            margin: 20px 0 8px;
-            padding-left: 12px;
+            letter-spacing: .07em;
+            margin: 20px 0 6px;
+            padding-left: 10px;
         }
 
-        /* TARJETAS ESTADÍSTICAS */
+        .eco-card-header {
+            background: #087c68;
+            color: #fff;
+            font-weight: 600;
+        }
 
         .dashboard-stat-card {
-            border-radius: 13px;
+            border-radius: 12px;
             transition: transform .2s ease, box-shadow .2s ease;
         }
 
         .dashboard-stat-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, .08) !important;
+            box-shadow: 0 8px 20px rgba(0,0,0,.08) !important;
         }
 
         .dashboard-stat-icon {
@@ -415,7 +391,12 @@
                 <a href="{% url 'accounts:perfil' %}"
                    class="eco-profile-trigger"
                    title="Mi perfil">
-                    <i class="bi bi-person-lines-fill"></i>
+                    {% if avatar_url %}
+                        <img src="{{ avatar_url }}" alt="Foto de {{ request.user.username }}"
+                             class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;">
+                    {% else %}
+                        <i class="bi bi-person-lines-fill"></i>
+                    {% endif %}
                     <span>Mi perfil</span>
                     <i class="bi bi-chevron-down small"></i>
                 </a>
@@ -753,11 +734,7 @@
                                     </small>
 
                                     <h2 class="fw-bold mt-2 mb-0">
-                                        {% if promedio_consumo != None %}
-                                            {{ promedio_consumo|floatformat:2 }}
-                                        {% else %}
-                                            —
-                                        {% endif %}
+                                        {{ consumo_promedio|default:0|floatformat:2 }}
                                     </h2>
                                 </div>
 
@@ -767,36 +744,7 @@
                             </div>
 
                             <small class="text-muted d-block mt-3">
-                                kWh por medición
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-
-                <!-- MEDICIONES -->
-                {% if mostrar_mediciones %}
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <small class="text-muted fw-semibold">
-                                        Mediciones registradas
-                                    </small>
-
-                                    <h2 class="fw-bold mt-2 mb-0">
-                                        {{ mediciones_total|default:0 }}
-                                    </h2>
-                                </div>
-
-                                <div class="dashboard-stat-icon bg-info-subtle text-info">
-                                    <i class="bi bi-speedometer2"></i>
-                                </div>
-                            </div>
-
-                            <small class="text-muted d-block mt-3">
-                                Lecturas en kWh
+                                Consumo energético en kWh
                             </small>
                         </div>
                     </div>
@@ -985,7 +933,7 @@
 
                 #dashboardCharts .dashboard-chart-card:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 6px 16px rgba(0, 0, 0, .08) !important;
+                    box-shadow: 0 6px 16px rgba(0,0,0,.08) !important;
                 }
 
                 #dashboardCharts .card-body {
@@ -1568,6 +1516,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+{# Clase 11 --> PM: burbuja de chat y conexión WebSocket también en el panel. #}
+{% if request.user.is_authenticated %}
+    {% include "_chat_widget.html" %}
+    {% include "_ws_client.html" %}
+{% endif %}
 
 </body>
 </html>

@@ -1,0 +1,102 @@
+{# Clase 11 --> PM: conexión WebSocket compartida (la usan base.html y el panel). Los demás scripts escuchan los eventos eco:ws y eco:ws-estado. #}
+<script>
+(() => {
+    const protocolo = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const MAX_INTENTOS = 6;
+    let intentos = 0;
+    let primeraConexion = true;
+    window.ecoWsConectado = false;
+
+    // Los demás scripts (chat, tablas) escuchan estos eventos en vez de abrir su propia conexión.
+    function emitir(nombre, detalle) {
+        document.dispatchEvent(new CustomEvent(nombre, { detail: detalle }));
+    }
+
+    // Indicador visible del estado (solo existe en pantallas con tabla en vivo). Usa texto + ícono, no solo color.
+    function mostrarEstado(estado) {
+        const badge = document.getElementById("live-status");
+        if (!badge) return;
+        const vistas = {
+            conectado: ["text-bg-success", '<i class="bi bi-broadcast" aria-hidden="true"></i> En vivo'],
+            reconectando: ["text-bg-warning", '<i class="bi bi-arrow-repeat" aria-hidden="true"></i> Reconectando…'],
+            desconectado: ["text-bg-danger", '<i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Sin conexión: la tabla puede estar desactualizada. Recarga la página.']
+        };
+        badge.className = "badge " + vistas[estado][0];
+        badge.innerHTML = vistas[estado][1];
+    }
+
+    // Pide por HTTP la tabla actualizada y reemplaza SOLO ese bloque (sin F5 ni recarga total).
+    // La vista del listado vuelve a aplicar permisos, organización, filtros, orden y paginación.
+    async function refrescarTabla(bloque) {
+        const url = new URL(bloque.dataset.liveUrl, window.location.origin);
+        url.search = window.location.search;                 // conserva filtros, orden, página y tamaño
+        const opciones = { headers: { "X-Requested-With": "XMLHttpRequest" }, credentials: "same-origin" };
+        try {
+            let respuesta = await fetch(url, opciones);
+            if (respuesta.status === 404 && url.searchParams.has("page")) {
+                url.searchParams.delete("page");              // la página ya no existe: se vuelve a una válida
+                respuesta = await fetch(url, opciones);
+            }
+            if (!respuesta.ok) return;                        // sin permiso o error: no se toca la tabla
+            const doc = new DOMParser().parseFromString(await respuesta.text(), "text/html");
+            const nuevo = doc.querySelector('[data-live-table="' + bloque.dataset.liveTable + '"]');
+            if (nuevo) bloque.innerHTML = nuevo.innerHTML;
+        } catch (error) {
+            console.error("No se pudo actualizar la tabla:", error);
+        }
+    }
+
+    const pendientes = new Map();
+    function refrescarTablas(modulo) {
+        document.querySelectorAll("[data-live-table]").forEach((bloque) => {
+            const modulos = (bloque.dataset.liveModules || "").split(/\s+/);
+            if (modulo && !modulos.includes(modulo)) return;  // el cambio es de otro módulo
+            clearTimeout(pendientes.get(bloque));
+            pendientes.set(bloque, setTimeout(() => refrescarTabla(bloque), 150));  // agrupa avisos seguidos
+        });
+    }
+
+    function conectar() {
+        const socket = new WebSocket(`${protocolo}//${window.location.host}/ws/chat/`);
+        window.ecoSocket = socket;
+
+        socket.onopen = () => {
+            intentos = 0;
+            window.ecoWsConectado = true;
+            mostrarEstado("conectado");
+            emitir("eco:ws-estado", { conectado: true });
+            // Si hubo una caída, se puede haber perdido algún aviso: se vuelve a pedir la tabla una vez.
+            if (!primeraConexion) refrescarTablas(null);
+            primeraConexion = false;
+        };
+
+        socket.onmessage = (event) => {
+            let data;
+            try {
+                data = JSON.parse(event.data);
+            } catch (error) {
+                console.error("Mensaje WebSocket inválido:", error);
+                return;
+            }
+            emitir("eco:ws", data);                           // el chat escucha este evento
+            if (data.type === "crud_update") refrescarTablas(data.module);
+        };
+
+        socket.onclose = () => {
+            window.ecoWsConectado = false;
+            emitir("eco:ws-estado", { conectado: false });
+            if (intentos < MAX_INTENTOS) {
+                mostrarEstado("reconectando");
+                setTimeout(conectar, Math.min(30000, 1000 * 2 ** intentos));
+                intentos += 1;
+            } else {
+                mostrarEstado("desconectado");
+            }
+        };
+
+        socket.onerror = (error) => console.error("Error en la conexión WebSocket:", error);
+    }
+
+    conectar();
+})();
+</script>

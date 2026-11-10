@@ -3,6 +3,8 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 from django.core.exceptions import ObjectDoesNotExist
 
+from .services import CHAT_MAX_LENGTH
+
 
 MODULE_PERMISSIONS = {
     "organizaciones": "organizations.view_organization",
@@ -73,14 +75,16 @@ class ChatConsumer(JsonWebsocketConsumer):
             )
 
     def receive_json(self, content, **kwargs):
-        mensaje = content.get("mensaje", "")
+        # Aceptar ambos formatos de mensaje para compatibilidad
+        # con las dos ramas.
+        mensaje = content.get("message", content.get("mensaje", ""))
 
         if not isinstance(mensaje, str):
             return
 
         mensaje = mensaje.strip()
 
-        if not mensaje or len(mensaje) > 500:
+        if not mensaje or len(mensaje) > CHAT_MAX_LENGTH:
             return
 
         async_to_sync(self.channel_layer.group_send)(
@@ -88,8 +92,9 @@ class ChatConsumer(JsonWebsocketConsumer):
             {
                 "type": "chat_event",
                 "payload": {
-                    "mensaje": mensaje,
-                    "usuario": self.scope["user"].username,
+                    "type": "chat_message",
+                    "username": self.scope["user"].username,
+                    "message": mensaje,
                 },
             },
         )
@@ -115,6 +120,8 @@ class ChatConsumer(JsonWebsocketConsumer):
             if not permission or not user.has_perm(permission):
                 return
 
+        # Enviar todos los datos de la notificación CRUD.
+        # Se conserva el payload completo para no perder información.
         self.send_json({
             "type": "crud_update",
             **event["payload"],

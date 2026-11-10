@@ -3,105 +3,50 @@
 {% block title %}Mi perfil | EcoEnergy{% endblock %}
 
 {% block content %}
-{# Perfil de usuario con foto (Clase 9) --> PM #}
-{# Esta página muestra los datos del usuario que inició sesión y le permite cambiar su foto. #}
-{# Siempre se comprueba {% if profile.avatar %} antes de usar .url para no romper la página cuando no hay foto. #}
+{# Mi perfil (solo lectura): los datos y la foto se cambian en "Editar mi perfil". #}
 <div class="container py-4">
 
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
     <div>
       <h1 class="h3 mb-1">Mi perfil</h1>
-      <p class="text-muted mb-0">Consulta tus datos y actualiza tu foto.</p>
+      <p class="text-muted mb-0">Consulta tus datos personales y de organización.</p>
     </div>
-    <a href="{% url 'dashboard:dashboard' %}" class="btn btn-outline-secondary">
-      <i class="bi bi-arrow-left"></i> Volver al panel
-    </a>
+    <div class="d-flex gap-2">
+      <a href="{% url 'accounts:perfil_editar' %}" class="btn btn-primary">
+        <i class="bi bi-pencil-square"></i> Editar mi perfil
+      </a>
+      <a href="{% url 'dashboard:dashboard' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Volver al panel
+      </a>
+    </div>
   </div>
 
   {% if not profile %}
     <div class="alert alert-warning">
-      Tu cuenta todavía no tiene un perfil asignado. Pide a un administrador que lo cree para poder usar tu foto y ver tus datos de organización.
+      Tu cuenta todavía no tiene un perfil de organización asignado. Puedes editar tu nombre, correo y contraseña; pide a un administrador que complete tu perfil para usar la foto.
     </div>
-  {% else %}
+  {% endif %}
+
   <div class="row g-4">
 
-    <!-- Columna izquierda: foto y cambio de foto -->
     <div class="col-lg-4">
       <div class="card border-0 shadow-sm">
         <div class="card-body text-center">
-
           {% if profile.avatar %}
             <img src="{{ profile.avatar.url }}"
                  alt="Foto de perfil de {{ user.username }}"
                  class="rounded-circle border mb-3"
                  style="width: 160px; height: 160px; object-fit: cover;">
           {% else %}
-            <i class="bi bi-person-circle text-secondary" style="font-size: 160px; line-height: 1;"></i>
+            <i class="bi bi-person-circle text-secondary" style="font-size: 160px; line-height: 1;" aria-hidden="true"></i>
+            <span class="visually-hidden">Sin foto de perfil</span>
           {% endif %}
-
           <h2 class="h5 mb-0">{{ user.get_full_name|default:user.username }}</h2>
-          <p class="text-muted small mb-3">@{{ user.username }}</p>
-
-          <hr>
-
-          <!-- enctype="multipart/form-data": sin esto el navegador no envía el archivo y request.FILES llega vacío -->
-          <form method="post" enctype="multipart/form-data" novalidate id="avatarForm" class="text-start">
-            {% csrf_token %}
-
-            {{ form.non_field_errors }}
-
-            <div class="form-label fw-semibold">Cambiar foto</div>
-
-            {# El input real está oculto (d-none); el botón "Elegir imagen" es un label que lo activa y se ve igual en cualquier navegador/idioma. #}
-            {{ form.avatar }}
-            <div class="d-flex align-items-center gap-2">
-              <label for="{{ form.avatar.id_for_label }}" class="btn btn-outline-success btn-sm mb-0 flex-shrink-0">
-                <i class="bi bi-image"></i> Elegir imagen
-              </label>
-              <span id="avatarNombre" class="small text-muted text-truncate">Ninguna imagen seleccionada</span>
-            </div>
-            <div class="form-text">{{ form.avatar.help_text }}</div>
-            {% for error in form.avatar.errors %}
-              <div class="text-danger small">{{ error }}</div>
-            {% endfor %}
-
-            <!-- Recortador: aparece al elegir una imagen nueva -->
-            <div id="cropBox" class="mt-3 d-none">
-              <div class="border rounded bg-dark" style="max-height: 300px; overflow: hidden;">
-                <img id="cropImage" alt="Vista previa para recortar" style="display: block; max-width: 100%;">
-              </div>
-              <div class="btn-group btn-group-sm mt-2" role="group" aria-label="Zoom y giro">
-                <button type="button" class="btn btn-outline-secondary" data-crop="zoom-in" title="Acercar">
-                  <i class="bi bi-zoom-in"></i>
-                </button>
-                <button type="button" class="btn btn-outline-secondary" data-crop="zoom-out" title="Alejar">
-                  <i class="bi bi-zoom-out"></i>
-                </button>
-                <button type="button" class="btn btn-outline-secondary" data-crop="rotate-left" title="Girar a la izquierda">
-                  <i class="bi bi-arrow-counterclockwise"></i>
-                </button>
-                <button type="button" class="btn btn-outline-secondary" data-crop="rotate-right" title="Girar a la derecha">
-                  <i class="bi bi-arrow-clockwise"></i>
-                </button>
-                <button type="button" class="btn btn-outline-secondary" data-crop="reset" title="Restablecer">
-                  <i class="bi bi-arrow-repeat"></i>
-                </button>
-              </div>
-              <div class="form-text">
-                Arrastra para mover, usa la rueda del mouse para hacer zoom. El recorte es cuadrado.
-              </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100 mt-3">
-              <i class="bi bi-cloud-upload"></i> Guardar foto
-            </button>
-          </form>
-
+          <p class="text-muted small mb-0">@{{ user.username }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Columna derecha: datos del usuario (solo lectura) -->
     <div class="col-lg-8">
       <div class="card border-0 shadow-sm">
         <div class="card-header bg-white py-3">
@@ -118,6 +63,7 @@
             <dt class="col-sm-4">Correo</dt>
             <dd class="col-sm-8">{{ user.email|default:"No registrado" }}</dd>
 
+            {% if profile %}
             <dt class="col-sm-4">Organización</dt>
             <dd class="col-sm-8">{{ profile.organization.comercial_name|default:profile.organization }}</dd>
 
@@ -135,6 +81,7 @@
 
             <dt class="col-sm-4">Dirección</dt>
             <dd class="col-sm-8">{{ profile.address|default:"No registrada" }}</dd>
+            {% endif %}
 
             <dt class="col-sm-4">Rol</dt>
             <dd class="col-sm-8">
@@ -153,102 +100,5 @@
     </div>
 
   </div>
-  {% endif %}
 </div>
-
-{% if profile %}
-{# Cropper.js (librería de recorte) cargada desde CDN. #}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
-<script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
-<script>
-  (function () {
-    var input = document.getElementById("id_avatar");
-    var form = document.getElementById("avatarForm");
-    var box = document.getElementById("cropBox");
-    var img = document.getElementById("cropImage");
-    var etiqueta = document.getElementById("avatarNombre");
-
-    if (!input || !form || !box || !img || typeof Cropper === "undefined") {
-      return;
-    }
-
-    var cropper = null;
-    var urlTemporal = null;
-    var tipoSalida = "image/jpeg";
-    var nombreSalida = "avatar.jpg";
-    var yaRecortada = false;
-
-    // Libera el recortador y la URL temporal.
-    function limpiar() {
-      if (cropper) { cropper.destroy(); cropper = null; }
-      if (urlTemporal) { URL.revokeObjectURL(urlTemporal); urlTemporal = null; }
-      img.removeAttribute("src");
-      box.classList.add("d-none");
-      yaRecortada = false;
-    }
-
-    // 1) Al elegir una imagen se muestra en el recortador (recorte cuadrado: aspectRatio 1).
-    input.addEventListener("change", function () {
-      limpiar();
-      var archivo = input.files && input.files[0];
-      // Muestra el nombre de la imagen elegida junto al botón.
-      if (etiqueta) { etiqueta.textContent = archivo ? archivo.name : "Ninguna imagen seleccionada"; }
-      if (!archivo || archivo.type.indexOf("image/") !== 0) { return; }
-
-      // PNG se mantiene como PNG (conserva transparencia); el resto se exporta como JPG.
-      var esPng = archivo.type === "image/png";
-      tipoSalida = esPng ? "image/png" : "image/jpeg";
-      var base = archivo.name.replace(/\.[^.]+$/, "") || "avatar";
-      nombreSalida = base + (esPng ? ".png" : ".jpg");
-
-      urlTemporal = URL.createObjectURL(archivo);
-      img.src = urlTemporal;
-      box.classList.remove("d-none");
-
-      cropper = new Cropper(img, {
-        aspectRatio: 1,       // recorte cuadrado, ideal para foto de perfil
-        viewMode: 1,          // el recuadro no se sale de la imagen
-        dragMode: "move",     // arrastrar mueve la imagen
-        autoCropArea: 1,
-        background: false,
-        responsive: true
-      });
-    });
-
-    // 2) Botones de zoom, giro y restablecer.
-    box.addEventListener("click", function (e) {
-      var boton = e.target.closest("button");
-      if (!boton || !cropper) { return; }
-      var accion = boton.getAttribute("data-crop");
-      if (accion === "zoom-in") { cropper.zoom(0.1); }
-      if (accion === "zoom-out") { cropper.zoom(-0.1); }
-      if (accion === "rotate-left") { cropper.rotate(-90); }
-      if (accion === "rotate-right") { cropper.rotate(90); }
-      if (accion === "reset") { cropper.reset(); }
-    });
-
-    // 3) Al guardar, la imagen recortada (máx. 600 px) reemplaza al archivo original dentro del input y recién ahí se envía el formulario.
-    form.addEventListener("submit", function (e) {
-      if (!cropper || yaRecortada) { return; }
-      e.preventDefault();
-
-      var lienzo = cropper.getCroppedCanvas({
-        maxWidth: 600,
-        maxHeight: 600,
-        imageSmoothingQuality: "high"
-      });
-      if (!lienzo) { return; }
-
-      lienzo.toBlob(function (blob) {
-        var archivoNuevo = new File([blob], nombreSalida, { type: tipoSalida });
-        var contenedor = new DataTransfer();
-        contenedor.items.add(archivoNuevo);
-        input.files = contenedor.files;
-        yaRecortada = true;
-        form.submit();
-      }, tipoSalida, 0.9);
-    });
-  })();
-</script>
-{% endif %}
 {% endblock %}
