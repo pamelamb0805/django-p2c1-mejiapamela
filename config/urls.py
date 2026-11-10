@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from core.views import home_view
+from core.views import home_view, export_crud_excel
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,6 +17,11 @@ urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('chat/', include('websocket.urls')),
+    path(
+    'exportar-excel/<str:module>/',
+    export_crud_excel,
+    name='export_crud_excel'
+    ),
 ]
 
 # Clase 9 (archivos e imágenes) --> PM

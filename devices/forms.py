@@ -255,6 +255,13 @@ class ProductForm(FormLimitsMixin, forms.ModelForm):
 # ModelForm de Measurement: se reutiliza para Crear y Editar.
 class MeasurementForm(FormLimitsMixin, forms.ModelForm):
 
+    status = forms.ChoiceField(
+        choices=ACTIVE_INACTIVE_CHOICES,
+        initial="activo",
+        label="Estado",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
     class Meta:
         model = Measurement
         fields = [
@@ -270,24 +277,20 @@ class MeasurementForm(FormLimitsMixin, forms.ModelForm):
             "measurement_id": forms.TextInput(attrs={"class": "form-control"}),
             "value": forms.NumberInput(attrs={"class": "form-control", "step": "0.0001"}),
             "unit": forms.TextInput(attrs={"class": "form-control"}),
-            # format: para que al editar el campo datetime-local muestre el valor guardado.
             "datetime": forms.DateTimeInput(
                 format="%Y-%m-%dT%H:%M",
                 attrs={"class": "form-control", "type": "datetime-local"},
             ),
-            "status": forms.TextInput(attrs={"class": "form-control"}),
             "origin": forms.TextInput(attrs={"class": "form-control"}),
             "device": forms.Select(attrs={"class": "form-select"}),
         }
 
-    # Recibe el usuario para que el selector solo muestre dispositivos de su ámbito.
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         if user is not None:
-            from .views import get_visible_devices  # import local: evita import circular
+            from .views import get_visible_devices
             self.fields["device"].queryset = get_visible_devices(user)
 
-    # El código es único en la base de datos (incluye eliminadas lógicas).
     def clean_measurement_id(self):
         code = self.cleaned_data["measurement_id"].strip()
         exists = (
@@ -299,7 +302,6 @@ class MeasurementForm(FormLimitsMixin, forms.ModelForm):
             raise ValidationError("Ya existe una medición con ese código.")
         return code
 
-    # Una lectura de consumo no puede ser negativa.
     def clean_value(self):
         value = self.cleaned_data["value"]
         if value < 0:

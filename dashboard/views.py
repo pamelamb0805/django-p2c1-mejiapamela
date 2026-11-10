@@ -518,3 +518,415 @@ def remember_preference(request):
     )
 
     return redirect("dashboard:dashboard")
+
+
+@login_required
+def export_dashboard_excel(request):
+
+    from io import BytesIO
+    from datetime import timedelta
+
+    from django.http import HttpResponse
+    from django.utils import timezone
+    from django.db.models import Sum, Count, Avg
+    from django.db.models.functions import TruncDate, ExtractHour
+
+    from openpyxl import Workbook
+    from openpyxl.styles import Font, PatternFill, Alignment
+
+    from devices.views import (
+        get_visible_devices,
+        get_visible_maintenance,
+    )
+
+    user = request.user
+    profile = getattr(user, "profile", None)
+
+    if profile is None and not user.is_superuser:
+        raise PermissionDenied(
+            "La cuenta no posee un perfil habilitado."
+        )
+
+    organization_id = (
+        profile.organization_id if profile else None
+    )
+
+    periods = {
+        "semana": ("Última semana", 7),
+        "mes": ("Último mes", 30),
+        "semestral": ("Últimos seis meses", 182),
+        "anual": ("Último año", 365),
+    }
+
+    selected_period = request.GET.get(
+        "periodo",
+        "semana"
+    )
+
+    if selected_period not in periods:
+        selected_period = "semana"
+
+    period_name, days = periods[selected_period]
+
+    now = timezone.now()
+    start_date = now - timedelta(days=days)
+
+    # CONSULTAS CON ALCANCE DE PERMISOS
+
+    if user.has_perm("devices.view_device"):
+        devices = get_visible_devices(user)
+    else:
+        devices = Device.objects.none()
+
+    measurements = Measurement.objects.none()
+
+    if user.has_perm("devices.view_measurement"):
+        measurements = Measurement.objects.filter(
+            deleted_at__isnull=True,
+            datetime__gte=start_date,
+            unit__iexact="kWh",
+            device__in=devices,
+        ).select_related(
+            "device",
+            "device__zone",
+            "device__zone__department",
+        )
+
+    alerts = AlertEvent.objects.none()
+
+    if user.has_perm("devices.view_alertevent"):
+        alerts = AlertEvent.objects.filter(
+            deleted_at__isnull=True,
+            created_at__gte=start_date,
+            device__in=devices,
+        )
+
+    maintenance = MaintenanceRequest.objects.none()
+
+    if user.has_perm("devices.view_maintenancerequest"):
+        maintenance = get_visible_maintenance(
+            user
+        ).filter(
+            created_at__gte=start_date
+        )
+
+    # DATOS DE GRÁFICOS
+
+    chart_rows = []
+
+    def add_chart_rows(title, queryset, label_field, unit):
+        for row in queryset:
+            label = row.get(label_field) or "Sin clasificar"
+            value = float(row.get("total") or 0)
+
+            chart_rows.append([
+                title,
+                str(label),
+                value,
+                unit,
+            ])
+
+    if user.has_perm("devices.view_measurement"):
+
+        # Consumo histórico diario
+        daily = (
+            measurements
+            .annotate(dia=TruncDate("datetime"))
+            .values("dia")
+            .annotate(total=Sum("value"))
+            .order_by("dia")
+        )
+
+        for row in daily:
+            chart_rows.append([
+                "Consumo histórico",
+                row["dia"].strftime("%d/%m/%Y") if row["dia"] else "Sin fecha",
+                float(row["total"] or 0),
+                "kWh",
+            ])
+
+        # Consumo por departamento
+        department_data = (
+            measurements
+            .values("device__zone__department__name")
+            .annotate(total=Sum("value"))
+            .order_by("-total")
+        )
+
+        add_chart_rows(
+            "Consumo por departamento",
+            department_data,
+            "device__zone__department__name",
+            "kWh",
+        )
+
+        # Consumo por zona
+        zone_data = (
+            measurements
+            .values("device__zone__name")
+            .annotate(total=Sum("value"))
+            .order_by("-total")
+        )
+
+        add_chart_rows(
+            "Consumo por zona",
+            zone_data,
+            "device__zone__name",
+            "kWh",
+        )
+
+        # Cinco dispositivos de mayor consumo
+        top_devices = (
+            measurements
+            .values("device__internal_name")
+            .annotate(total=Sum("value"))
+            .order_by("-total")[:5]
+        )
+
+        add_chart_rows(
+            "Top dispositivos",
+            top_devices,
+            "device__internal_name",
+            "kWh",
+        )
+
+        # Demanda horaria
+        hourly = (
+            measurements
+            .annotate(hora=ExtractHour("datetime"))
+            .values("hora")
+            .annotate(total=Sum("value"))
+            .order_by("hora")
+        )
+
+        for row in hourly:
+            chart_rows.append([
+                "Demanda horaria",
+                f"{row['hora']:02d}:00" if row["hora"] is not None else "Sin hora",
+                float(row["total"] or 0),
+                "kWh",
+            ])
+
+    # Estado actual de dispositivos
+    if user.has_perm("devices.view_device"):
+
+        device_states = (
+            devices
+            .values("status")
+            .annotate(total=Count("pk"))
+            .order_by("status")
+        )
+
+        for row in device_states:
+            chart_rows.append([
+                "Estado de dispositivos",
+                row["status"] or "Sin estado",
+                row["total"],
+                "Dispositivos",
+            ])
+
+    # Estado de alertas creadas durante el período
+    if user.has_perm("devices.view_alertevent"):
+
+        alert_states = (
+            alerts
+            .values("status")
+            .annotate(total=Count("pk"))
+            .order_by("status")
+        )
+
+        for row in alert_states:
+            chart_rows.append([
+                "Estado de alertas",
+                row["status"] or "Sin estado",
+                row["total"],
+                "Alertas",
+            ])
+
+    # Estado de mantenimientos creados durante el período
+    if user.has_perm("devices.view_maintenancerequest"):
+
+        maintenance_states = (
+            maintenance
+            .values("status")
+            .annotate(total=Count("pk"))
+            .order_by("status")
+        )
+
+        for row in maintenance_states:
+            chart_rows.append([
+                "Estado de mantenimientos",
+                row["status"] or "Sin estado",
+                row["total"],
+                "Solicitudes",
+            ])
+
+    # ÚLTIMOS REGISTROS DE LA BITÁCORA
+
+    activity = get_visible_activity(
+        user,
+        organization_id,
+    ).filter(
+        created_at__gte=start_date
+    ).select_related(
+        "actor",
+        "organization",
+    ).order_by("-created_at")[:15]
+
+    # RESUMEN
+
+    measurement_summary = measurements.aggregate(
+        total=Sum("value"),
+        promedio=Avg("value"),
+        cantidad=Count("pk"),
+    )
+
+    # CREAR EXCEL
+
+    workbook = Workbook()
+
+    # HOJA 1: RESUMEN
+    summary = workbook.active
+    summary.title = "Resumen"
+
+    summary.append(["INFORME ECOENERGY"])
+    summary.append(["Período", period_name])
+    summary.append(["Desde", timezone.localtime(start_date).replace(tzinfo=None)])
+    summary.append(["Hasta", timezone.localtime(now).replace(tzinfo=None)])
+    summary.append([])
+
+    summary.append(["Indicador", "Resultado"])
+
+    summary.append([
+        "Total de mediciones",
+        measurement_summary["cantidad"] or 0,
+    ])
+
+    summary.append([
+        "Consumo acumulado (kWh)",
+        float(measurement_summary["total"] or 0),
+    ])
+
+    summary.append([
+        "Consumo promedio (kWh)",
+        float(measurement_summary["promedio"] or 0),
+    ])
+
+    if user.has_perm("devices.view_device"):
+        summary.append([
+            "Dispositivos visibles",
+            devices.count(),
+        ])
+
+    if user.has_perm("devices.view_alertevent"):
+        summary.append([
+            "Alertas del período",
+            alerts.count(),
+        ])
+
+    if user.has_perm("devices.view_maintenancerequest"):
+        summary.append([
+            "Mantenimientos del período",
+            maintenance.count(),
+        ])
+
+    # HOJA 2: DATOS DE LOS GRÁFICOS
+    charts_sheet = workbook.create_sheet("Datos gráficos")
+
+    charts_sheet.append([
+        "Gráfico",
+        "Categoría",
+        "Valor",
+        "Unidad",
+    ])
+
+    for row in chart_rows:
+        charts_sheet.append(row)
+
+    # HOJA 3: ÚLTIMOS REGISTROS
+    activity_sheet = workbook.create_sheet("Últimos registros")
+
+    activity_sheet.append([
+        "Fecha y hora",
+        "Módulo",
+        "Operación",
+        "Registro afectado",
+        "Tipo de registro",
+        "ID",
+        "Responsable",
+        "Organización",
+    ])
+
+    for registro in activity:
+        fecha = registro.created_at
+
+        if timezone.is_aware(fecha):
+            fecha = timezone.localtime(fecha).replace(tzinfo=None)
+
+        organizacion = ""
+
+        if registro.organization:
+            organizacion = (
+                registro.organization.comercial_name
+                or registro.organization.legal_name
+            )
+
+        activity_sheet.append([
+            fecha,
+            registro.get_module_display(),
+            registro.get_action_display(),
+            registro.object_label,
+            registro.object_type,
+            registro.object_pk,
+            registro.actor_name,
+            organizacion or "Global",
+        ])
+
+    # FORMATO DE LAS HOJAS
+    for sheet in workbook.worksheets:
+
+        sheet.freeze_panes = "A2"
+
+        if sheet.max_row > 1:
+            sheet.auto_filter.ref = sheet.dimensions
+
+        for cell in sheet[1]:
+            cell.font = Font(
+                bold=True,
+                color="FFFFFF",
+            )
+            cell.fill = PatternFill(
+                fill_type="solid",
+                fgColor="034159",
+            )
+            cell.alignment = Alignment(
+                horizontal="center",
+            )
+
+        for column_cells in sheet.columns:
+            max_length = max(
+                len(str(cell.value or ""))
+                for cell in column_cells
+            )
+
+            sheet.column_dimensions[
+                column_cells[0].column_letter
+            ].width = min(max(max_length + 3, 14), 45)
+
+    output = BytesIO()
+    workbook.save(output)
+    output.seek(0)
+
+    response = HttpResponse(
+        output.getvalue(),
+        content_type=(
+            "application/vnd.openxmlformats-officedocument."
+            "spreadsheetml.sheet"
+        ),
+    )
+
+    response["Content-Disposition"] = (
+        f'attachment; filename="EcoEnergy_Dashboard_{selected_period}.xlsx"'
+    )
+
+    return response

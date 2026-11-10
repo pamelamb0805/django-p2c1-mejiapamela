@@ -8,4 +8,9 @@ urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('preference/', views.remember_preference, name='remember_preference'),
     path('indicators/', indicators_view, name='indicators'),
+    path(
+    'exportar-excel/',
+    views.export_dashboard_excel,
+    name='export_excel'
+    ),
 ]

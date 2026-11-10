@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block title %}Usuarios y perfiles | EcoEnergy{% endblock %}
@@ -57,7 +58,6 @@
           </div>
           {% endif %}
 
-          {% include "_page_size_select.html" %}
           <div class="col-md-2">
             <label for="departamento" class="form-label">Departamento</label>
             <select class="form-select" id="departamento" name="departamento">
@@ -70,8 +70,9 @@
               {% endfor %}
             </select>
           </div>
-          
+
           {% include "_page_size_select.html" %}
+
           <div class="col-md-2">
             <label for="rol" class="form-label">Rol</label>
             <select class="form-select" id="rol" name="rol">
@@ -98,6 +99,11 @@
 
         </div>
       </form>
+
+      <!-- Exportar a Excel -->
+      <div class="d-flex justify-content-end mt-3">
+        {% include "_export_excel_button.html" with export_module="usuarios" %}
+      </div>
     </div>
   </div>
 

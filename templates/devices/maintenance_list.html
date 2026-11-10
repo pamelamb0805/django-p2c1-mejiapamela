@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block title %}Mantenimiento | EcoEnergy{% endblock %}
@@ -14,8 +15,7 @@
     </div>
 
     {% if perms.devices.add_maintenancerequest %}
-      <a href="{% url 'devices:maintenance_create' %}"
-         class="btn btn-primary">
+      <a href="{% url 'devices:maintenance_create' %}" class="btn btn-primary">
         <i class="bi bi-plus-lg"></i> Nueva solicitud
       </a>
     {% endif %}
@@ -68,6 +68,7 @@
 
           {% include "_ordering_select.html" %}
           {% include "_page_size_select.html" %}
+
           <div class="col-md-3 d-flex gap-2">
             <button type="submit" class="btn btn-primary w-100">
               <i class="bi bi-search"></i> Buscar
@@ -81,6 +82,11 @@
 
         </div>
       </form>
+
+      <!-- Exportar a Excel -->
+      <div class="d-flex justify-content-end mt-3">
+        {% include "_export_excel_button.html" with export_module="mantenimiento" %}
+      </div>
     </div>
   </div>
 
@@ -139,7 +145,9 @@
             <td>
               {% if m.assigned_to %}
                 {{ m.assigned_to.get_full_name|default:m.assigned_to.username }}
-              {% else %}—{% endif %}
+              {% else %}
+                —
+              {% endif %}
             </td>
 
             <td class="text-end text-nowrap">
