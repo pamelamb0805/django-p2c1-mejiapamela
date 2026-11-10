@@ -18,7 +18,7 @@ msgpack==1.2.3
 mysqlclient==2.3.0
 openpyxl==3.1.5
 packaging==26.3
-pillow>=11.0.0
+pillow==13.0.0
 pycparser==3.11
 pyOpenSSL==26.4.0
 python-dotenv==1.2.3
@@ -29,4 +29,4 @@ txaio==26.6.1
 typing_extensions==4.16.0
 tzdata==2026.3
 ujson==6.0.0
-zope.interface==8.7openpyxl==3.1.5
+zope.interface==8.7
