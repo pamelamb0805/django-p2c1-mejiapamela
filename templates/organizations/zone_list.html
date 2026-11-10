@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block title %}Zonas físicas | EcoEnergy{% endblock %}
@@ -69,6 +70,7 @@
 
           {% include "_ordering_select.html" %}
           {% include "_page_size_select.html" %}
+
           <div class="col-md-3 d-flex gap-2">
             <button type="submit" class="btn btn-primary w-100">
               <i class="bi bi-search"></i> Buscar
@@ -82,6 +84,11 @@
 
         </div>
       </form>
+
+      <!-- Exportar a Excel -->
+      <div class="d-flex justify-content-end mt-3">
+        {% include "_export_excel_button.html" with export_module="zonas" %}
+      </div>
     </div>
   </div>
 
