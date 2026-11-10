@@ -1,6 +1,6 @@
 
 # Entrega Eva3 --> PM --> corrección paginador
-#prueba git
+#prueba git2
 # Opciones de ordenamiento y paginación.
 PAGE_SIZE_OPTIONS = (5, 10, 15)
 DEFAULT_PAGE_SIZE = 10
