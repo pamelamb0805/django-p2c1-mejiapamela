@@ -181,19 +181,42 @@ MESSAGE_TAGS = {
 # Bootstrap usa 'danger'
 }
 
-#recuperacion correo backend ---ppt 1 u 2
-#EMAIL_BACKEND = (
-#"django.core.mail.backends."
-#"console.EmailBackend"
-#)
-DEFAULT_FROM_EMAIL = (
-"noreply@proyecto.local"
+# ==========================================
+# CONFIGURACIÓN DE CORREO - ECOENERGY
+# ==========================================
+
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.smtp.EmailBackend"
 )
-#estructura email backend
-EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
-AUTHENTICATION_BACKENDS = ["accounts.backends.EmailOrUsernameBackend"]
-EMAIL_HOST = os.getenv("EMAIL_HOST", "")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", "2525"))
+
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
+
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() == "true"
+EMAIL_USE_SSL = False
+
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    EMAIL_HOST_USER
+)
+
+# ==========================================
+# CONFIGURACIÓN DE RECUPERACIÓN DE CONTRASEÑA
+# ==========================================
+
+PASSWORD_RESET_CODE_TTL = int(
+    os.getenv("PASSWORD_RESET_CODE_TTL", "120")
+)
+
+PASSWORD_RESET_MAX_ATTEMPTS = int(
+    os.getenv("PASSWORD_RESET_MAX_ATTEMPTS", "5")
+)
+
+# Autenticación mediante correo o nombre de usuario
+AUTHENTICATION_BACKENDS = [
+    "accounts.backends.EmailOrUsernameBackend"
+]

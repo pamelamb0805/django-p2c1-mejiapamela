@@ -1,3 +1,4 @@
+
 {% load django_bootstrap5 %}
 {% load static %}
 <!doctype html>
@@ -18,6 +19,115 @@
 
     <!-- CSS global -->
     <link rel="stylesheet" href="{% static 'css/ecoenergy.css' %}">
+
+    <!-- Estilos del menú Mi perfil -->
+    <style>
+        .eco-profile-dropdown {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .eco-profile-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: #EAFBF1;
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 10px;
+            transition: background-color 0.2s ease;
+        }
+
+        .eco-profile-trigger:hover,
+        .eco-profile-trigger:focus {
+            color: #A9FFCB;
+            background-color: rgba(169, 255, 203, 0.10);
+        }
+
+        .eco-profile-trigger img {
+            width: 34px;
+            height: 34px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .eco-profile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            min-width: 190px;
+            padding: 6px;
+            background-color: #034159;
+            border: 1px solid rgba(169, 255, 203, 0.22);
+            border-radius: 10px;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+            z-index: 1100;
+        }
+
+        /* Mostrar al pasar el mouse o al navegar con teclado */
+        .eco-profile-dropdown:hover .eco-profile-menu,
+        .eco-profile-dropdown:focus-within .eco-profile-menu {
+            display: block;
+        }
+
+        .eco-profile-menu form {
+            margin: 0;
+        }
+
+        .eco-profile-menu-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 7px;
+            padding: 10px 12px;
+            background: transparent;
+            color: #EAFBF1;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .eco-profile-menu-button:hover,
+        .eco-profile-menu-button:focus {
+            background-color: #02735E;
+            color: #FFFFFF;
+        }
+
+        .eco-profile-menu-button i {
+            font-size: 1.05rem;
+        }
+
+        /* En celulares se muestra la opción directamente,
+           ya que no existe interacción hover. */
+        @media (max-width: 991.98px) {
+            .eco-navbar-action {
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .eco-profile-dropdown {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .eco-profile-menu {
+                display: block;
+                position: static;
+                width: 100%;
+                min-width: 0;
+                margin-top: 3px;
+                box-shadow: none;
+            }
+        }
+    </style>
 
     <!-- CSS específico de cada página -->
     {% block extra_head %}{% endblock %}
@@ -74,33 +184,64 @@
 
                 </ul>
 
-                <!-- BOTÓN DE ACCESO -->
+                <!-- ACCIONES DE USUARIO -->
                 <div class="eco-navbar-action">
+
                     {% if user.is_authenticated %}
-                        {# Perfil de usuario con foto (Clase 9) --> PM: foto + enlace a "Mi perfil". user.profile.avatar no falla si el usuario no tiene perfil. #}
-                        <a href="{% url 'accounts:perfil' %}"
-                           class="d-inline-flex align-items-center gap-2 text-decoration-none text-light me-3"
-                           title="Mi perfil">
-                            {% if user.profile.avatar %}
-                                <img src="{{ user.profile.avatar.url }}"
-                                     alt="Foto de {{ user.username }}"
-                                     class="rounded-circle"
-                                     style="width: 32px; height: 32px; object-fit: cover;">
-                            {% else %}
-                                <i class="bi bi-person-circle fs-4"></i>
-                            {% endif %}
-                            <span class="d-none d-lg-inline">Mi perfil</span>
-                        </a>
-                        <a href="{% url 'dashboard:dashboard' %}" class="btn eco-btn-start">
+
+                        <!-- MENÚ DESPLEGABLE MI PERFIL -->
+                        <div class="eco-profile-dropdown">
+
+                            <a href="{% url 'accounts:perfil' %}"
+                               class="eco-profile-trigger"
+                               title="Mi perfil"
+                               aria-label="Ir a Mi perfil">
+
+                                {% if user.profile.avatar %}
+                                    <img src="{{ user.profile.avatar.url }}"
+                                         alt="Foto de {{ user.username }}">
+                                {% else %}
+                                    <i class="bi bi-person-circle fs-4"></i>
+                                {% endif %}
+
+                                <span>Mi perfil</span>
+
+                                <i class="bi bi-chevron-down"></i>
+                            </a>
+
+                            <!-- OPCIÓN QUE APARECE AL PASAR EL MOUSE -->
+                            <div class="eco-profile-menu">
+
+                                <form method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+
+                                    <button type="submit"
+                                            class="eco-profile-menu-button">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        Cerrar sesión
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+
+                        <!-- MI PANEL -->
+                        <a href="{% url 'dashboard:dashboard' %}"
+                           class="btn eco-btn-start">
                             Mi panel
                             <i class="bi bi-arrow-right ms-1"></i>
                         </a>
+
                     {% else %}
-                        <a href="{% url 'accounts:registro' %}" class="btn eco-btn-start">
+
+                        <a href="{% url 'accounts:registro' %}"
+                           class="btn eco-btn-start">
                             Comenzar
                             <i class="bi bi-arrow-right ms-1"></i>
                         </a>
+
                     {% endif %}
+
                 </div>
 
             </div>
@@ -113,7 +254,10 @@
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
             {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Cerrar"></button>
         </div>
         {% endfor %}
     </div>

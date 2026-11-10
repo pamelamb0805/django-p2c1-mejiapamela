@@ -185,7 +185,7 @@ class DeviceListView(PageSizeMixin, DeviceAccessMixin, ListView):
     page_size_session_key = "device_page_size"
 
     def get_queryset(self):
-        # Solo dispositivos activos y autorizados para el usuario.
+        # Solo dispositivos autorizados para el usuario.
         queryset = get_visible_devices(self.request.user)
 
         # Buscador general.
@@ -209,9 +209,11 @@ class DeviceListView(PageSizeMixin, DeviceAccessMixin, ListView):
         if zona.isdigit():
             queryset = queryset.filter(zone_id=int(zona))
 
-        return queryset.select_related(
+        queryset = queryset.select_related(
             "product", "zone", "zone__organization"
-        ).order_by("internal_name")
+        )
+
+        return self.apply_ordering(queryset, "internal_name")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -427,9 +429,15 @@ class CategoryListView(PageSizeMixin, CategoryAccessMixin, ListView):
         if estado:
             queryset = queryset.filter(status__iexact=estado)
 
-        return queryset.annotate(
-            products_count=Count("products", filter=Q(products__deleted_at__isnull=True))
-        ).order_by("name")
+        # Mantener la cantidad de productos asociados.
+        queryset = queryset.annotate(
+            products_count=Count(
+                "products",
+                filter=Q(products__deleted_at__isnull=True)
+            )
+        )
+
+        return self.apply_ordering(queryset, "name")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -562,7 +570,7 @@ class ProductListView(PageSizeMixin, ProductAccessMixin, ListView):
         if categoria.isdigit():
             queryset = queryset.filter(catalog_id=int(categoria))
 
-        return queryset.order_by("name")
+        return self.apply_ordering(queryset, "name")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -788,7 +796,7 @@ class MeasurementListView(PageSizeMixin, MeasurementAccessMixin, ListView):
         if dispositivo.isdigit():
             queryset = queryset.filter(device_id=int(dispositivo))
 
-        return queryset.order_by("-datetime")
+        return self.apply_ordering(queryset, "measurement_id")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -981,12 +989,14 @@ class AlertListView(PageSizeMixin, AlertAccessMixin, ListView):
         if estado:
             queryset = queryset.filter(status__iexact=estado)
 
-        # Filtro por severidad de la regla.
+        # Filtro por severidad.
         severidad = self.request.GET.get("severidad", "").strip()
         if severidad:
-            queryset = queryset.filter(alert_rule__severity__iexact=severidad)
+            queryset = queryset.filter(
+                alert_rule__severity__iexact=severidad
+            )
 
-        return queryset.order_by("-created_at")
+        return self.apply_ordering(queryset, "alert_event_id")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1140,7 +1150,7 @@ class CatalogListView(PageSizeMixin, CatalogAccessMixin, ListView):
         if estado:
             queryset = queryset.filter(status__iexact=estado)
 
-        return queryset.order_by("name")
+        return self.apply_ordering(queryset, "name")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1330,7 +1340,7 @@ class MaintenanceListView(PageSizeMixin,MaintenanceAccessMixin, ListView):
         if prioridad:
             queryset = queryset.filter(priority__iexact=prioridad)
 
-        return queryset.order_by("-created_at")
+        return self.apply_ordering(queryset, "maintenance_request_id")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -11,10 +11,15 @@ from core.validators import FormLimitsMixin, validate_code, validate_name, valid
 class OrganizationForm(FormLimitsMixin, forms.ModelForm):
     # El modelo permite NULL en status, lo que Django mostraría como "Desconocido / Sí / No".
     # Se declara como casilla simple: marcada = activa, desmarcada = inactiva.
-    status = forms.BooleanField(
-        required=False,
-        label="Activa",
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    status = forms.TypedChoiceField(
+        choices=[
+            ("1", "Activo"),
+            ("0", "Inactivo"),
+        ],
+        coerce=lambda value: value == "1",
+        initial="1",
+        label="Estado",
+        widget=forms.Select(attrs={"class": "form-select"}),
     )
 
     class Meta:
@@ -88,10 +93,15 @@ class OrganizationForm(FormLimitsMixin, forms.ModelForm):
 #correccion eva 3 --> PM --> Validadores Formularios
 class DepartmentForm(FormLimitsMixin, forms.ModelForm):
     # Casilla simple: marcada = activo, desmarcada = inactivo.
-    status = forms.BooleanField(
-        required=False,
-        label="Activo",
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    status = forms.TypedChoiceField(
+        choices=[
+            ("1", "Activo"),
+            ("0", "Inactivo"),
+        ],
+        coerce=lambda value: value == "1",
+        initial="1",
+        label="Estado",
+        widget=forms.Select(attrs={"class": "form-select"}),
     )
 
     class Meta:
@@ -187,10 +197,15 @@ class DepartmentForm(FormLimitsMixin, forms.ModelForm):
 #correccion eva 3 --> PM --> Validadores Formularios
 class ZoneForm(FormLimitsMixin, forms.ModelForm):
     # Casilla simple: marcada = activa, desmarcada = inactiva.
-    status = forms.BooleanField(
-        required=False,
-        label="Activa",
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    status = forms.TypedChoiceField(
+        choices=[
+            ("1", "Activo"),
+            ("0", "Inactivo"),
+        ],
+        coerce=lambda value: value == "1",
+        initial="1",
+        label="Estado",
+        widget=forms.Select(attrs={"class": "form-select"}),
     )
 
     class Meta:

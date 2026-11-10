@@ -1,0 +1,7698 @@
+[
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add user",
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change user",
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete user",
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view user",
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Organizaci�n",
+    "content_type": [
+      "organizations",
+      "organization"
+    ],
+    "codename": "add_organization"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Organizaci�n",
+    "content_type": [
+      "organizations",
+      "organization"
+    ],
+    "codename": "change_organization"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Organizaci�n",
+    "content_type": [
+      "organizations",
+      "organization"
+    ],
+    "codename": "delete_organization"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Organizaci�n",
+    "content_type": [
+      "organizations",
+      "organization"
+    ],
+    "codename": "view_organization"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Departamento",
+    "content_type": [
+      "organizations",
+      "department"
+    ],
+    "codename": "add_department"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Departamento",
+    "content_type": [
+      "organizations",
+      "department"
+    ],
+    "codename": "change_department"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Departamento",
+    "content_type": [
+      "organizations",
+      "department"
+    ],
+    "codename": "delete_department"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Departamento",
+    "content_type": [
+      "organizations",
+      "department"
+    ],
+    "codename": "view_department"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Usuario",
+    "content_type": [
+      "organizations",
+      "user"
+    ],
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Usuario",
+    "content_type": [
+      "organizations",
+      "user"
+    ],
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Usuario",
+    "content_type": [
+      "organizations",
+      "user"
+    ],
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Usuario",
+    "content_type": [
+      "organizations",
+      "user"
+    ],
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Zona",
+    "content_type": [
+      "organizations",
+      "zone"
+    ],
+    "codename": "add_zone"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Zona",
+    "content_type": [
+      "organizations",
+      "zone"
+    ],
+    "codename": "change_zone"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Zona",
+    "content_type": [
+      "organizations",
+      "zone"
+    ],
+    "codename": "delete_zone"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Zona",
+    "content_type": [
+      "organizations",
+      "zone"
+    ],
+    "codename": "view_zone"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Regla de alerta",
+    "content_type": [
+      "devices",
+      "alertrule"
+    ],
+    "codename": "add_alertrule"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Regla de alerta",
+    "content_type": [
+      "devices",
+      "alertrule"
+    ],
+    "codename": "change_alertrule"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Regla de alerta",
+    "content_type": [
+      "devices",
+      "alertrule"
+    ],
+    "codename": "delete_alertrule"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Regla de alerta",
+    "content_type": [
+      "devices",
+      "alertrule"
+    ],
+    "codename": "view_alertrule"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Cat�logo",
+    "content_type": [
+      "devices",
+      "catalog"
+    ],
+    "codename": "add_catalog"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Cat�logo",
+    "content_type": [
+      "devices",
+      "catalog"
+    ],
+    "codename": "change_catalog"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Cat�logo",
+    "content_type": [
+      "devices",
+      "catalog"
+    ],
+    "codename": "delete_catalog"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Cat�logo",
+    "content_type": [
+      "devices",
+      "catalog"
+    ],
+    "codename": "view_catalog"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Dispositivo",
+    "content_type": [
+      "devices",
+      "device"
+    ],
+    "codename": "add_device"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Dispositivo",
+    "content_type": [
+      "devices",
+      "device"
+    ],
+    "codename": "change_device"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Dispositivo",
+    "content_type": [
+      "devices",
+      "device"
+    ],
+    "codename": "delete_device"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Dispositivo",
+    "content_type": [
+      "devices",
+      "device"
+    ],
+    "codename": "view_device"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Historial",
+    "content_type": [
+      "devices",
+      "history"
+    ],
+    "codename": "add_history"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Historial",
+    "content_type": [
+      "devices",
+      "history"
+    ],
+    "codename": "change_history"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Historial",
+    "content_type": [
+      "devices",
+      "history"
+    ],
+    "codename": "delete_history"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Historial",
+    "content_type": [
+      "devices",
+      "history"
+    ],
+    "codename": "view_history"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Solicitud de mantenimiento",
+    "content_type": [
+      "devices",
+      "maintenancerequest"
+    ],
+    "codename": "add_maintenancerequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Solicitud de mantenimiento",
+    "content_type": [
+      "devices",
+      "maintenancerequest"
+    ],
+    "codename": "change_maintenancerequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Solicitud de mantenimiento",
+    "content_type": [
+      "devices",
+      "maintenancerequest"
+    ],
+    "codename": "delete_maintenancerequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Solicitud de mantenimiento",
+    "content_type": [
+      "devices",
+      "maintenancerequest"
+    ],
+    "codename": "view_maintenancerequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Medici�n",
+    "content_type": [
+      "devices",
+      "measurement"
+    ],
+    "codename": "add_measurement"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Medici�n",
+    "content_type": [
+      "devices",
+      "measurement"
+    ],
+    "codename": "change_measurement"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Medici�n",
+    "content_type": [
+      "devices",
+      "measurement"
+    ],
+    "codename": "delete_measurement"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Medici�n",
+    "content_type": [
+      "devices",
+      "measurement"
+    ],
+    "codename": "view_measurement"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Evento de alerta",
+    "content_type": [
+      "devices",
+      "alertevent"
+    ],
+    "codename": "add_alertevent"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Evento de alerta",
+    "content_type": [
+      "devices",
+      "alertevent"
+    ],
+    "codename": "change_alertevent"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Evento de alerta",
+    "content_type": [
+      "devices",
+      "alertevent"
+    ],
+    "codename": "delete_alertevent"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Evento de alerta",
+    "content_type": [
+      "devices",
+      "alertevent"
+    ],
+    "codename": "view_alertevent"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add Producto",
+    "content_type": [
+      "devices",
+      "product"
+    ],
+    "codename": "add_product"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change Producto",
+    "content_type": [
+      "devices",
+      "product"
+    ],
+    "codename": "change_product"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete Producto",
+    "content_type": [
+      "devices",
+      "product"
+    ],
+    "codename": "delete_product"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Producto",
+    "content_type": [
+      "devices",
+      "product"
+    ],
+    "codename": "view_product"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add user profile",
+    "content_type": [
+      "accounts",
+      "userprofile"
+    ],
+    "codename": "add_userprofile"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change user profile",
+    "content_type": [
+      "accounts",
+      "userprofile"
+    ],
+    "codename": "change_userprofile"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete user profile",
+    "content_type": [
+      "accounts",
+      "userprofile"
+    ],
+    "codename": "delete_userprofile"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view user profile",
+    "content_type": [
+      "accounts",
+      "userprofile"
+    ],
+    "codename": "view_userprofile"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add delegaci�n",
+    "content_type": [
+      "organizations",
+      "delegacion"
+    ],
+    "codename": "add_delegacion"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change delegaci�n",
+    "content_type": [
+      "organizations",
+      "delegacion"
+    ],
+    "codename": "change_delegacion"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete delegaci�n",
+    "content_type": [
+      "organizations",
+      "delegacion"
+    ],
+    "codename": "delete_delegacion"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view delegaci�n",
+    "content_type": [
+      "organizations",
+      "delegacion"
+    ],
+    "codename": "view_delegacion"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add cargo",
+    "content_type": [
+      "organizations",
+      "cargo"
+    ],
+    "codename": "add_cargo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change cargo",
+    "content_type": [
+      "organizations",
+      "cargo"
+    ],
+    "codename": "change_cargo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete cargo",
+    "content_type": [
+      "organizations",
+      "cargo"
+    ],
+    "codename": "delete_cargo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view cargo",
+    "content_type": [
+      "organizations",
+      "cargo"
+    ],
+    "codename": "view_cargo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add �tem medible",
+    "content_type": [
+      "organizations",
+      "itemmedible"
+    ],
+    "codename": "add_itemmedible"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change �tem medible",
+    "content_type": [
+      "organizations",
+      "itemmedible"
+    ],
+    "codename": "change_itemmedible"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete �tem medible",
+    "content_type": [
+      "organizations",
+      "itemmedible"
+    ],
+    "codename": "delete_itemmedible"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view �tem medible",
+    "content_type": [
+      "organizations",
+      "itemmedible"
+    ],
+    "codename": "view_itemmedible"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add rol",
+    "content_type": [
+      "organizations",
+      "rol"
+    ],
+    "codename": "add_rol"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change rol",
+    "content_type": [
+      "organizations",
+      "rol"
+    ],
+    "codename": "change_rol"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete rol",
+    "content_type": [
+      "organizations",
+      "rol"
+    ],
+    "codename": "delete_rol"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view rol",
+    "content_type": [
+      "organizations",
+      "rol"
+    ],
+    "codename": "view_rol"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add funcionario",
+    "content_type": [
+      "organizations",
+      "funcionario"
+    ],
+    "codename": "add_funcionario"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change funcionario",
+    "content_type": [
+      "organizations",
+      "funcionario"
+    ],
+    "codename": "change_funcionario"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete funcionario",
+    "content_type": [
+      "organizations",
+      "funcionario"
+    ],
+    "codename": "delete_funcionario"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view funcionario",
+    "content_type": [
+      "organizations",
+      "funcionario"
+    ],
+    "codename": "view_funcionario"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add funcionario rol",
+    "content_type": [
+      "organizations",
+      "funcionariorol"
+    ],
+    "codename": "add_funcionariorol"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change funcionario rol",
+    "content_type": [
+      "organizations",
+      "funcionariorol"
+    ],
+    "codename": "change_funcionariorol"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete funcionario rol",
+    "content_type": [
+      "organizations",
+      "funcionariorol"
+    ],
+    "codename": "delete_funcionariorol"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view funcionario rol",
+    "content_type": [
+      "organizations",
+      "funcionariorol"
+    ],
+    "codename": "view_funcionariorol"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add usuario de acceso",
+    "content_type": [
+      "organizations",
+      "usuario"
+    ],
+    "codename": "add_usuario"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change usuario de acceso",
+    "content_type": [
+      "organizations",
+      "usuario"
+    ],
+    "codename": "change_usuario"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete usuario de acceso",
+    "content_type": [
+      "organizations",
+      "usuario"
+    ],
+    "codename": "delete_usuario"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view usuario de acceso",
+    "content_type": [
+      "organizations",
+      "usuario"
+    ],
+    "codename": "view_usuario"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add elemento de cat�logo",
+    "content_type": [
+      "catalogs",
+      "catalogo"
+    ],
+    "codename": "add_catalogo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change elemento de cat�logo",
+    "content_type": [
+      "catalogs",
+      "catalogo"
+    ],
+    "codename": "change_catalogo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete elemento de cat�logo",
+    "content_type": [
+      "catalogs",
+      "catalogo"
+    ],
+    "codename": "delete_catalogo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view elemento de cat�logo",
+    "content_type": [
+      "catalogs",
+      "catalogo"
+    ],
+    "codename": "view_catalogo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add periodo",
+    "content_type": [
+      "measurement",
+      "periodo"
+    ],
+    "codename": "add_periodo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change periodo",
+    "content_type": [
+      "measurement",
+      "periodo"
+    ],
+    "codename": "change_periodo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete periodo",
+    "content_type": [
+      "measurement",
+      "periodo"
+    ],
+    "codename": "delete_periodo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view periodo",
+    "content_type": [
+      "measurement",
+      "periodo"
+    ],
+    "codename": "view_periodo"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add meta",
+    "content_type": [
+      "measurement",
+      "meta"
+    ],
+    "codename": "add_meta"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change meta",
+    "content_type": [
+      "measurement",
+      "meta"
+    ],
+    "codename": "change_meta"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete meta",
+    "content_type": [
+      "measurement",
+      "meta"
+    ],
+    "codename": "delete_meta"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view meta",
+    "content_type": [
+      "measurement",
+      "meta"
+    ],
+    "codename": "view_meta"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add indicador",
+    "content_type": [
+      "measurement",
+      "indicador"
+    ],
+    "codename": "add_indicador"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change indicador",
+    "content_type": [
+      "measurement",
+      "indicador"
+    ],
+    "codename": "change_indicador"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete indicador",
+    "content_type": [
+      "measurement",
+      "indicador"
+    ],
+    "codename": "delete_indicador"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view indicador",
+    "content_type": [
+      "measurement",
+      "indicador"
+    ],
+    "codename": "view_indicador"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add ajuste",
+    "content_type": [
+      "measurement",
+      "ajuste"
+    ],
+    "codename": "add_ajuste"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change ajuste",
+    "content_type": [
+      "measurement",
+      "ajuste"
+    ],
+    "codename": "change_ajuste"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete ajuste",
+    "content_type": [
+      "measurement",
+      "ajuste"
+    ],
+    "codename": "delete_ajuste"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view ajuste",
+    "content_type": [
+      "measurement",
+      "ajuste"
+    ],
+    "codename": "view_ajuste"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add actividad",
+    "content_type": [
+      "activities",
+      "actividad"
+    ],
+    "codename": "add_actividad"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change actividad",
+    "content_type": [
+      "activities",
+      "actividad"
+    ],
+    "codename": "change_actividad"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete actividad",
+    "content_type": [
+      "activities",
+      "actividad"
+    ],
+    "codename": "delete_actividad"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view actividad",
+    "content_type": [
+      "activities",
+      "actividad"
+    ],
+    "codename": "view_actividad"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add evidencia",
+    "content_type": [
+      "activities",
+      "evidencia"
+    ],
+    "codename": "add_evidencia"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change evidencia",
+    "content_type": [
+      "activities",
+      "evidencia"
+    ],
+    "codename": "change_evidencia"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete evidencia",
+    "content_type": [
+      "activities",
+      "evidencia"
+    ],
+    "codename": "delete_evidencia"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view evidencia",
+    "content_type": [
+      "activities",
+      "evidencia"
+    ],
+    "codename": "view_evidencia"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add validacion",
+    "content_type": [
+      "activities",
+      "validacion"
+    ],
+    "codename": "add_validacion"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change validacion",
+    "content_type": [
+      "activities",
+      "validacion"
+    ],
+    "codename": "change_validacion"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete validacion",
+    "content_type": [
+      "activities",
+      "validacion"
+    ],
+    "codename": "delete_validacion"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view validacion",
+    "content_type": [
+      "activities",
+      "validacion"
+    ],
+    "codename": "view_validacion"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add compromiso",
+    "content_type": [
+      "agenda",
+      "compromiso"
+    ],
+    "codename": "add_compromiso"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change compromiso",
+    "content_type": [
+      "agenda",
+      "compromiso"
+    ],
+    "codename": "change_compromiso"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete compromiso",
+    "content_type": [
+      "agenda",
+      "compromiso"
+    ],
+    "codename": "delete_compromiso"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view compromiso",
+    "content_type": [
+      "agenda",
+      "compromiso"
+    ],
+    "codename": "view_compromiso"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add historial de transiciones",
+    "content_type": [
+      "agenda",
+      "historialtransiciones"
+    ],
+    "codename": "add_historialtransiciones"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change historial de transiciones",
+    "content_type": [
+      "agenda",
+      "historialtransiciones"
+    ],
+    "codename": "change_historialtransiciones"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete historial de transiciones",
+    "content_type": [
+      "agenda",
+      "historialtransiciones"
+    ],
+    "codename": "delete_historialtransiciones"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view historial de transiciones",
+    "content_type": [
+      "agenda",
+      "historialtransiciones"
+    ],
+    "codename": "view_historialtransiciones"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add usuario social",
+    "content_type": [
+      "social",
+      "usuariosocial"
+    ],
+    "codename": "add_usuariosocial"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change usuario social",
+    "content_type": [
+      "social",
+      "usuariosocial"
+    ],
+    "codename": "change_usuariosocial"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete usuario social",
+    "content_type": [
+      "social",
+      "usuariosocial"
+    ],
+    "codename": "delete_usuariosocial"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view usuario social",
+    "content_type": [
+      "social",
+      "usuariosocial"
+    ],
+    "codename": "view_usuariosocial"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add atenci�n social",
+    "content_type": [
+      "social",
+      "atencionsocial"
+    ],
+    "codename": "add_atencionsocial"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change atenci�n social",
+    "content_type": [
+      "social",
+      "atencionsocial"
+    ],
+    "codename": "change_atencionsocial"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete atenci�n social",
+    "content_type": [
+      "social",
+      "atencionsocial"
+    ],
+    "codename": "delete_atencionsocial"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view atenci�n social",
+    "content_type": [
+      "social",
+      "atencionsocial"
+    ],
+    "codename": "view_atencionsocial"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add evento de auditor�a",
+    "content_type": [
+      "audit",
+      "auditoria"
+    ],
+    "codename": "add_auditoria"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change evento de auditor�a",
+    "content_type": [
+      "audit",
+      "auditoria"
+    ],
+    "codename": "change_auditoria"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete evento de auditor�a",
+    "content_type": [
+      "audit",
+      "auditoria"
+    ],
+    "codename": "delete_auditoria"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view evento de auditor�a",
+    "content_type": [
+      "audit",
+      "auditoria"
+    ],
+    "codename": "view_auditoria"
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "Operador",
+    "permissions": [
+      [
+        "change_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "view_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "view_device",
+        "devices",
+        "device"
+      ],
+      [
+        "add_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "change_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "delete_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "view_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "add_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "change_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "view_measurement",
+        "devices",
+        "measurement"
+      ]
+    ]
+  }
+}
+  ,
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "Admin",
+    "permissions": [
+      [
+        "add_userprofile",
+        "accounts",
+        "userprofile"
+      ],
+      [
+        "change_userprofile",
+        "accounts",
+        "userprofile"
+      ],
+      [
+        "delete_userprofile",
+        "accounts",
+        "userprofile"
+      ],
+      [
+        "view_userprofile",
+        "accounts",
+        "userprofile"
+      ],
+      [
+        "add_actividad",
+        "activities",
+        "actividad"
+      ],
+      [
+        "change_actividad",
+        "activities",
+        "actividad"
+      ],
+      [
+        "delete_actividad",
+        "activities",
+        "actividad"
+      ],
+      [
+        "view_actividad",
+        "activities",
+        "actividad"
+      ],
+      [
+        "add_evidencia",
+        "activities",
+        "evidencia"
+      ],
+      [
+        "change_evidencia",
+        "activities",
+        "evidencia"
+      ],
+      [
+        "delete_evidencia",
+        "activities",
+        "evidencia"
+      ],
+      [
+        "view_evidencia",
+        "activities",
+        "evidencia"
+      ],
+      [
+        "add_validacion",
+        "activities",
+        "validacion"
+      ],
+      [
+        "change_validacion",
+        "activities",
+        "validacion"
+      ],
+      [
+        "delete_validacion",
+        "activities",
+        "validacion"
+      ],
+      [
+        "view_validacion",
+        "activities",
+        "validacion"
+      ],
+      [
+        "add_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "change_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "delete_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "view_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "add_compromiso",
+        "agenda",
+        "compromiso"
+      ],
+      [
+        "change_compromiso",
+        "agenda",
+        "compromiso"
+      ],
+      [
+        "delete_compromiso",
+        "agenda",
+        "compromiso"
+      ],
+      [
+        "view_compromiso",
+        "agenda",
+        "compromiso"
+      ],
+      [
+        "add_historialtransiciones",
+        "agenda",
+        "historialtransiciones"
+      ],
+      [
+        "change_historialtransiciones",
+        "agenda",
+        "historialtransiciones"
+      ],
+      [
+        "delete_historialtransiciones",
+        "agenda",
+        "historialtransiciones"
+      ],
+      [
+        "view_historialtransiciones",
+        "agenda",
+        "historialtransiciones"
+      ],
+      [
+        "add_auditoria",
+        "audit",
+        "auditoria"
+      ],
+      [
+        "change_auditoria",
+        "audit",
+        "auditoria"
+      ],
+      [
+        "delete_auditoria",
+        "audit",
+        "auditoria"
+      ],
+      [
+        "view_auditoria",
+        "audit",
+        "auditoria"
+      ],
+      [
+        "add_group",
+        "auth",
+        "group"
+      ],
+      [
+        "change_group",
+        "auth",
+        "group"
+      ],
+      [
+        "delete_group",
+        "auth",
+        "group"
+      ],
+      [
+        "view_group",
+        "auth",
+        "group"
+      ],
+      [
+        "add_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "change_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "delete_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "view_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "add_user",
+        "auth",
+        "user"
+      ],
+      [
+        "change_user",
+        "auth",
+        "user"
+      ],
+      [
+        "delete_user",
+        "auth",
+        "user"
+      ],
+      [
+        "view_user",
+        "auth",
+        "user"
+      ],
+      [
+        "add_catalogo",
+        "catalogs",
+        "catalogo"
+      ],
+      [
+        "change_catalogo",
+        "catalogs",
+        "catalogo"
+      ],
+      [
+        "delete_catalogo",
+        "catalogs",
+        "catalogo"
+      ],
+      [
+        "view_catalogo",
+        "catalogs",
+        "catalogo"
+      ],
+      [
+        "add_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "change_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "delete_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "view_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "add_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "change_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "delete_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "view_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "add_alertrule",
+        "devices",
+        "alertrule"
+      ],
+      [
+        "change_alertrule",
+        "devices",
+        "alertrule"
+      ],
+      [
+        "delete_alertrule",
+        "devices",
+        "alertrule"
+      ],
+      [
+        "view_alertrule",
+        "devices",
+        "alertrule"
+      ],
+      [
+        "add_catalog",
+        "devices",
+        "catalog"
+      ],
+      [
+        "change_catalog",
+        "devices",
+        "catalog"
+      ],
+      [
+        "delete_catalog",
+        "devices",
+        "catalog"
+      ],
+      [
+        "view_catalog",
+        "devices",
+        "catalog"
+      ],
+      [
+        "add_device",
+        "devices",
+        "device"
+      ],
+      [
+        "change_device",
+        "devices",
+        "device"
+      ],
+      [
+        "delete_device",
+        "devices",
+        "device"
+      ],
+      [
+        "view_device",
+        "devices",
+        "device"
+      ],
+      [
+        "add_history",
+        "devices",
+        "history"
+      ],
+      [
+        "change_history",
+        "devices",
+        "history"
+      ],
+      [
+        "delete_history",
+        "devices",
+        "history"
+      ],
+      [
+        "view_history",
+        "devices",
+        "history"
+      ],
+      [
+        "add_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "change_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "delete_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "view_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "add_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "change_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "delete_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "view_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "add_product",
+        "devices",
+        "product"
+      ],
+      [
+        "change_product",
+        "devices",
+        "product"
+      ],
+      [
+        "delete_product",
+        "devices",
+        "product"
+      ],
+      [
+        "view_product",
+        "devices",
+        "product"
+      ],
+      [
+        "add_ajuste",
+        "measurement",
+        "ajuste"
+      ],
+      [
+        "change_ajuste",
+        "measurement",
+        "ajuste"
+      ],
+      [
+        "delete_ajuste",
+        "measurement",
+        "ajuste"
+      ],
+      [
+        "view_ajuste",
+        "measurement",
+        "ajuste"
+      ],
+      [
+        "add_indicador",
+        "measurement",
+        "indicador"
+      ],
+      [
+        "change_indicador",
+        "measurement",
+        "indicador"
+      ],
+      [
+        "delete_indicador",
+        "measurement",
+        "indicador"
+      ],
+      [
+        "view_indicador",
+        "measurement",
+        "indicador"
+      ],
+      [
+        "add_meta",
+        "measurement",
+        "meta"
+      ],
+      [
+        "change_meta",
+        "measurement",
+        "meta"
+      ],
+      [
+        "delete_meta",
+        "measurement",
+        "meta"
+      ],
+      [
+        "view_meta",
+        "measurement",
+        "meta"
+      ],
+      [
+        "add_periodo",
+        "measurement",
+        "periodo"
+      ],
+      [
+        "change_periodo",
+        "measurement",
+        "periodo"
+      ],
+      [
+        "delete_periodo",
+        "measurement",
+        "periodo"
+      ],
+      [
+        "view_periodo",
+        "measurement",
+        "periodo"
+      ],
+      [
+        "add_cargo",
+        "organizations",
+        "cargo"
+      ],
+      [
+        "change_cargo",
+        "organizations",
+        "cargo"
+      ],
+      [
+        "delete_cargo",
+        "organizations",
+        "cargo"
+      ],
+      [
+        "view_cargo",
+        "organizations",
+        "cargo"
+      ],
+      [
+        "add_delegacion",
+        "organizations",
+        "delegacion"
+      ],
+      [
+        "change_delegacion",
+        "organizations",
+        "delegacion"
+      ],
+      [
+        "delete_delegacion",
+        "organizations",
+        "delegacion"
+      ],
+      [
+        "view_delegacion",
+        "organizations",
+        "delegacion"
+      ],
+      [
+        "add_department",
+        "organizations",
+        "department"
+      ],
+      [
+        "change_department",
+        "organizations",
+        "department"
+      ],
+      [
+        "delete_department",
+        "organizations",
+        "department"
+      ],
+      [
+        "view_department",
+        "organizations",
+        "department"
+      ],
+      [
+        "add_funcionario",
+        "organizations",
+        "funcionario"
+      ],
+      [
+        "change_funcionario",
+        "organizations",
+        "funcionario"
+      ],
+      [
+        "delete_funcionario",
+        "organizations",
+        "funcionario"
+      ],
+      [
+        "view_funcionario",
+        "organizations",
+        "funcionario"
+      ],
+      [
+        "add_funcionariorol",
+        "organizations",
+        "funcionariorol"
+      ],
+      [
+        "change_funcionariorol",
+        "organizations",
+        "funcionariorol"
+      ],
+      [
+        "delete_funcionariorol",
+        "organizations",
+        "funcionariorol"
+      ],
+      [
+        "view_funcionariorol",
+        "organizations",
+        "funcionariorol"
+      ],
+      [
+        "add_itemmedible",
+        "organizations",
+        "itemmedible"
+      ],
+      [
+        "change_itemmedible",
+        "organizations",
+        "itemmedible"
+      ],
+      [
+        "delete_itemmedible",
+        "organizations",
+        "itemmedible"
+      ],
+      [
+        "view_itemmedible",
+        "organizations",
+        "itemmedible"
+      ],
+      [
+        "add_organization",
+        "organizations",
+        "organization"
+      ],
+      [
+        "change_organization",
+        "organizations",
+        "organization"
+      ],
+      [
+        "delete_organization",
+        "organizations",
+        "organization"
+      ],
+      [
+        "view_organization",
+        "organizations",
+        "organization"
+      ],
+      [
+        "add_rol",
+        "organizations",
+        "rol"
+      ],
+      [
+        "change_rol",
+        "organizations",
+        "rol"
+      ],
+      [
+        "delete_rol",
+        "organizations",
+        "rol"
+      ],
+      [
+        "view_rol",
+        "organizations",
+        "rol"
+      ],
+      [
+        "add_user",
+        "organizations",
+        "user"
+      ],
+      [
+        "change_user",
+        "organizations",
+        "user"
+      ],
+      [
+        "delete_user",
+        "organizations",
+        "user"
+      ],
+      [
+        "view_user",
+        "organizations",
+        "user"
+      ],
+      [
+        "add_usuario",
+        "organizations",
+        "usuario"
+      ],
+      [
+        "change_usuario",
+        "organizations",
+        "usuario"
+      ],
+      [
+        "delete_usuario",
+        "organizations",
+        "usuario"
+      ],
+      [
+        "view_usuario",
+        "organizations",
+        "usuario"
+      ],
+      [
+        "add_zone",
+        "organizations",
+        "zone"
+      ],
+      [
+        "change_zone",
+        "organizations",
+        "zone"
+      ],
+      [
+        "delete_zone",
+        "organizations",
+        "zone"
+      ],
+      [
+        "view_zone",
+        "organizations",
+        "zone"
+      ],
+      [
+        "add_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "change_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "delete_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "view_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "add_atencionsocial",
+        "social",
+        "atencionsocial"
+      ],
+      [
+        "change_atencionsocial",
+        "social",
+        "atencionsocial"
+      ],
+      [
+        "delete_atencionsocial",
+        "social",
+        "atencionsocial"
+      ],
+      [
+        "view_atencionsocial",
+        "social",
+        "atencionsocial"
+      ],
+      [
+        "add_usuariosocial",
+        "social",
+        "usuariosocial"
+      ],
+      [
+        "change_usuariosocial",
+        "social",
+        "usuariosocial"
+      ],
+      [
+        "delete_usuariosocial",
+        "social",
+        "usuariosocial"
+      ],
+      [
+        "view_usuariosocial",
+        "social",
+        "usuariosocial"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$JNdVpXBS5Wka74QOXgtluU$OHXiOXX4q2CQkELXalf3gsdgGrrasH3iZ/vPtcwNfGg=",
+    "last_login": "2026-11-05T02:41:10.454Z",
+    "is_superuser": true,
+    "username": "ROOT",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-30T12:23:44Z",
+    "groups": [],
+    "user_permissions": [
+      [
+        "add_userprofile",
+        "accounts",
+        "userprofile"
+      ],
+      [
+        "change_userprofile",
+        "accounts",
+        "userprofile"
+      ],
+      [
+        "delete_userprofile",
+        "accounts",
+        "userprofile"
+      ],
+      [
+        "view_userprofile",
+        "accounts",
+        "userprofile"
+      ],
+      [
+        "add_actividad",
+        "activities",
+        "actividad"
+      ],
+      [
+        "change_actividad",
+        "activities",
+        "actividad"
+      ],
+      [
+        "delete_actividad",
+        "activities",
+        "actividad"
+      ],
+      [
+        "view_actividad",
+        "activities",
+        "actividad"
+      ],
+      [
+        "add_evidencia",
+        "activities",
+        "evidencia"
+      ],
+      [
+        "change_evidencia",
+        "activities",
+        "evidencia"
+      ],
+      [
+        "delete_evidencia",
+        "activities",
+        "evidencia"
+      ],
+      [
+        "view_evidencia",
+        "activities",
+        "evidencia"
+      ],
+      [
+        "add_validacion",
+        "activities",
+        "validacion"
+      ],
+      [
+        "change_validacion",
+        "activities",
+        "validacion"
+      ],
+      [
+        "delete_validacion",
+        "activities",
+        "validacion"
+      ],
+      [
+        "view_validacion",
+        "activities",
+        "validacion"
+      ],
+      [
+        "add_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "change_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "delete_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "view_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "add_compromiso",
+        "agenda",
+        "compromiso"
+      ],
+      [
+        "change_compromiso",
+        "agenda",
+        "compromiso"
+      ],
+      [
+        "delete_compromiso",
+        "agenda",
+        "compromiso"
+      ],
+      [
+        "view_compromiso",
+        "agenda",
+        "compromiso"
+      ],
+      [
+        "add_historialtransiciones",
+        "agenda",
+        "historialtransiciones"
+      ],
+      [
+        "change_historialtransiciones",
+        "agenda",
+        "historialtransiciones"
+      ],
+      [
+        "delete_historialtransiciones",
+        "agenda",
+        "historialtransiciones"
+      ],
+      [
+        "view_historialtransiciones",
+        "agenda",
+        "historialtransiciones"
+      ],
+      [
+        "add_auditoria",
+        "audit",
+        "auditoria"
+      ],
+      [
+        "change_auditoria",
+        "audit",
+        "auditoria"
+      ],
+      [
+        "delete_auditoria",
+        "audit",
+        "auditoria"
+      ],
+      [
+        "view_auditoria",
+        "audit",
+        "auditoria"
+      ],
+      [
+        "add_group",
+        "auth",
+        "group"
+      ],
+      [
+        "change_group",
+        "auth",
+        "group"
+      ],
+      [
+        "delete_group",
+        "auth",
+        "group"
+      ],
+      [
+        "view_group",
+        "auth",
+        "group"
+      ],
+      [
+        "add_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "change_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "delete_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "view_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "add_user",
+        "auth",
+        "user"
+      ],
+      [
+        "change_user",
+        "auth",
+        "user"
+      ],
+      [
+        "delete_user",
+        "auth",
+        "user"
+      ],
+      [
+        "view_user",
+        "auth",
+        "user"
+      ],
+      [
+        "add_catalogo",
+        "catalogs",
+        "catalogo"
+      ],
+      [
+        "change_catalogo",
+        "catalogs",
+        "catalogo"
+      ],
+      [
+        "delete_catalogo",
+        "catalogs",
+        "catalogo"
+      ],
+      [
+        "view_catalogo",
+        "catalogs",
+        "catalogo"
+      ],
+      [
+        "add_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "change_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "delete_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "view_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "add_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "change_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "delete_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "view_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "add_alertrule",
+        "devices",
+        "alertrule"
+      ],
+      [
+        "change_alertrule",
+        "devices",
+        "alertrule"
+      ],
+      [
+        "delete_alertrule",
+        "devices",
+        "alertrule"
+      ],
+      [
+        "view_alertrule",
+        "devices",
+        "alertrule"
+      ],
+      [
+        "add_catalog",
+        "devices",
+        "catalog"
+      ],
+      [
+        "change_catalog",
+        "devices",
+        "catalog"
+      ],
+      [
+        "delete_catalog",
+        "devices",
+        "catalog"
+      ],
+      [
+        "view_catalog",
+        "devices",
+        "catalog"
+      ],
+      [
+        "add_device",
+        "devices",
+        "device"
+      ],
+      [
+        "change_device",
+        "devices",
+        "device"
+      ],
+      [
+        "delete_device",
+        "devices",
+        "device"
+      ],
+      [
+        "view_device",
+        "devices",
+        "device"
+      ],
+      [
+        "add_history",
+        "devices",
+        "history"
+      ],
+      [
+        "change_history",
+        "devices",
+        "history"
+      ],
+      [
+        "delete_history",
+        "devices",
+        "history"
+      ],
+      [
+        "view_history",
+        "devices",
+        "history"
+      ],
+      [
+        "add_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "change_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "delete_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "view_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "add_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "change_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "delete_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "view_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "add_product",
+        "devices",
+        "product"
+      ],
+      [
+        "change_product",
+        "devices",
+        "product"
+      ],
+      [
+        "delete_product",
+        "devices",
+        "product"
+      ],
+      [
+        "view_product",
+        "devices",
+        "product"
+      ],
+      [
+        "add_ajuste",
+        "measurement",
+        "ajuste"
+      ],
+      [
+        "change_ajuste",
+        "measurement",
+        "ajuste"
+      ],
+      [
+        "delete_ajuste",
+        "measurement",
+        "ajuste"
+      ],
+      [
+        "view_ajuste",
+        "measurement",
+        "ajuste"
+      ],
+      [
+        "add_indicador",
+        "measurement",
+        "indicador"
+      ],
+      [
+        "change_indicador",
+        "measurement",
+        "indicador"
+      ],
+      [
+        "delete_indicador",
+        "measurement",
+        "indicador"
+      ],
+      [
+        "view_indicador",
+        "measurement",
+        "indicador"
+      ],
+      [
+        "add_meta",
+        "measurement",
+        "meta"
+      ],
+      [
+        "change_meta",
+        "measurement",
+        "meta"
+      ],
+      [
+        "delete_meta",
+        "measurement",
+        "meta"
+      ],
+      [
+        "view_meta",
+        "measurement",
+        "meta"
+      ],
+      [
+        "add_periodo",
+        "measurement",
+        "periodo"
+      ],
+      [
+        "change_periodo",
+        "measurement",
+        "periodo"
+      ],
+      [
+        "delete_periodo",
+        "measurement",
+        "periodo"
+      ],
+      [
+        "view_periodo",
+        "measurement",
+        "periodo"
+      ],
+      [
+        "add_cargo",
+        "organizations",
+        "cargo"
+      ],
+      [
+        "change_cargo",
+        "organizations",
+        "cargo"
+      ],
+      [
+        "delete_cargo",
+        "organizations",
+        "cargo"
+      ],
+      [
+        "view_cargo",
+        "organizations",
+        "cargo"
+      ],
+      [
+        "add_delegacion",
+        "organizations",
+        "delegacion"
+      ],
+      [
+        "change_delegacion",
+        "organizations",
+        "delegacion"
+      ],
+      [
+        "delete_delegacion",
+        "organizations",
+        "delegacion"
+      ],
+      [
+        "view_delegacion",
+        "organizations",
+        "delegacion"
+      ],
+      [
+        "add_department",
+        "organizations",
+        "department"
+      ],
+      [
+        "change_department",
+        "organizations",
+        "department"
+      ],
+      [
+        "delete_department",
+        "organizations",
+        "department"
+      ],
+      [
+        "view_department",
+        "organizations",
+        "department"
+      ],
+      [
+        "add_funcionario",
+        "organizations",
+        "funcionario"
+      ],
+      [
+        "change_funcionario",
+        "organizations",
+        "funcionario"
+      ],
+      [
+        "delete_funcionario",
+        "organizations",
+        "funcionario"
+      ],
+      [
+        "view_funcionario",
+        "organizations",
+        "funcionario"
+      ],
+      [
+        "add_funcionariorol",
+        "organizations",
+        "funcionariorol"
+      ],
+      [
+        "change_funcionariorol",
+        "organizations",
+        "funcionariorol"
+      ],
+      [
+        "delete_funcionariorol",
+        "organizations",
+        "funcionariorol"
+      ],
+      [
+        "view_funcionariorol",
+        "organizations",
+        "funcionariorol"
+      ],
+      [
+        "add_itemmedible",
+        "organizations",
+        "itemmedible"
+      ],
+      [
+        "change_itemmedible",
+        "organizations",
+        "itemmedible"
+      ],
+      [
+        "delete_itemmedible",
+        "organizations",
+        "itemmedible"
+      ],
+      [
+        "view_itemmedible",
+        "organizations",
+        "itemmedible"
+      ],
+      [
+        "add_organization",
+        "organizations",
+        "organization"
+      ],
+      [
+        "change_organization",
+        "organizations",
+        "organization"
+      ],
+      [
+        "delete_organization",
+        "organizations",
+        "organization"
+      ],
+      [
+        "view_organization",
+        "organizations",
+        "organization"
+      ],
+      [
+        "add_rol",
+        "organizations",
+        "rol"
+      ],
+      [
+        "change_rol",
+        "organizations",
+        "rol"
+      ],
+      [
+        "delete_rol",
+        "organizations",
+        "rol"
+      ],
+      [
+        "view_rol",
+        "organizations",
+        "rol"
+      ],
+      [
+        "add_user",
+        "organizations",
+        "user"
+      ],
+      [
+        "change_user",
+        "organizations",
+        "user"
+      ],
+      [
+        "delete_user",
+        "organizations",
+        "user"
+      ],
+      [
+        "view_user",
+        "organizations",
+        "user"
+      ],
+      [
+        "add_usuario",
+        "organizations",
+        "usuario"
+      ],
+      [
+        "change_usuario",
+        "organizations",
+        "usuario"
+      ],
+      [
+        "delete_usuario",
+        "organizations",
+        "usuario"
+      ],
+      [
+        "view_usuario",
+        "organizations",
+        "usuario"
+      ],
+      [
+        "add_zone",
+        "organizations",
+        "zone"
+      ],
+      [
+        "change_zone",
+        "organizations",
+        "zone"
+      ],
+      [
+        "delete_zone",
+        "organizations",
+        "zone"
+      ],
+      [
+        "view_zone",
+        "organizations",
+        "zone"
+      ],
+      [
+        "add_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "change_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "delete_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "view_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "add_atencionsocial",
+        "social",
+        "atencionsocial"
+      ],
+      [
+        "change_atencionsocial",
+        "social",
+        "atencionsocial"
+      ],
+      [
+        "delete_atencionsocial",
+        "social",
+        "atencionsocial"
+      ],
+      [
+        "view_atencionsocial",
+        "social",
+        "atencionsocial"
+      ],
+      [
+        "add_usuariosocial",
+        "social",
+        "usuariosocial"
+      ],
+      [
+        "change_usuariosocial",
+        "social",
+        "usuariosocial"
+      ],
+      [
+        "delete_usuariosocial",
+        "social",
+        "usuariosocial"
+      ],
+      [
+        "view_usuariosocial",
+        "social",
+        "usuariosocial"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$jwjreStYy7sgqkQ6Dq3jWi$4e1CjyQLUW964AGiXHPf6UpG1jLMwD1LD2vraR59Sgk=",
+    "last_login": "2026-11-05T12:22:42.572Z",
+    "is_superuser": false,
+    "username": "operador_norte",
+    "first_name": "Juan",
+    "last_name": "Perez",
+    "email": "juan.perez@ecoenergy.cl",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-30T18:25:35Z",
+    "groups": [
+      [
+        "Operador"
+      ]
+    ],
+    "user_permissions": [
+      [
+        "view_userprofile",
+        "accounts",
+        "userprofile"
+      ],
+      [
+        "view_actividad",
+        "activities",
+        "actividad"
+      ],
+      [
+        "view_evidencia",
+        "activities",
+        "evidencia"
+      ],
+      [
+        "view_validacion",
+        "activities",
+        "validacion"
+      ],
+      [
+        "view_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "view_compromiso",
+        "agenda",
+        "compromiso"
+      ],
+      [
+        "view_historialtransiciones",
+        "agenda",
+        "historialtransiciones"
+      ],
+      [
+        "view_auditoria",
+        "audit",
+        "auditoria"
+      ],
+      [
+        "view_group",
+        "auth",
+        "group"
+      ],
+      [
+        "view_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "view_user",
+        "auth",
+        "user"
+      ],
+      [
+        "view_catalogo",
+        "catalogs",
+        "catalogo"
+      ],
+      [
+        "view_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "view_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "view_alertrule",
+        "devices",
+        "alertrule"
+      ],
+      [
+        "view_catalog",
+        "devices",
+        "catalog"
+      ],
+      [
+        "view_device",
+        "devices",
+        "device"
+      ],
+      [
+        "view_history",
+        "devices",
+        "history"
+      ],
+      [
+        "view_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "view_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "view_product",
+        "devices",
+        "product"
+      ],
+      [
+        "view_ajuste",
+        "measurement",
+        "ajuste"
+      ],
+      [
+        "view_indicador",
+        "measurement",
+        "indicador"
+      ],
+      [
+        "view_meta",
+        "measurement",
+        "meta"
+      ],
+      [
+        "view_periodo",
+        "measurement",
+        "periodo"
+      ],
+      [
+        "view_cargo",
+        "organizations",
+        "cargo"
+      ],
+      [
+        "view_delegacion",
+        "organizations",
+        "delegacion"
+      ],
+      [
+        "view_department",
+        "organizations",
+        "department"
+      ],
+      [
+        "view_funcionario",
+        "organizations",
+        "funcionario"
+      ],
+      [
+        "view_funcionariorol",
+        "organizations",
+        "funcionariorol"
+      ],
+      [
+        "view_itemmedible",
+        "organizations",
+        "itemmedible"
+      ],
+      [
+        "view_organization",
+        "organizations",
+        "organization"
+      ],
+      [
+        "view_rol",
+        "organizations",
+        "rol"
+      ],
+      [
+        "view_user",
+        "organizations",
+        "user"
+      ],
+      [
+        "view_usuario",
+        "organizations",
+        "usuario"
+      ],
+      [
+        "view_zone",
+        "organizations",
+        "zone"
+      ],
+      [
+        "view_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "view_atencionsocial",
+        "social",
+        "atencionsocial"
+      ],
+      [
+        "view_usuariosocial",
+        "social",
+        "usuariosocial"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$WDzCoClhynrbys3xfd9pCI$tMG8ty3nWXhiPybB+7RNYcVs23+apOqjQQ5+i4I3eoo=",
+    "last_login": "2026-10-27T20:06:46.869Z",
+    "is_superuser": false,
+    "username": "operador_sur",
+    "first_name": "Carlos",
+    "last_name": "Perez",
+    "email": "carlos.perez@ecoenergy.cl",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-30T18:27:16Z",
+    "groups": [
+      [
+        "Operador"
+      ]
+    ],
+    "user_permissions": [
+      [
+        "view_userprofile",
+        "accounts",
+        "userprofile"
+      ],
+      [
+        "view_actividad",
+        "activities",
+        "actividad"
+      ],
+      [
+        "view_evidencia",
+        "activities",
+        "evidencia"
+      ],
+      [
+        "view_validacion",
+        "activities",
+        "validacion"
+      ],
+      [
+        "view_logentry",
+        "admin",
+        "logentry"
+      ],
+      [
+        "view_compromiso",
+        "agenda",
+        "compromiso"
+      ],
+      [
+        "view_historialtransiciones",
+        "agenda",
+        "historialtransiciones"
+      ],
+      [
+        "view_auditoria",
+        "audit",
+        "auditoria"
+      ],
+      [
+        "view_group",
+        "auth",
+        "group"
+      ],
+      [
+        "view_permission",
+        "auth",
+        "permission"
+      ],
+      [
+        "view_user",
+        "auth",
+        "user"
+      ],
+      [
+        "view_catalogo",
+        "catalogs",
+        "catalogo"
+      ],
+      [
+        "view_contenttype",
+        "contenttypes",
+        "contenttype"
+      ],
+      [
+        "view_alertevent",
+        "devices",
+        "alertevent"
+      ],
+      [
+        "view_alertrule",
+        "devices",
+        "alertrule"
+      ],
+      [
+        "view_catalog",
+        "devices",
+        "catalog"
+      ],
+      [
+        "view_device",
+        "devices",
+        "device"
+      ],
+      [
+        "view_history",
+        "devices",
+        "history"
+      ],
+      [
+        "view_maintenancerequest",
+        "devices",
+        "maintenancerequest"
+      ],
+      [
+        "view_measurement",
+        "devices",
+        "measurement"
+      ],
+      [
+        "view_product",
+        "devices",
+        "product"
+      ],
+      [
+        "view_ajuste",
+        "measurement",
+        "ajuste"
+      ],
+      [
+        "view_indicador",
+        "measurement",
+        "indicador"
+      ],
+      [
+        "view_meta",
+        "measurement",
+        "meta"
+      ],
+      [
+        "view_periodo",
+        "measurement",
+        "periodo"
+      ],
+      [
+        "view_cargo",
+        "organizations",
+        "cargo"
+      ],
+      [
+        "view_delegacion",
+        "organizations",
+        "delegacion"
+      ],
+      [
+        "view_department",
+        "organizations",
+        "department"
+      ],
+      [
+        "view_funcionario",
+        "organizations",
+        "funcionario"
+      ],
+      [
+        "view_funcionariorol",
+        "organizations",
+        "funcionariorol"
+      ],
+      [
+        "view_itemmedible",
+        "organizations",
+        "itemmedible"
+      ],
+      [
+        "view_organization",
+        "organizations",
+        "organization"
+      ],
+      [
+        "view_rol",
+        "organizations",
+        "rol"
+      ],
+      [
+        "view_user",
+        "organizations",
+        "user"
+      ],
+      [
+        "view_usuario",
+        "organizations",
+        "usuario"
+      ],
+      [
+        "view_zone",
+        "organizations",
+        "zone"
+      ],
+      [
+        "view_session",
+        "sessions",
+        "session"
+      ],
+      [
+        "view_atencionsocial",
+        "social",
+        "atencionsocial"
+      ],
+      [
+        "view_usuariosocial",
+        "social",
+        "usuariosocial"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.admin01",
+    "first_name": "Carolina",
+    "last_name": "Mu�oz Rojas",
+    "email": "norte.admin01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.admin02",
+    "first_name": "Sebasti�n",
+    "last_name": "Araya L�pez",
+    "email": "norte.admin02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.admin03",
+    "first_name": "Valentina",
+    "last_name": "Castro D�az",
+    "email": "norte.admin03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.admin04",
+    "first_name": "Felipe",
+    "last_name": "Gonz�lez Soto",
+    "email": "norte.admin04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.admin05",
+    "first_name": "Daniela",
+    "last_name": "Morales Vega",
+    "email": "norte.admin05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.energia01",
+    "first_name": "Camila",
+    "last_name": "Fern�ndez Ruiz",
+    "email": "norte.energia01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.energia02",
+    "first_name": "Nicol�s",
+    "last_name": "P�rez Silva",
+    "email": "norte.energia02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.energia03",
+    "first_name": "Javiera",
+    "last_name": "Torres M�ndez",
+    "email": "norte.energia03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.energia04",
+    "first_name": "Mat�as",
+    "last_name": "Herrera Campos",
+    "email": "norte.energia04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.energia05",
+    "first_name": "Francisca",
+    "last_name": "Vargas N��ez",
+    "email": "norte.energia05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.oper01",
+    "first_name": "Rodrigo",
+    "last_name": "Ram�rez Fuentes",
+    "email": "norte.oper01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.oper02",
+    "first_name": "Antonia",
+    "last_name": "Contreras Reyes",
+    "email": "norte.oper02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.oper03",
+    "first_name": "Diego",
+    "last_name": "Sep�lveda Pizarro",
+    "email": "norte.oper03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.oper04",
+    "first_name": "Constanza",
+    "last_name": "Silva Carrasco",
+    "email": "norte.oper04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.oper05",
+    "first_name": "Tom�s",
+    "last_name": "Vald�s Romero",
+    "email": "norte.oper05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.opnorte01",
+    "first_name": "Ignacio",
+    "last_name": "Rojas Molina",
+    "email": "norte.opnorte01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.opnorte02",
+    "first_name": "Fernanda",
+    "last_name": "D�az Castillo",
+    "email": "norte.opnorte02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.opnorte03",
+    "first_name": "Benjam�n",
+    "last_name": "Flores Tapia",
+    "email": "norte.opnorte03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.opnorte04",
+    "first_name": "Catalina",
+    "last_name": "N��ez Salas",
+    "email": "norte.opnorte04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.opnorte05",
+    "first_name": "Gabriel",
+    "last_name": "Ortega Vidal",
+    "email": "norte.opnorte05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.rrhh01",
+    "first_name": "Paula",
+    "last_name": "S�nchez Le�n",
+    "email": "norte.rrhh01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.rrhh02",
+    "first_name": "Mart�n",
+    "last_name": "Aguilera Paz",
+    "email": "norte.rrhh02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.rrhh03",
+    "first_name": "Isidora",
+    "last_name": "Bravo Cort�s",
+    "email": "norte.rrhh03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.rrhh04",
+    "first_name": "Vicente",
+    "last_name": "Campos Riquelme",
+    "email": "norte.rrhh04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.rrhh05",
+    "first_name": "Emilia",
+    "last_name": "Godoy Figueroa",
+    "email": "norte.rrhh05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.ti01",
+    "first_name": "Alejandro",
+    "last_name": "Medina Ortiz",
+    "email": "norte.ti01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.ti02",
+    "first_name": "Sof�a",
+    "last_name": "Cabrera Pe�a",
+    "email": "norte.ti02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.ti03",
+    "first_name": "Crist�bal",
+    "last_name": "Molina Vera",
+    "email": "norte.ti03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.ti04",
+    "first_name": "Amanda",
+    "last_name": "Escobar Lara",
+    "email": "norte.ti04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "norte.ti05",
+    "first_name": "Esteban",
+    "last_name": "N��ez Arancibia",
+    "email": "norte.ti05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:21:00.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.admin01",
+    "first_name": "Mar�a Jos�",
+    "last_name": "Fuentes Rojas",
+    "email": "centro.admin01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.admin02",
+    "first_name": "Andr�s",
+    "last_name": "L�pez Castro",
+    "email": "centro.admin02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.admin03",
+    "first_name": "Valeria",
+    "last_name": "M�ndez Silva",
+    "email": "centro.admin03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.admin04",
+    "first_name": "Pablo",
+    "last_name": "Soto Ram�rez",
+    "email": "centro.admin04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.admin05",
+    "first_name": "Natalia",
+    "last_name": "Vega Torres",
+    "email": "centro.admin05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.rrhh01",
+    "first_name": "Claudia",
+    "last_name": "Reyes Molina",
+    "email": "centro.rrhh01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.rrhh02",
+    "first_name": "Jorge",
+    "last_name": "Pizarro D�az",
+    "email": "centro.rrhh02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.rrhh03",
+    "first_name": "Daniela",
+    "last_name": "Araya Flores",
+    "email": "centro.rrhh03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.rrhh04",
+    "first_name": "Felipe",
+    "last_name": "Carrasco N��ez",
+    "email": "centro.rrhh04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.rrhh05",
+    "first_name": "Antonia",
+    "last_name": "Romero Campos",
+    "email": "centro.rrhh05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.oper01",
+    "first_name": "Cristian",
+    "last_name": "Morales Vera",
+    "email": "centro.oper01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.oper02",
+    "first_name": "Camila",
+    "last_name": "Vald�s Ortiz",
+    "email": "centro.oper02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.oper03",
+    "first_name": "Sebasti�n",
+    "last_name": "Tapia Le�n",
+    "email": "centro.oper03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.oper04",
+    "first_name": "Francisca",
+    "last_name": "Godoy Pe�a",
+    "email": "centro.oper04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.oper05",
+    "first_name": "Tom�s",
+    "last_name": "Aguilera Paz",
+    "email": "centro.oper05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.ti01",
+    "first_name": "Gabriela",
+    "last_name": "Contreras Rojas",
+    "email": "centro.ti01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.ti02",
+    "first_name": "Diego",
+    "last_name": "Herrera Silva",
+    "email": "centro.ti02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.ti03",
+    "first_name": "Valentina",
+    "last_name": "Sep�lveda Ruiz",
+    "email": "centro.ti03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.ti04",
+    "first_name": "Mat�as",
+    "last_name": "Fern�ndez Soto",
+    "email": "centro.ti04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.ti05",
+    "first_name": "Javiera",
+    "last_name": "Castro M�ndez",
+    "email": "centro.ti05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.energia01",
+    "first_name": "Ignacio",
+    "last_name": "Vargas L�pez",
+    "email": "centro.energia01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.energia02",
+    "first_name": "Sof�a",
+    "last_name": "Mu�oz D�az",
+    "email": "centro.energia02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.energia03",
+    "first_name": "Benjam�n",
+    "last_name": "Ortega Reyes",
+    "email": "centro.energia03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.energia04",
+    "first_name": "Catalina",
+    "last_name": "Bravo Fuentes",
+    "email": "centro.energia04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "centro.energia05",
+    "first_name": "Vicente",
+    "last_name": "Medina Arancibia",
+    "email": "centro.energia05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:27:04.668Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.admin01",
+    "first_name": "Andrea",
+    "last_name": "Riquelme Soto",
+    "email": "sur.admin01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.admin02",
+    "first_name": "Mauricio",
+    "last_name": "Leiva Campos",
+    "email": "sur.admin02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.admin03",
+    "first_name": "Paula",
+    "last_name": "Cort�s Molina",
+    "email": "sur.admin03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.admin04",
+    "first_name": "Esteban",
+    "last_name": "Navarro D�az",
+    "email": "sur.admin04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.admin05",
+    "first_name": "Lorena",
+    "last_name": "Fuentes Reyes",
+    "email": "sur.admin05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.rrhh01",
+    "first_name": "Carolina",
+    "last_name": "Mella Vargas",
+    "email": "sur.rrhh01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.rrhh02",
+    "first_name": "H�ctor",
+    "last_name": "Salinas Rojas",
+    "email": "sur.rrhh02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.rrhh03",
+    "first_name": "Daniela",
+    "last_name": "Pino Morales",
+    "email": "sur.rrhh03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.rrhh04",
+    "first_name": "Crist�bal",
+    "last_name": "Vera Gonz�lez",
+    "email": "sur.rrhh04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.rrhh05",
+    "first_name": "Francisca",
+    "last_name": "Lagos Herrera",
+    "email": "sur.rrhh05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.oper01",
+    "first_name": "Rodrigo",
+    "last_name": "C�ceres Silva",
+    "email": "sur.oper01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.oper02",
+    "first_name": "Valentina",
+    "last_name": "Olivares Pe�a",
+    "email": "sur.oper02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.oper03",
+    "first_name": "Mat�as",
+    "last_name": "Espinoza Torres",
+    "email": "sur.oper03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.oper04",
+    "first_name": "Javiera",
+    "last_name": "Carrasco Mu�oz",
+    "email": "sur.oper04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.oper05",
+    "first_name": "Nicol�s",
+    "last_name": "Bravo Castillo",
+    "email": "sur.oper05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.ti01",
+    "first_name": "Camila",
+    "last_name": "Arancibia L�pez",
+    "email": "sur.ti01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.ti02",
+    "first_name": "Felipe",
+    "last_name": "Sanhueza D�az",
+    "email": "sur.ti02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.ti03",
+    "first_name": "Constanza",
+    "last_name": "Paredes Rojas",
+    "email": "sur.ti03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.ti04",
+    "first_name": "Diego",
+    "last_name": "Gallardo Fuentes",
+    "email": "sur.ti04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.ti05",
+    "first_name": "Antonia",
+    "last_name": "Mardones Silva",
+    "email": "sur.ti05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.energia01",
+    "first_name": "Ignacio",
+    "last_name": "Pe�a Morales",
+    "email": "sur.energia01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.energia02",
+    "first_name": "Sof�a",
+    "last_name": "Alarc�n Reyes",
+    "email": "sur.energia02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.energia03",
+    "first_name": "Benjam�n",
+    "last_name": "Cisternas Vega",
+    "email": "sur.energia03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.energia04",
+    "first_name": "Catalina",
+    "last_name": "Miranda Soto",
+    "email": "sur.energia04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.energia05",
+    "first_name": "Vicente",
+    "last_name": "Figueroa Ruiz",
+    "email": "sur.energia05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.opnorte01",
+    "first_name": "Gabriel",
+    "last_name": "Molina Araya",
+    "email": "sur.opnorte01@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.opnorte02",
+    "first_name": "Fernanda",
+    "last_name": "Sep�lveda Le�n",
+    "email": "sur.opnorte02@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.opnorte03",
+    "first_name": "Tom�s",
+    "last_name": "Contreras Paz",
+    "email": "sur.opnorte03@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.opnorte04",
+    "first_name": "Isidora",
+    "last_name": "Valenzuela D�az",
+    "email": "sur.opnorte04@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$EcoNorteTest2026$Bl2CQ9pJCvoNuX8CVZO4YTZHdprc6blWUXHa+gY/s7I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sur.opnorte05",
+    "first_name": "Mart�n",
+    "last_name": "Godoy Fern�ndez",
+    "email": "sur.opnorte05@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-02T20:29:54.276Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "organizations.organization",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T16:16:02.085Z",
+    "updated_at": "2026-09-30T16:16:02.085Z",
+    "deleted_at": null,
+    "organization_id": "ORG-001",
+    "legal_name": "EcoEnergy Norte SpA",
+    "comercial_name": "EcoEnergy Norte",
+    "contact": null,
+    "email": "norte@ecoenergy.test",
+    "tax": "76.111.111-1",
+    "status": true
+  }
+},
+{
+  "model": "organizations.organization",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T16:16:53.495Z",
+    "updated_at": "2026-11-02T22:38:58.744Z",
+    "deleted_at": null,
+    "organization_id": "ORG-003",
+    "legal_name": "EcoEnergy Sur SpA",
+    "comercial_name": "EcoEnergy Sur",
+    "contact": null,
+    "email": "sur@ecoenergy.test",
+    "tax": "76.222.222-2",
+    "status": true
+  }
+},
+{
+  "model": "organizations.organization",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-10-26T22:49:26.513Z",
+    "updated_at": "2026-10-26T22:50:26.016Z",
+    "deleted_at": null,
+    "organization_id": "ORG-ADMIN",
+    "legal_name": "EcoEnergy Plataforma",
+    "comercial_name": null,
+    "contact": null,
+    "email": "admin@ecoenergy.test",
+    "tax": "76.333.333-3",
+    "status": true
+  }
+},
+{
+  "model": "organizations.organization",
+  "pk": 12,
+  "fields": {
+    "created_at": "2026-11-02T22:42:20.866Z",
+    "updated_at": "2026-11-05T13:44:08.034Z",
+    "deleted_at": null,
+    "organization_id": "ORG-002",
+    "legal_name": "EcoEnergy Centro SpA",
+    "comercial_name": "EcoEnergy Centro",
+    "contact": null,
+    "email": "centro@ecoenergy.test",
+    "tax": "76.444.444-4",
+    "status": true
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T16:24:08.389Z",
+    "updated_at": "2026-11-02T22:48:46.192Z",
+    "deleted_at": null,
+    "department_id": "DEP-N01",
+    "name": "Operaciones Norte",
+    "description": "EcoEnergy Norte",
+    "status": true,
+    "organization": 1,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T16:24:31.979Z",
+    "updated_at": "2026-09-30T16:24:31.979Z",
+    "deleted_at": null,
+    "department_id": "DEP-S01",
+    "name": "Operaciones Sur",
+    "description": "EcoEnergy Sur",
+    "status": true,
+    "organization": 2,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-11-02T22:47:24.994Z",
+    "updated_at": "2026-11-02T22:49:18.428Z",
+    "deleted_at": null,
+    "department_id": "DEP-N-01",
+    "name": "Administraci�n",
+    "description": "Administraci�n General",
+    "status": true,
+    "organization": 1,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 4,
+  "fields": {
+    "created_at": "2026-11-02T22:49:38.422Z",
+    "updated_at": "2026-11-02T22:49:38.422Z",
+    "deleted_at": null,
+    "department_id": "DEP-N-02",
+    "name": "Recursos Humanos",
+    "description": "Recursos Humanos",
+    "status": true,
+    "organization": 1,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 5,
+  "fields": {
+    "created_at": "2026-11-02T22:50:06.212Z",
+    "updated_at": "2026-11-02T22:50:06.213Z",
+    "deleted_at": null,
+    "department_id": "DEP-N-03",
+    "name": "Operaciones",
+    "description": "Operaciones",
+    "status": true,
+    "organization": 1,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 6,
+  "fields": {
+    "created_at": "2026-11-02T22:50:33.110Z",
+    "updated_at": "2026-11-02T22:50:33.110Z",
+    "deleted_at": null,
+    "department_id": "DEP-N-04",
+    "name": "Tecnolog�a e Inform�tica",
+    "description": "Tecnolog�a e Inform�tica",
+    "status": true,
+    "organization": 1,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 7,
+  "fields": {
+    "created_at": "2026-11-02T22:50:59.170Z",
+    "updated_at": "2026-11-02T22:50:59.170Z",
+    "deleted_at": null,
+    "department_id": "DEP-N-05",
+    "name": "Gesti�n Energ�tica",
+    "description": "Gesti�n Energ�tica",
+    "status": true,
+    "organization": 1,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 8,
+  "fields": {
+    "created_at": "2026-11-02T22:51:36.467Z",
+    "updated_at": "2026-11-02T22:51:36.467Z",
+    "deleted_at": null,
+    "department_id": "DEP-C-01",
+    "name": "Administraci�n",
+    "description": "Administraci�n General",
+    "status": true,
+    "organization": 12,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 9,
+  "fields": {
+    "created_at": "2026-11-02T22:52:19.722Z",
+    "updated_at": "2026-11-02T22:52:19.722Z",
+    "deleted_at": null,
+    "department_id": "DEP-C-02",
+    "name": "Recursos Humanos",
+    "description": "Recursos Humanos",
+    "status": true,
+    "organization": 12,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 10,
+  "fields": {
+    "created_at": "2026-11-02T22:52:49.749Z",
+    "updated_at": "2026-11-02T22:52:49.749Z",
+    "deleted_at": null,
+    "department_id": "DEP-C-03",
+    "name": "Operaciones",
+    "description": "Operaciones",
+    "status": true,
+    "organization": 12,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 11,
+  "fields": {
+    "created_at": "2026-11-02T22:53:15.345Z",
+    "updated_at": "2026-11-02T22:53:15.345Z",
+    "deleted_at": null,
+    "department_id": "DEP-C-04",
+    "name": "Tecnolog�a e Inform�tica",
+    "description": "Tecnolog�a e Inform�tica",
+    "status": true,
+    "organization": 12,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 12,
+  "fields": {
+    "created_at": "2026-11-02T22:54:05.655Z",
+    "updated_at": "2026-11-02T22:54:05.655Z",
+    "deleted_at": null,
+    "department_id": "DEP-C-05",
+    "name": "Gesti�n Energ�tica",
+    "description": "Gesti�n Energ�tica",
+    "status": true,
+    "organization": 12,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 13,
+  "fields": {
+    "created_at": "2026-11-02T22:54:31.446Z",
+    "updated_at": "2026-11-02T22:54:31.446Z",
+    "deleted_at": null,
+    "department_id": "DEP-S-01",
+    "name": "Administraci�n",
+    "description": "Administraci�n General",
+    "status": true,
+    "organization": 2,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 14,
+  "fields": {
+    "created_at": "2026-11-02T22:54:50.594Z",
+    "updated_at": "2026-11-02T22:54:50.594Z",
+    "deleted_at": null,
+    "department_id": "DEP-S-02",
+    "name": "Recursos Humanos",
+    "description": "Recursos Humanos",
+    "status": true,
+    "organization": 2,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 15,
+  "fields": {
+    "created_at": "2026-11-02T22:55:13.901Z",
+    "updated_at": "2026-11-02T22:55:13.901Z",
+    "deleted_at": null,
+    "department_id": "DEP-S-03",
+    "name": "Operaciones",
+    "description": "Operaciones",
+    "status": true,
+    "organization": 2,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 16,
+  "fields": {
+    "created_at": "2026-11-02T22:55:35.846Z",
+    "updated_at": "2026-11-02T22:55:35.846Z",
+    "deleted_at": null,
+    "department_id": "DEP-S-04",
+    "name": "Tecnolog�a e Inform�tica",
+    "description": "Tecnolog�a e Inform�tica",
+    "status": true,
+    "organization": 2,
+    "user": null
+  }
+},
+{
+  "model": "organizations.department",
+  "pk": 17,
+  "fields": {
+    "created_at": "2026-11-02T22:55:55.344Z",
+    "updated_at": "2026-11-02T22:55:55.344Z",
+    "deleted_at": null,
+    "department_id": "DEP-S-05",
+    "name": "Gesti�n Energ�tica",
+    "description": "Gesti�n Energ�tica",
+    "status": true,
+    "organization": 2,
+    "user": null
+  }
+},
+{
+  "model": "organizations.zone",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T19:22:24.986Z",
+    "updated_at": "2026-11-05T13:44:54.367Z",
+    "deleted_at": null,
+    "zone_id": "ZON-N01",
+    "name": "Zona norte",
+    "description": null,
+    "status": true,
+    "organization": 1,
+    "department": 1
+  }
+},
+{
+  "model": "organizations.zone",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T19:22:45.175Z",
+    "updated_at": "2026-09-30T19:22:45.175Z",
+    "deleted_at": null,
+    "zone_id": "ZON-S01",
+    "name": "Zona Sur",
+    "description": null,
+    "status": true,
+    "organization": 2,
+    "department": 2
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T19:27:02.232Z",
+    "updated_at": "2026-09-30T19:27:02.232Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-001",
+    "name": "Medidores de energ�a",
+    "description": "Medidores inteligentes de consumo el�ctrico para monitoreo en instalaciones industriales y comerciales.",
+    "status": "activo"
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-10-27T13:57:14.795Z",
+    "updated_at": "2026-10-27T13:57:14.795Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-002",
+    "name": "Medidor Trif�sico",
+    "description": "Dispositivos para la medici�n de energ�a el�ctrica trif�sica en instalaciones industriales y de alta demanda.",
+    "status": "Activo"
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-10-27T13:57:47.609Z",
+    "updated_at": "2026-10-27T13:57:47.609Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-003",
+    "name": "Medidor Monof�sico",
+    "description": "Equipos destinados al registro y control de consumo el�ctrico monof�sico en sectores espec�ficos.",
+    "status": "Activo"
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 4,
+  "fields": {
+    "created_at": "2026-10-27T13:58:19.674Z",
+    "updated_at": "2026-10-27T13:58:19.674Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-004",
+    "name": "Sensor de Flujo T�rmico",
+    "description": "Sensores de alta precisi�n para la medici�n de caudal y flujo en sistemas t�rmicos y de fluidos.",
+    "status": "Activo"
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 5,
+  "fields": {
+    "created_at": "2026-10-27T13:58:50.673Z",
+    "updated_at": "2026-11-01T18:17:26.591Z",
+    "deleted_at": "2026-11-01T18:17:26.590Z",
+    "catalog_id": "CAT-005",
+    "name": "Analizador de Calidad de Red",
+    "description": "Instrumentos avanzados para el monitoreo de arm�nicos, fluctuaciones de voltaje y calidad general del suministro.",
+    "status": "Activo"
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 6,
+  "fields": {
+    "created_at": "2026-10-27T13:59:22.724Z",
+    "updated_at": "2026-10-27T13:59:22.724Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-006",
+    "name": "Transformador de Corriente",
+    "description": "Transformadores dise�ados para la reducci�n proporcional y segura de corrientes el�ctricas elevadas.",
+    "status": "Activo"
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 7,
+  "fields": {
+    "created_at": "2026-10-27T13:59:54.328Z",
+    "updated_at": "2026-10-27T13:59:54.328Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-007",
+    "name": "Gateway IoT Industrial",
+    "description": "Pasarelas de comunicaci�n industrial para la integraci�n, recolecci�n y transmisi�n de datos IoT.",
+    "status": "Activo"
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 8,
+  "fields": {
+    "created_at": "2026-10-27T14:00:37.777Z",
+    "updated_at": "2026-10-27T14:02:42.360Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-008",
+    "name": "Sensor de Temperatura IoT",
+    "description": "Sensores inal�mbricos de temperatura con tecnolog�a LoRaWAN para el control ambiental y de c�maras de fr�o.",
+    "status": "Inactivo"
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 9,
+  "fields": {
+    "created_at": "2026-10-27T14:01:07.955Z",
+    "updated_at": "2026-10-27T14:01:07.955Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-009",
+    "name": "Medidor Energ�tico Inteligente",
+    "description": "Medidores avanzados con memoria interna y capacidades de comunicaci�n Ethernet para an�lisis en tiempo real.",
+    "status": "Activo"
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 10,
+  "fields": {
+    "created_at": "2026-10-27T14:01:44.068Z",
+    "updated_at": "2026-10-27T14:01:44.068Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-010",
+    "name": "Sensor de Corriente de N�cleo Partido",
+    "description": "Sensores de corriente de f�cil instalaci�n que permiten mediciones sin necesidad de interrumpir el cableado.",
+    "status": "Activo"
+  }
+},
+{
+  "model": "devices.catalog",
+  "pk": 11,
+  "fields": {
+    "created_at": "2026-10-27T14:02:16.591Z",
+    "updated_at": "2026-11-01T18:27:34.540Z",
+    "deleted_at": null,
+    "catalog_id": "CAT-011",
+    "name": "Data Logger Solar",
+    "description": "Registradores de datos espec�ficos para inversores y plantas de generaci�n solar fotovoltaica.",
+    "status": "Activo"
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T19:28:19.042Z",
+    "updated_at": "2026-10-27T14:06:42.093Z",
+    "deleted_at": null,
+    "product_id": "PROD-001",
+    "name": "Medidor trif�sico iEM3155",
+    "description": "Medidor de energ�a trif�sico con comunicaci�n Modbus, para monitoreo de consumo por sector.",
+    "kwh": "0.24",
+    "manufacturer": "Schneider Electric",
+    "model": "iEM3155",
+    "sku": "A9MEM3155",
+    "catalog": 1
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T19:29:03.586Z",
+    "updated_at": "2026-10-27T14:06:36.131Z",
+    "deleted_at": null,
+    "product_id": "PROD-002",
+    "name": "Analizador de red PAC3200",
+    "description": "Analizador de red multifunci�n para medir potencia, energ�a y calidad de suministro.",
+    "kwh": "0.36",
+    "manufacturer": "Siemens",
+    "model": "SENTRON PAC3200",
+    "sku": "7KM2200-2EA30-1JA1",
+    "catalog": 1
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-10-27T14:06:15.889Z",
+    "updated_at": "2026-10-27T14:06:15.889Z",
+    "deleted_at": null,
+    "product_id": "PROD-003",
+    "name": "Medidor Trif�sico IEM3000",
+    "description": "Medidor trif�sico de alta precisi�n para control de energ�a industrial.",
+    "kwh": "150.50",
+    "manufacturer": "Schneider Electric",
+    "model": "IEM3000",
+    "sku": "MED-SCH-001",
+    "catalog": 2
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 4,
+  "fields": {
+    "created_at": "2026-10-27T14:07:39.226Z",
+    "updated_at": "2026-10-27T14:07:39.226Z",
+    "deleted_at": null,
+    "product_id": "PROD-004",
+    "name": "Medidor Monof�sico PAC3100",
+    "description": "Medidor monof�sico compacto para sectores espec�ficos.",
+    "kwh": "45.00",
+    "manufacturer": "Siemens",
+    "model": "PAC3100",
+    "sku": "MED-SIE-002",
+    "catalog": 3
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 5,
+  "fields": {
+    "created_at": "2026-10-27T14:09:08.855Z",
+    "updated_at": "2026-10-27T14:09:08.855Z",
+    "deleted_at": null,
+    "product_id": "PROD-005",
+    "name": "Sensor de Flujo T�rmico FMT400",
+    "description": "Sensor de caudal de alta precisi�n con interfaz Modbus.",
+    "kwh": "15.00",
+    "manufacturer": "ABB",
+    "model": "FMT400",
+    "sku": "SEN-ABB-003",
+    "catalog": 4
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 6,
+  "fields": {
+    "created_at": "2026-10-27T14:10:14.423Z",
+    "updated_at": "2026-10-27T21:03:33.862Z",
+    "deleted_at": "2026-10-27T21:03:33.862Z",
+    "product_id": "PROD-006",
+    "name": "Analizador CVM-A1500",
+    "description": "Analizador avanzado de calidad de red con pantalla LCD.",
+    "kwh": "200.00",
+    "manufacturer": "Circutor",
+    "model": "CVM-A1500",
+    "sku": "ANA-CIR-004",
+    "catalog": 5
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 7,
+  "fields": {
+    "created_at": "2026-10-27T14:11:22.830Z",
+    "updated_at": "2026-10-27T14:11:22.830Z",
+    "deleted_at": null,
+    "product_id": "PROD-007",
+    "name": "Transformador de Corriente CT-200",
+    "description": "Transformador de corriente con ratio 200/5A.",
+    "kwh": "10.00",
+    "manufacturer": "Leybold",
+    "model": "CT-200",
+    "sku": "TRA-LEY-005",
+    "catalog": 6
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 8,
+  "fields": {
+    "created_at": "2026-10-27T14:12:23.339Z",
+    "updated_at": "2026-10-27T14:12:23.339Z",
+    "deleted_at": null,
+    "product_id": "PROD-008",
+    "name": "Gateway IoT ECU-1051",
+    "description": "Gateway industrial para recolecci�n y transmisi�n de datos IoT.",
+    "kwh": "25.00",
+    "manufacturer": "Advantech",
+    "model": "ECU-1051",
+    "sku": "GAT-ADV-006",
+    "catalog": 7
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 9,
+  "fields": {
+    "created_at": "2026-10-27T14:13:09.982Z",
+    "updated_at": "2026-10-27T14:13:09.982Z",
+    "deleted_at": null,
+    "product_id": "PROD-009",
+    "name": "Sensor Temperatura EM300-TH",
+    "description": "Sensor inal�mbrico LoRaWAN para c�maras de fr�o.",
+    "kwh": "5.00",
+    "manufacturer": "Milesight",
+    "model": "EM300-TH",
+    "sku": "SEN-MIL-007",
+    "catalog": 8
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 10,
+  "fields": {
+    "created_at": "2026-10-27T14:13:55.284Z",
+    "updated_at": "2026-10-27T14:13:55.284Z",
+    "deleted_at": null,
+    "product_id": "PROD-010",
+    "name": "Medidor Inteligente UMG 96-PA",
+    "description": "Medidor energ�tico con conectividad Ethernet y memoria interna.",
+    "kwh": "120.00",
+    "manufacturer": "Janitza",
+    "model": "UMG 96-PA",
+    "sku": "MED-JAN-008",
+    "catalog": 9
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 11,
+  "fields": {
+    "created_at": "2026-10-27T14:14:51.120Z",
+    "updated_at": "2026-10-27T14:14:51.121Z",
+    "deleted_at": null,
+    "product_id": "PROD-011",
+    "name": "Sensor de Corriente ATO-75",
+    "description": "Sensor de corriente de n�cleo partido para medici�n sin corte.",
+    "kwh": "8.00",
+    "manufacturer": "LEM",
+    "model": "ATO-75",
+    "sku": "SEN-LEM-009",
+    "catalog": 10
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 12,
+  "fields": {
+    "created_at": "2026-10-27T14:16:02.362Z",
+    "updated_at": "2026-10-27T14:16:02.362Z",
+    "deleted_at": null,
+    "product_id": "PROD-012",
+    "name": "Data Logger Datamanager 2.0",
+    "description": "Registrador de datos espec�fico para inversores y plantas solares.",
+    "kwh": "30.00",
+    "manufacturer": "Fronius",
+    "model": "Datamanager 2.0",
+    "sku": "DAT-FRO-010",
+    "catalog": 11
+  }
+},
+{
+  "model": "devices.product",
+  "pk": 13,
+  "fields": {
+    "created_at": "2026-10-27T21:00:31.319Z",
+    "updated_at": "2026-10-27T21:00:31.319Z",
+    "deleted_at": null,
+    "product_id": "PROD-033",
+    "name": "Medidor Prueba",
+    "description": "kdjhakwsidj",
+    "kwh": "3.00",
+    "manufacturer": "Schneider Electric",
+    "model": "SENTRON PAC3200",
+    "sku": "ANA-CIR-033",
+    "catalog": 6
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T19:55:42.877Z",
+    "updated_at": "2026-11-01T18:28:31.148Z",
+    "deleted_at": null,
+    "device_id": "DEV-N-0017",
+    "internal_name": "Medidor Bodega Super Mega Norte",
+    "description": "Hola soy el cambio",
+    "reference_power": "6.70",
+    "serial_number": "SN-N-0017",
+    "status": "Activo",
+    "product": 7,
+    "zone": 2
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T19:58:17.628Z",
+    "updated_at": "2026-10-27T21:09:23.362Z",
+    "deleted_at": "2026-10-27T21:09:23.362Z",
+    "device_id": "DEV-S-001",
+    "internal_name": "Medidor Bodega Sur",
+    "description": "Medidor de consumo bodega sur",
+    "reference_power": "5.50",
+    "serial_number": "SN-S-001",
+    "status": "activo",
+    "product": 2,
+    "zone": 2
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-09-30T19:59:13.815Z",
+    "updated_at": "2026-09-30T19:59:13.815Z",
+    "deleted_at": "2026-09-30T20:01:04.683Z",
+    "device_id": "DEV-N-002",
+    "internal_name": "Medidor Prueba Norte",
+    "description": "Medidor de prueba para archivado",
+    "reference_power": "5.50",
+    "serial_number": "SN-N-002",
+    "status": "activo",
+    "product": 1,
+    "zone": 1
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 4,
+  "fields": {
+    "created_at": "2026-10-01T00:30:37.814Z",
+    "updated_at": "2026-10-01T00:35:10.877Z",
+    "deleted_at": "2026-10-01T00:35:10.877Z",
+    "device_id": "DEV-N-003",
+    "internal_name": "Medidor Prueba 2",
+    "description": "",
+    "reference_power": "50.00",
+    "serial_number": "SN-N-003",
+    "status": "activo",
+    "product": 2,
+    "zone": 2
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 5,
+  "fields": {
+    "created_at": "2026-10-27T20:22:29.701Z",
+    "updated_at": "2026-10-27T20:22:38.173Z",
+    "deleted_at": "2026-10-27T20:22:38.173Z",
+    "device_id": "432",
+    "internal_name": "rewrew",
+    "description": "rwrew",
+    "reference_power": "4.00",
+    "serial_number": "343",
+    "status": "dfs",
+    "product": 2,
+    "zone": 1
+  }
+},
+{
+  "model": "devices.device",
+  "pk": 6,
+  "fields": {
+    "created_at": "2026-11-01T19:03:11.999Z",
+    "updated_at": "2026-11-05T13:45:58.366Z",
+    "deleted_at": null,
+    "device_id": "DEV-N-088",
+    "internal_name": "aaa",
+    "description": "a",
+    "reference_power": "22.00",
+    "serial_number": "SN-N-001",
+    "status": "Inactivo",
+    "product": 3,
+    "zone": 1
+  }
+},
+{
+  "model": "devices.measurement",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-10-01T02:37:48.431Z",
+    "updated_at": "2026-10-01T02:37:48.431Z",
+    "deleted_at": null,
+    "measurement_id": "MED-N-001",
+    "value": "125.4000",
+    "unit": "kWh",
+    "datetime": "2026-10-01T02:37:45Z",
+    "status": "activo",
+    "origin": "manual",
+    "device": 1,
+    "user": [
+      "operador_norte"
+    ]
+  }
+},
+{
+  "model": "devices.measurement",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-10-01T02:39:00.720Z",
+    "updated_at": "2026-10-01T02:39:00.720Z",
+    "deleted_at": null,
+    "measurement_id": "MED-S-001",
+    "value": "98.7500",
+    "unit": "kWh",
+    "datetime": "2026-10-01T02:38:33Z",
+    "status": "activo",
+    "origin": "manual",
+    "device": 2,
+    "user": [
+      "operador_sur"
+    ]
+  }
+},
+{
+  "model": "devices.measurement",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-10-01T02:40:08.971Z",
+    "updated_at": "2026-10-01T02:40:08.971Z",
+    "deleted_at": null,
+    "measurement_id": "MED-S-002",
+    "value": "98.7500",
+    "unit": "kWh",
+    "datetime": "2026-10-01T02:38:33Z",
+    "status": "activo",
+    "origin": "manual",
+    "device": 2,
+    "user": [
+      "operador_sur"
+    ]
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 1,
+  "fields": {
+    "created_at": "2026-09-30T18:38:34.079Z",
+    "updated_at": "2026-09-30T18:38:34.079Z",
+    "deleted_at": null,
+    "user": [
+      "operador_norte"
+    ],
+    "organization": 1,
+    "department": 1,
+    "employee_code": "EMP-001",
+    "rut": null,
+    "phone": "",
+    "address": ""
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 2,
+  "fields": {
+    "created_at": "2026-09-30T18:38:55.386Z",
+    "updated_at": "2026-09-30T18:38:55.387Z",
+    "deleted_at": null,
+    "user": [
+      "operador_sur"
+    ],
+    "organization": 2,
+    "department": 2,
+    "employee_code": "EMP-002",
+    "rut": null,
+    "phone": "",
+    "address": ""
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 3,
+  "fields": {
+    "created_at": "2026-10-26T22:54:29.197Z",
+    "updated_at": "2026-10-26T22:54:29.197Z",
+    "deleted_at": "2026-10-26T22:53:57Z",
+    "user": [
+      "ROOT"
+    ],
+    "organization": 3,
+    "department": null,
+    "employee_code": "ADM-001",
+    "rut": null,
+    "phone": "",
+    "address": ""
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 4,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.admin01"
+    ],
+    "organization": 1,
+    "department": 3,
+    "employee_code": "EN-TEST-001",
+    "rut": "20000001-3",
+    "phone": "+56950000001",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 5,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.admin02"
+    ],
+    "organization": 1,
+    "department": 3,
+    "employee_code": "EN-TEST-002",
+    "rut": "20000002-1",
+    "phone": "+56950000002",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 6,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.admin03"
+    ],
+    "organization": 1,
+    "department": 3,
+    "employee_code": "EN-TEST-003",
+    "rut": "20000003-K",
+    "phone": "+56950000003",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 7,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.admin04"
+    ],
+    "organization": 1,
+    "department": 3,
+    "employee_code": "EN-TEST-004",
+    "rut": "20000004-8",
+    "phone": "+56950000004",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 8,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.admin05"
+    ],
+    "organization": 1,
+    "department": 3,
+    "employee_code": "EN-TEST-005",
+    "rut": "20000005-6",
+    "phone": "+56950000005",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 9,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.energia01"
+    ],
+    "organization": 1,
+    "department": 7,
+    "employee_code": "EN-TEST-006",
+    "rut": "20000006-4",
+    "phone": "+56950000006",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 10,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.energia02"
+    ],
+    "organization": 1,
+    "department": 7,
+    "employee_code": "EN-TEST-007",
+    "rut": "20000007-2",
+    "phone": "+56950000007",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 11,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.energia03"
+    ],
+    "organization": 1,
+    "department": 7,
+    "employee_code": "EN-TEST-008",
+    "rut": "20000008-0",
+    "phone": "+56950000008",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 12,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.energia04"
+    ],
+    "organization": 1,
+    "department": 7,
+    "employee_code": "EN-TEST-009",
+    "rut": "20000009-9",
+    "phone": "+56950000009",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 13,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.energia05"
+    ],
+    "organization": 1,
+    "department": 7,
+    "employee_code": "EN-TEST-010",
+    "rut": "20000010-2",
+    "phone": "+56950000010",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 14,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.oper01"
+    ],
+    "organization": 1,
+    "department": 5,
+    "employee_code": "EN-TEST-011",
+    "rut": "20000011-0",
+    "phone": "+56950000011",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 15,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.oper02"
+    ],
+    "organization": 1,
+    "department": 5,
+    "employee_code": "EN-TEST-012",
+    "rut": "20000012-9",
+    "phone": "+56950000012",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 16,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.oper03"
+    ],
+    "organization": 1,
+    "department": 5,
+    "employee_code": "EN-TEST-013",
+    "rut": "20000013-7",
+    "phone": "+56950000013",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 17,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.oper04"
+    ],
+    "organization": 1,
+    "department": 5,
+    "employee_code": "EN-TEST-014",
+    "rut": "20000014-5",
+    "phone": "+56950000014",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 18,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.oper05"
+    ],
+    "organization": 1,
+    "department": 5,
+    "employee_code": "EN-TEST-015",
+    "rut": "20000015-3",
+    "phone": "+56950000015",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 19,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.opnorte01"
+    ],
+    "organization": 1,
+    "department": 1,
+    "employee_code": "EN-TEST-016",
+    "rut": "20000016-1",
+    "phone": "+56950000016",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 20,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.opnorte02"
+    ],
+    "organization": 1,
+    "department": 1,
+    "employee_code": "EN-TEST-017",
+    "rut": "20000017-K",
+    "phone": "+56950000017",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 21,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.opnorte03"
+    ],
+    "organization": 1,
+    "department": 1,
+    "employee_code": "EN-TEST-018",
+    "rut": "20000018-8",
+    "phone": "+56950000018",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 22,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.opnorte04"
+    ],
+    "organization": 1,
+    "department": 1,
+    "employee_code": "EN-TEST-019",
+    "rut": "20000019-6",
+    "phone": "+56950000019",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 23,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.opnorte05"
+    ],
+    "organization": 1,
+    "department": 1,
+    "employee_code": "EN-TEST-020",
+    "rut": "20000020-K",
+    "phone": "+56950000020",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 24,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.rrhh01"
+    ],
+    "organization": 1,
+    "department": 4,
+    "employee_code": "EN-TEST-021",
+    "rut": "20000021-8",
+    "phone": "+56950000021",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 25,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.rrhh02"
+    ],
+    "organization": 1,
+    "department": 4,
+    "employee_code": "EN-TEST-022",
+    "rut": "20000022-6",
+    "phone": "+56950000022",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 26,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.rrhh03"
+    ],
+    "organization": 1,
+    "department": 4,
+    "employee_code": "EN-TEST-023",
+    "rut": "20000023-4",
+    "phone": "+56950000023",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 27,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.rrhh04"
+    ],
+    "organization": 1,
+    "department": 4,
+    "employee_code": "EN-TEST-024",
+    "rut": "20000024-2",
+    "phone": "+56950000024",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 28,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.rrhh05"
+    ],
+    "organization": 1,
+    "department": 4,
+    "employee_code": "EN-TEST-025",
+    "rut": "20000025-0",
+    "phone": "+56950000025",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 29,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.ti01"
+    ],
+    "organization": 1,
+    "department": 6,
+    "employee_code": "EN-TEST-026",
+    "rut": "20000026-9",
+    "phone": "+56950000026",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 30,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.ti02"
+    ],
+    "organization": 1,
+    "department": 6,
+    "employee_code": "EN-TEST-027",
+    "rut": "20000027-7",
+    "phone": "+56950000027",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 31,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.ti03"
+    ],
+    "organization": 1,
+    "department": 6,
+    "employee_code": "EN-TEST-028",
+    "rut": "20000028-5",
+    "phone": "+56950000028",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 32,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.ti04"
+    ],
+    "organization": 1,
+    "department": 6,
+    "employee_code": "EN-TEST-029",
+    "rut": "20000029-3",
+    "phone": "+56950000029",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 33,
+  "fields": {
+    "created_at": "2026-11-02T20:21:01.001Z",
+    "updated_at": "2026-11-02T20:24:49.256Z",
+    "deleted_at": null,
+    "user": [
+      "norte.ti05"
+    ],
+    "organization": 1,
+    "department": 6,
+    "employee_code": "EN-TEST-030",
+    "rut": "20000030-7",
+    "phone": "+56950000030",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 34,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.admin01"
+    ],
+    "organization": 12,
+    "department": 8,
+    "employee_code": "EC-TEST-001",
+    "rut": "21000001-0",
+    "phone": "+56951000001",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 35,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.admin02"
+    ],
+    "organization": 12,
+    "department": 8,
+    "employee_code": "EC-TEST-002",
+    "rut": "21000002-9",
+    "phone": "+56951000002",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 36,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.admin03"
+    ],
+    "organization": 12,
+    "department": 8,
+    "employee_code": "EC-TEST-003",
+    "rut": "21000003-7",
+    "phone": "+56951000003",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 37,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.admin04"
+    ],
+    "organization": 12,
+    "department": 8,
+    "employee_code": "EC-TEST-004",
+    "rut": "21000004-5",
+    "phone": "+56951000004",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 38,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.admin05"
+    ],
+    "organization": 12,
+    "department": 8,
+    "employee_code": "EC-TEST-005",
+    "rut": "21000005-3",
+    "phone": "+56951000005",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 39,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.rrhh01"
+    ],
+    "organization": 12,
+    "department": 9,
+    "employee_code": "EC-TEST-006",
+    "rut": "21000006-1",
+    "phone": "+56951000006",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 40,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.rrhh02"
+    ],
+    "organization": 12,
+    "department": 9,
+    "employee_code": "EC-TEST-007",
+    "rut": "21000007-K",
+    "phone": "+56951000007",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 41,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.rrhh03"
+    ],
+    "organization": 12,
+    "department": 9,
+    "employee_code": "EC-TEST-008",
+    "rut": "21000008-8",
+    "phone": "+56951000008",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 42,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.rrhh04"
+    ],
+    "organization": 12,
+    "department": 9,
+    "employee_code": "EC-TEST-009",
+    "rut": "21000009-6",
+    "phone": "+56951000009",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 43,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.rrhh05"
+    ],
+    "organization": 12,
+    "department": 9,
+    "employee_code": "EC-TEST-010",
+    "rut": "21000010-K",
+    "phone": "+56951000010",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 44,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.oper01"
+    ],
+    "organization": 12,
+    "department": 10,
+    "employee_code": "EC-TEST-011",
+    "rut": "21000011-8",
+    "phone": "+56951000011",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 45,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.oper02"
+    ],
+    "organization": 12,
+    "department": 10,
+    "employee_code": "EC-TEST-012",
+    "rut": "21000012-6",
+    "phone": "+56951000012",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 46,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.oper03"
+    ],
+    "organization": 12,
+    "department": 10,
+    "employee_code": "EC-TEST-013",
+    "rut": "21000013-4",
+    "phone": "+56951000013",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 47,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.oper04"
+    ],
+    "organization": 12,
+    "department": 10,
+    "employee_code": "EC-TEST-014",
+    "rut": "21000014-2",
+    "phone": "+56951000014",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 48,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.oper05"
+    ],
+    "organization": 12,
+    "department": 10,
+    "employee_code": "EC-TEST-015",
+    "rut": "21000015-0",
+    "phone": "+56951000015",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 49,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.ti01"
+    ],
+    "organization": 12,
+    "department": 11,
+    "employee_code": "EC-TEST-016",
+    "rut": "21000016-9",
+    "phone": "+56951000016",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 50,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.ti02"
+    ],
+    "organization": 12,
+    "department": 11,
+    "employee_code": "EC-TEST-017",
+    "rut": "21000017-7",
+    "phone": "+56951000017",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 51,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.ti03"
+    ],
+    "organization": 12,
+    "department": 11,
+    "employee_code": "EC-TEST-018",
+    "rut": "21000018-5",
+    "phone": "+56951000018",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 52,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.ti04"
+    ],
+    "organization": 12,
+    "department": 11,
+    "employee_code": "EC-TEST-019",
+    "rut": "21000019-3",
+    "phone": "+56951000019",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 53,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.ti05"
+    ],
+    "organization": 12,
+    "department": 11,
+    "employee_code": "EC-TEST-020",
+    "rut": "21000020-1",
+    "phone": "+56951000020",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 54,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.energia01"
+    ],
+    "organization": 12,
+    "department": 12,
+    "employee_code": "EC-TEST-021",
+    "rut": "21000021-K",
+    "phone": "+56951000021",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 55,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.energia02"
+    ],
+    "organization": 12,
+    "department": 12,
+    "employee_code": "EC-TEST-022",
+    "rut": "21000022-8",
+    "phone": "+56951000022",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 56,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.energia03"
+    ],
+    "organization": 12,
+    "department": 12,
+    "employee_code": "EC-TEST-023",
+    "rut": "21000023-6",
+    "phone": "+56951000023",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 57,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.energia04"
+    ],
+    "organization": 12,
+    "department": 12,
+    "employee_code": "EC-TEST-024",
+    "rut": "21000024-4",
+    "phone": "+56951000024",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 58,
+  "fields": {
+    "created_at": "2026-11-02T20:27:04.747Z",
+    "updated_at": "2026-11-02T20:27:04.747Z",
+    "deleted_at": null,
+    "user": [
+      "centro.energia05"
+    ],
+    "organization": 12,
+    "department": 12,
+    "employee_code": "EC-TEST-025",
+    "rut": "21000025-2",
+    "phone": "+56951000025",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 59,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.admin01"
+    ],
+    "organization": 2,
+    "department": 13,
+    "employee_code": "ES-TEST-001",
+    "rut": "22000001-K",
+    "phone": "+56952000001",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 60,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.admin02"
+    ],
+    "organization": 2,
+    "department": 13,
+    "employee_code": "ES-TEST-002",
+    "rut": "22000002-8",
+    "phone": "+56952000002",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 61,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.admin03"
+    ],
+    "organization": 2,
+    "department": 13,
+    "employee_code": "ES-TEST-003",
+    "rut": "22000003-6",
+    "phone": "+56952000003",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 62,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.admin04"
+    ],
+    "organization": 2,
+    "department": 13,
+    "employee_code": "ES-TEST-004",
+    "rut": "22000004-4",
+    "phone": "+56952000004",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 63,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.admin05"
+    ],
+    "organization": 2,
+    "department": 13,
+    "employee_code": "ES-TEST-005",
+    "rut": "22000005-2",
+    "phone": "+56952000005",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 64,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.rrhh01"
+    ],
+    "organization": 2,
+    "department": 14,
+    "employee_code": "ES-TEST-006",
+    "rut": "22000006-0",
+    "phone": "+56952000006",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 65,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.rrhh02"
+    ],
+    "organization": 2,
+    "department": 14,
+    "employee_code": "ES-TEST-007",
+    "rut": "22000007-9",
+    "phone": "+56952000007",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 66,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.rrhh03"
+    ],
+    "organization": 2,
+    "department": 14,
+    "employee_code": "ES-TEST-008",
+    "rut": "22000008-7",
+    "phone": "+56952000008",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 67,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.rrhh04"
+    ],
+    "organization": 2,
+    "department": 14,
+    "employee_code": "ES-TEST-009",
+    "rut": "22000009-5",
+    "phone": "+56952000009",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 68,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.rrhh05"
+    ],
+    "organization": 2,
+    "department": 14,
+    "employee_code": "ES-TEST-010",
+    "rut": "22000010-9",
+    "phone": "+56952000010",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 69,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.oper01"
+    ],
+    "organization": 2,
+    "department": 15,
+    "employee_code": "ES-TEST-011",
+    "rut": "22000011-7",
+    "phone": "+56952000011",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 70,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.oper02"
+    ],
+    "organization": 2,
+    "department": 15,
+    "employee_code": "ES-TEST-012",
+    "rut": "22000012-5",
+    "phone": "+56952000012",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 71,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.oper03"
+    ],
+    "organization": 2,
+    "department": 15,
+    "employee_code": "ES-TEST-013",
+    "rut": "22000013-3",
+    "phone": "+56952000013",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 72,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.oper04"
+    ],
+    "organization": 2,
+    "department": 15,
+    "employee_code": "ES-TEST-014",
+    "rut": "22000014-1",
+    "phone": "+56952000014",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 73,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.oper05"
+    ],
+    "organization": 2,
+    "department": 15,
+    "employee_code": "ES-TEST-015",
+    "rut": "22000015-K",
+    "phone": "+56952000015",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 74,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.ti01"
+    ],
+    "organization": 2,
+    "department": 16,
+    "employee_code": "ES-TEST-016",
+    "rut": "22000016-8",
+    "phone": "+56952000016",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 75,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.ti02"
+    ],
+    "organization": 2,
+    "department": 16,
+    "employee_code": "ES-TEST-017",
+    "rut": "22000017-6",
+    "phone": "+56952000017",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 76,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.ti03"
+    ],
+    "organization": 2,
+    "department": 16,
+    "employee_code": "ES-TEST-018",
+    "rut": "22000018-4",
+    "phone": "+56952000018",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 77,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.ti04"
+    ],
+    "organization": 2,
+    "department": 16,
+    "employee_code": "ES-TEST-019",
+    "rut": "22000019-2",
+    "phone": "+56952000019",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 78,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.ti05"
+    ],
+    "organization": 2,
+    "department": 16,
+    "employee_code": "ES-TEST-020",
+    "rut": "22000020-6",
+    "phone": "+56952000020",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 79,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.energia01"
+    ],
+    "organization": 2,
+    "department": 17,
+    "employee_code": "ES-TEST-021",
+    "rut": "22000021-4",
+    "phone": "+56952000021",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 80,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.energia02"
+    ],
+    "organization": 2,
+    "department": 17,
+    "employee_code": "ES-TEST-022",
+    "rut": "22000022-2",
+    "phone": "+56952000022",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 81,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.energia03"
+    ],
+    "organization": 2,
+    "department": 17,
+    "employee_code": "ES-TEST-023",
+    "rut": "22000023-0",
+    "phone": "+56952000023",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 82,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.energia04"
+    ],
+    "organization": 2,
+    "department": 17,
+    "employee_code": "ES-TEST-024",
+    "rut": "22000024-9",
+    "phone": "+56952000024",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 83,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.energia05"
+    ],
+    "organization": 2,
+    "department": 17,
+    "employee_code": "ES-TEST-025",
+    "rut": "22000025-7",
+    "phone": "+56952000025",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 84,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.opnorte01"
+    ],
+    "organization": 2,
+    "department": 2,
+    "employee_code": "ES-TEST-026",
+    "rut": "22000026-5",
+    "phone": "+56952000026",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 85,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.opnorte02"
+    ],
+    "organization": 2,
+    "department": 2,
+    "employee_code": "ES-TEST-027",
+    "rut": "22000027-3",
+    "phone": "+56952000027",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 86,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.opnorte03"
+    ],
+    "organization": 2,
+    "department": 2,
+    "employee_code": "ES-TEST-028",
+    "rut": "22000028-1",
+    "phone": "+56952000028",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 87,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.opnorte04"
+    ],
+    "organization": 2,
+    "department": 2,
+    "employee_code": "ES-TEST-029",
+    "rut": "22000029-K",
+    "phone": "+56952000029",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 88,
+  "fields": {
+    "created_at": "2026-11-02T20:29:54.369Z",
+    "updated_at": "2026-11-02T20:29:54.369Z",
+    "deleted_at": null,
+    "user": [
+      "sur.opnorte05"
+    ],
+    "organization": 2,
+    "department": 2,
+    "employee_code": "ES-TEST-030",
+    "rut": "22000030-3",
+    "phone": "+56952000030",
+    "address": "Direcci�n de prueba, La Serena"
+  }
+}
+]

@@ -1,10 +1,14 @@
+
+from asgiref.sync import async_to_sync
 from django.db import transaction
 from django.views.generic.edit import UpdateView
 
+from core.models import ActivityLog
 from websocket.services import publish_crud_event
 
 
 class WebSocketCrudEventsMixin:
+
     crud_module = "registros"
     crud_action = None
 
@@ -12,9 +16,10 @@ class WebSocketCrudEventsMixin:
         """
         Obtiene la organización propietaria del registro.
 
-        La organización puede estar relacionada directamente
-        o mediante un dispositivo y su zona.
+        Considera relaciones directas y relaciones mediante
+        departamento, zona o dispositivo.
         """
+
         obj = getattr(self, "object", None)
 
         if obj is None:
@@ -24,35 +29,43 @@ class WebSocketCrudEventsMixin:
         if self.crud_module == "organizaciones":
             return obj.pk
 
-        # Relaciones directas con organización.
-        organization_id = getattr(obj, "organization_id", None)
+        # Relación directa con organización.
+        organization_id = getattr(
+            obj,
+            "organization_id",
+            None
+        )
 
         if organization_id:
             return organization_id
 
-        # Registros relacionados directamente con una zona.
+        # Relación mediante zona.
         zone = getattr(obj, "zone", None)
 
         if zone is not None:
-            organization_id = getattr(zone, "organization_id", None)
+            organization_id = getattr(
+                zone,
+                "organization_id",
+                None
+            )
 
             if organization_id:
                 return organization_id
 
-        # Registros relacionados con un departamento.
+        # Relación mediante departamento.
         department = getattr(obj, "department", None)
 
         if department is not None:
             organization_id = getattr(
                 department,
                 "organization_id",
-                None,
+                None
             )
 
             if organization_id:
                 return organization_id
 
-        # Mediciones y alertas: dispositivo -> zona -> organización.
+        # Relación mediante dispositivo.
         device = getattr(obj, "device", None)
 
         if device is not None:
@@ -62,41 +75,96 @@ class WebSocketCrudEventsMixin:
                 organization_id = getattr(
                     device_zone,
                     "organization_id",
-                    None,
+                    None
                 )
 
                 if organization_id:
                     return organization_id
 
-        # Los registros globales, como categorías y productos,
-        # no se difunden a todas las organizaciones.
+        # Los catálogos y productos globales no tienen organización.
         return None
 
+    def save_crud_activity(self, action=None):
+        """
+        Guarda una operación CRUD en la bitácora permanente
+        y devuelve el registro creado.
+        """
+
+        obj = getattr(self, "object", None)
+
+        if obj is None:
+            return None
+
+        action = (
+            action
+            or self.crud_action
+            or "actualizado"
+        )
+
+        user = self.request.user
+        organization_id = self.get_crud_organization_id()
+
+        activity = ActivityLog.objects.create(
+            actor=user,
+            actor_name=(
+                user.get_full_name()
+                or user.username
+            ),
+            organization_id=organization_id,
+            module=self.crud_module,
+            action=action,
+            object_type=str(obj._meta.verbose_name),
+            object_label=str(obj)[:255],
+            object_pk=str(obj.pk),
+        )
+
+        return activity
+
     def publish_crud_notification(self, action=None):
+        """
+        Guarda la actividad y publica la notificación WebSocket
+        después de confirmar la transacción.
+        """
+
         obj = getattr(self, "object", None)
 
         if obj is None:
             return
 
-        # Clase 11 --> PM: los datos se calculan ahora, pero el aviso se envía recién cuando la transacción se confirma
-        # (transaction.on_commit). Si hay un rollback, el aviso se descarta; si no hay transacción activa, se envía de inmediato.
-        # Como TODAS las vistas pasan por este método (también las de eliminar), todas avisan después de guardar.
-        modulo = self.crud_module
-        accion = action or self.crud_action or "actualizado"
-        actor_id = self.request.user.pk
+        action = (
+            action
+            or self.crud_action
+            or "actualizado"
+        )
+
         organization_id = self.get_crud_organization_id()
+
+        # Guardar la actividad en la bitácora.
+        activity = self.save_crud_activity(action)
+
+        if activity is None:
+            return
+
+        # Preparar los datos para publicar después del commit.
+        modulo = self.crud_module
+        actor_id = self.request.user.pk
 
         transaction.on_commit(
             lambda: publish_crud_event(
                 module=modulo,
-                action=accion,
+                action=action,
                 actor_id=actor_id,
                 organization_id=organization_id,
+                activity=activity,
             )
         )
 
     def form_valid(self, form):
-        # Identificar la acción antes de guardar.
+        """
+        Registra automáticamente las creaciones y modificaciones
+        después de guardar correctamente el formulario.
+        """
+
         action = self.crud_action
 
         if action is None:
@@ -106,14 +174,19 @@ class WebSocketCrudEventsMixin:
                 else "creado"
             )
 
-        # Una edición donde no cambió ningún dato no se anuncia. (Solo aplica a las vistas de edición.)
-        sin_cambios = isinstance(self, UpdateView) and not form.changed_data
+        # Una edición donde no cambió ningún dato no se anuncia.
+        sin_cambios = (
+            isinstance(self, UpdateView)
+            and not form.changed_data
+        )
 
-        # atomic: el guardado y el registro del aviso quedan en la misma transacción; el aviso sale al confirmarla.
+        # El guardado y el registro de actividad quedan dentro
+        # de la misma transacción.
         with transaction.atomic():
             response = super().form_valid(form)
 
-            # Un formulario inválido nunca llega aquí, así que no se anuncia un cambio que no ocurrió.
+            # Un formulario inválido nunca llega aquí.
+            # No se anuncia una modificación sin cambios.
             if response.status_code < 400 and not sin_cambios:
                 self.publish_crud_notification(action)
 

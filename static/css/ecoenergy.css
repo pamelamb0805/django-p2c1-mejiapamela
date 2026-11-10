@@ -601,3 +601,97 @@ label {
         height: 48px;
     }
 }
+
+
+/* =========================================================
+   BUSCADORES Y FILTROS DE CRUD / MANTENEDORES
+   Una fila en escritorio y adaptación automática
+   ========================================================= */
+
+/* Distribución general */
+.card.border-0.shadow-sm.mb-4
+.card-body > form[method="get"] > .row.g-3.align-items-end {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+    margin: 0;
+}
+
+/* Cada campo del buscador */
+.card.border-0.shadow-sm.mb-4
+.card-body > form[method="get"] > .row.g-3.align-items-end > [class*="col-"] {
+    flex: 1 1 170px;
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    padding: 0;
+}
+
+/* Campos y selectores */
+.card.border-0.shadow-sm.mb-4
+.card-body > form[method="get"] > .row.g-3.align-items-end .form-control,
+.card.border-0.shadow-sm.mb-4
+.card-body > form[method="get"] > .row.g-3.align-items-end .form-select {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Grupo de botones */
+.card.border-0.shadow-sm.mb-4
+.card-body > form[method="get"] > .row.g-3.align-items-end
+> div:has(> button[type="submit"]) {
+    flex: 0 0 150px;
+    display: flex;
+    gap: 8px;
+}
+
+.card.border-0.shadow-sm.mb-4
+.card-body > form[method="get"] > .row.g-3.align-items-end
+> div:has(> button[type="submit"]) .btn {
+    white-space: nowrap;
+}
+
+/* Escritorio: todos los controles en una sola fila */
+@media (min-width: 1200px) {
+    .card.border-0.shadow-sm.mb-4
+    .card-body > form[method="get"] > .row.g-3.align-items-end {
+        flex-wrap: nowrap;
+    }
+
+    .card.border-0.shadow-sm.mb-4
+    .card-body > form[method="get"] > .row.g-3.align-items-end
+    > [class*="col-"] {
+        flex: 1 1 0;
+    }
+
+    .card.border-0.shadow-sm.mb-4
+    .card-body > form[method="get"] > .row.g-3.align-items-end
+    > div:has(> button[type="submit"]) {
+        flex: 0 0 150px;
+    }
+}
+
+/* Tablets: varias columnas según el espacio disponible */
+@media (min-width: 576px) and (max-width: 1199.98px) {
+    .card.border-0.shadow-sm.mb-4
+    .card-body > form[method="get"] > .row.g-3.align-items-end
+    > [class*="col-"] {
+        flex: 1 1 200px;
+    }
+}
+
+/* Celulares: controles apilados y botones adaptables */
+@media (max-width: 575.98px) {
+    .card.border-0.shadow-sm.mb-4
+    .card-body > form[method="get"] > .row.g-3.align-items-end
+    > [class*="col-"] {
+        flex: 1 1 100%;
+    }
+
+    .card.border-0.shadow-sm.mb-4
+    .card-body > form[method="get"] > .row.g-3.align-items-end
+    > div:has(> button[type="submit"]) {
+        flex: 1 1 100%;
+    }
+}

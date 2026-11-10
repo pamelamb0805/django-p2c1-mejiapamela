@@ -7,51 +7,411 @@
 
     <title>Dashboard - EcoEnergy</title>
 
-    <!-- Bootstrap 5.3.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-
-    <!-- Estilos EcoEnergy -->
     <link href="{% static 'css/ecoenergy.css' %}" rel="stylesheet">
+
+    <style>
+        .eco-profile-dropdown {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .eco-profile-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            text-decoration: none;
+            padding: 7px 10px;
+            border-radius: 8px;
+        }
+
+        .eco-profile-trigger:hover {
+            color: #fff;
+            background: rgba(255,255,255,.12);
+        }
+
+        .eco-profile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            min-width: 180px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.15);
+            padding: 8px;
+            z-index: 1050;
+        }
+
+        .eco-profile-dropdown:hover .eco-profile-menu,
+        .eco-profile-dropdown:focus-within .eco-profile-menu {
+            display: block;
+        }
+
+        .eco-profile-menu-button {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            color: #dc3545;
+            text-align: left;
+            padding: 10px;
+            border-radius: 7px;
+        }
+
+        .eco-profile-menu-button:hover {
+            background: #fff1f1;
+        }
+
+        .eco-notification-dropdown {
+            position: relative;
+        }
+
+        .eco-notification-button {
+            position: relative;
+            border: 0;
+            background: transparent;
+            color: #fff;
+            font-size: 1.25rem;
+            padding: 7px 10px;
+            border-radius: 8px;
+        }
+
+        .eco-notification-button:hover {
+            background: rgba(255,255,255,.12);
+        }
+
+        .eco-notification-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #dc3545;
+            color: #fff;
+            font-size: .65rem;
+            font-weight: 700;
+            border-radius: 50px;
+            padding: 0 4px;
+        }
+
+        .eco-notification-menu {
+            width: 350px;
+            max-width: calc(100vw - 20px);
+            max-height: 420px;
+            overflow-y: auto;
+            padding: 0;
+            border: 0;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.15);
+        }
+
+        .eco-notification-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 15px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .eco-notification-clear {
+            border: 0;
+            background: transparent;
+            color: #087c68;
+            font-size: .75rem;
+            font-weight: 600;
+        }
+
+        .eco-notification-clear:hover {
+            text-decoration: underline;
+        }
+
+        .eco-notification-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            white-space: normal;
+        }
+
+        .eco-notification-item.is-new {
+            background: #f0faf7;
+        }
+
+        .eco-notification-item:last-child {
+            border-bottom: 0;
+        }
+
+        .eco-notification-title {
+            font-size: .85rem;
+            font-weight: 700;
+            color: #263238;
+            margin-bottom: 5px;
+        }
+
+        .eco-notification-detail {
+            font-size: .78rem;
+            color: #59656b;
+            line-height: 1.5;
+        }
+
+        .eco-notification-meta {
+            font-size: .7rem;
+            color: #899399;
+            margin-top: 7px;
+        }
+
+        .eco-notification-empty {
+            text-align: center;
+            color: #899399;
+            padding: 25px 15px;
+            font-size: .85rem;
+        }
+
+        .eco-sidebar {
+            min-height: calc(100vh - 56px);
+            background: #123c35;
+        }
+
+        .eco-sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255,255,255,.8);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: .9rem;
+        }
+
+        .eco-sidebar .nav-link:hover,
+        .eco-sidebar .nav-link.active {
+            color: #fff;
+            background: rgba(255,255,255,.14);
+        }
+
+        .eco-sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-section {
+            color: rgba(255,255,255,.55);
+            font-size: .68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            margin: 20px 0 6px;
+            padding-left: 10px;
+        }
+
+        .eco-card-header {
+            background: #087c68;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .dashboard-stat-card {
+            border-radius: 12px;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .dashboard-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,.08) !important;
+        }
+
+        .dashboard-stat-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .dashboard-stat-card h2 {
+            font-size: 1.9rem;
+        }
+
+        .dashboard-stat-card small {
+            line-height: 1.4;
+        }
+
+        @media (max-width: 767.98px) {
+            .eco-sidebar {
+                min-height: auto;
+            }
+
+            .eco-profile-menu {
+                display: block;
+                position: static;
+                margin-top: 5px;
+            }
+
+            .eco-notification-menu {
+                position: fixed !important;
+                top: 65px !important;
+                right: 10px !important;
+                left: auto !important;
+                transform: none !important;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .eco-dashboard-content {
+                padding: 15px !important;
+            }
+
+            .dashboard-stat-card h2 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-light">
 
-<!-- Navbar -->
+<!-- BARRA SUPERIOR -->
 <nav class="navbar navbar-expand-lg navbar-dark eco-navbar shadow">
     <div class="container-fluid">
 
-        <a class="navbar-brand eco-brand" href="{% url 'dashboard:dashboard' %}">
+        <a class="navbar-brand eco-brand" href="{% url 'home' %}">
             {% include "_brand.html" %}
             <span class="eco-brand-text">Mi Panel</span>
         </a>
 
-        <div class="d-flex align-items-center gap-3">
-            {# Mismo encabezado que el resto del sitio: foto/ícono + "Mi perfil" y "Cerrar sesión". #}
-            <a href="{% url 'accounts:perfil' %}"
-               class="d-inline-flex align-items-center gap-2 text-decoration-none text-light"
-               title="Mi perfil">
-                {% if request.user.profile.avatar %}
-                    <img src="{{ request.user.profile.avatar.url }}"
-                         alt="Foto de {{ request.user.username }}"
-                         class="rounded-circle"
-                         style="width: 32px; height: 32px; object-fit: cover;">
-                {% else %}
-                    <i class="bi bi-person-circle fs-4" aria-hidden="true"></i>
-                {% endif %}
-                <span class="d-none d-md-inline">Mi perfil</span>
-            </a>
+        <div class="d-flex align-items-center gap-2">
 
-            {# Cerrar sesión por POST con CSRF (LogoutView de Django 5 o superior no acepta GET). #}
-            <form method="post" action="{% url 'logout' %}" class="m-0">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-box-arrow-right me-1" aria-hidden="true"></i>
-                    Cerrar sesión
+            <span class="text-white d-none d-md-inline">
+                <i class="bi bi-person-circle me-1"></i>
+                {{ request.user.first_name|default:request.user.username }}
+            </span>
+
+            <!-- CAMPANITA DE NOTIFICACIONES -->
+            <div class="dropdown eco-notification-dropdown">
+
+                <button
+                    class="eco-notification-button"
+                    type="button"
+                    id="notificationDropdown"
+                    data-bs-toggle="dropdown"
+                    data-bs-auto-close="outside"
+                    aria-expanded="false"
+                    title="Notificaciones">
+
+                    <i class="bi bi-bell-fill"></i>
+
+                    <span
+                        id="notificationCount"
+                        class="eco-notification-count d-none">
+                        0
+                    </span>
                 </button>
-            </form>
+
+                <div
+                    class="dropdown-menu dropdown-menu-end eco-notification-menu"
+                    aria-labelledby="notificationDropdown">
+
+                    <div class="eco-notification-header">
+                        <div>
+                            <i class="bi bi-bell-fill me-2"></i>
+                            <strong>Notificaciones</strong>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="eco-notification-clear"
+                            id="clearNotifications">
+                            Marcar como leídas
+                        </button>
+                    </div>
+
+                    <div id="notificationList">
+
+                        {% for registro in actividad %}
+                        <div class="eco-notification-item">
+
+                            <div class="eco-notification-title">
+                                {{ registro.get_module_display }}
+                                · {{ registro.get_action_display }}
+                            </div>
+
+                            <div class="eco-notification-detail">
+                                <strong>{{ registro.object_label }}</strong>
+                                <br>
+
+                                {{ registro.object_type }}
+                                · ID: {{ registro.object_pk }}
+                                <br>
+
+                                <i class="bi bi-person-circle me-1"></i>
+                                {{ registro.actor_name|default:"Usuario no disponible" }}
+
+                                <br>
+
+                                {% if registro.organization %}
+                                    <i class="bi bi-building me-1"></i>
+                                    {{ registro.organization.comercial_name|default:registro.organization.legal_name }}
+                                {% else %}
+                                    <span class="text-muted">Global</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="eco-notification-meta">
+                                <i class="bi bi-clock me-1"></i>
+                                {{ registro.created_at|date:"d/m/Y H:i" }}
+                            </div>
+
+                        </div>
+
+                        {% empty %}
+                        <div class="eco-notification-empty" id="notificationEmpty">
+                            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                            No hay notificaciones disponibles.
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERFIL -->
+            <div class="eco-profile-dropdown">
+
+                <a href="{% url 'accounts:perfil' %}"
+                   class="eco-profile-trigger"
+                   title="Mi perfil">
+                    {% if avatar_url %}
+                        <img src="{{ avatar_url }}" alt="Foto de {{ request.user.username }}"
+                             class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;">
+                    {% else %}
+                        <i class="bi bi-person-lines-fill"></i>
+                    {% endif %}
+                    <span>Mi perfil</span>
+                    <i class="bi bi-chevron-down small"></i>
+                </a>
+
+                <div class="eco-profile-menu">
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="eco-profile-menu-button">
+                            <i class="bi bi-box-arrow-right me-2"></i>
+                            Cerrar sesión
+                        </button>
+                    </form>
+                </div>
+
+            </div>
         </div>
     </div>
 </nav>
@@ -59,8 +419,8 @@
 <div class="container-fluid">
     <div class="row">
 
-        <!-- Sidebar -->
-        <aside class="col-md-2 eco-sidebar text-white p-3">
+        <!-- BARRA LATERAL -->
+        <aside class="col-md-3 col-lg-2 eco-sidebar text-white p-3">
 
             <div class="sidebar-heading mb-4">
                 <div class="d-flex align-items-center gap-2">
@@ -73,84 +433,168 @@
             <ul class="nav flex-column gap-1">
 
                 <li class="nav-item">
-                    <a class="nav-link text-white active" href="{% url 'dashboard:dashboard' %}">
-                        <i class="bi bi-house-door-fill me-2"></i>
+                    <a class="nav-link active" href="{% url 'dashboard:dashboard' %}">
+                        <i class="bi bi-house-door-fill"></i>
                         Inicio
                     </a>
                 </li>
 
-                {% if es_administrador %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'accounts:user_list' %}">
-                        <i class="bi bi-people-fill me-2"></i>
-                        Usuarios
-                    </a>
-                </li>
+                <!-- ADMINISTRADOR DE PLATAFORMA -->
+                {% if user.is_superuser %}
+                    <li class="sidebar-section">Administración de plataforma</li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">
+                            <i class="bi bi-shield-lock-fill"></i>
+                            Panel de administración
+                        </a>
+                    </li>
                 {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'organizations:organization_list' %}">
-                        <i class="bi bi-buildings-fill me-2"></i>
-                        Organizaciones
-                    </a>
-                </li>
+                {% if perms.organizations.view_organization %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'organizations:organization_list' %}">
+                            <i class="bi bi-buildings-fill"></i>
+                            Organizaciones cliente
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'organizations:zone_list' %}">
-                        <i class="bi bi-geo-alt-fill me-2"></i>
-                        Zonas
-                    </a>
-                </li>
+                {% if perms.devices.view_catalog %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:category_list' %}">
+                            <i class="bi bi-journal-bookmark-fill"></i>
+                            Catálogo global
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'devices:device_list' %}">
-                        <i class="bi bi-cpu-fill me-2"></i>
-                        Dispositivos
-                    </a>
-                </li>
+                {% if perms.devices.view_product %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:product_list' %}">
+                            <i class="bi bi-box-seam-fill"></i>
+                            Productos
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'devices:maintenance_list' %}">
-                        <i class="bi bi-tools me-2"></i>
-                        Mantenimiento
-                    </a>
-                </li>
+                <!-- ADMINISTRADOR DE ORGANIZACIÓN -->
+                {% if perms.accounts.view_userprofile or perms.organizations.view_department or perms.organizations.view_zone %}
+                    <li class="sidebar-section">Gestión de organización</li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'devices:measurement_list' %}">
-                        <i class="bi bi-speedometer2 me-2"></i>
-                        Mediciones
-                    </a>
-                </li>
+                {% if perms.accounts.view_userprofile %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:user_list' %}">
+                            <i class="bi bi-people-fill"></i>
+                            Usuarios y perfiles
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'devices:alert_list' %}">
-                        <i class="bi bi-bell-fill me-2"></i>
-                        Alertas
-                    </a>
-                </li>
+                {% if perms.organizations.view_department %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'organizations:department_list' %}">
+                            <i class="bi bi-diagram-3-fill"></i>
+                            Departamentos
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">
-                        <i class="bi bi-bar-chart-fill me-2"></i>
-                        Reportes
-                    </a>
-                </li>
+                {% if perms.organizations.view_zone %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'organizations:zone_list' %}">
+                            <i class="bi bi-pin-map-fill"></i>
+                            Zonas físicas
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">
-                        <i class="bi bi-gear-fill me-2"></i>
-                        Configuración
-                    </a>
-                </li>
+                <!-- JEFATURA DE DEPARTAMENTO -->
+                {% if perms.devices.view_measurement or perms.devices.view_maintenancerequest %}
+                    <li class="sidebar-section">Supervisión</li>
+                {% endif %}
+
+                {% if perms.devices.view_measurement %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard:indicators' %}">
+                            <i class="bi bi-bar-chart-fill"></i>
+                            Indicadores de consumo
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if perms.devices.view_maintenancerequest %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:maintenance_list' %}">
+                            <i class="bi bi-tools"></i>
+                            Mantenimiento
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- OPERADOR -->
+                {% if perms.devices.view_device or perms.devices.view_measurement or perms.devices.view_alertevent %}
+                    <li class="sidebar-section">Operación diaria</li>
+                {% endif %}
+
+                {% if perms.devices.view_device %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:device_list' %}">
+                            <i class="bi bi-cpu-fill"></i>
+                            Dispositivos
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if perms.devices.view_measurement %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:measurement_list' %}">
+                            <i class="bi bi-speedometer2"></i>
+                            Mediciones
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if perms.devices.view_alertevent %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:alert_list' %}">
+                            <i class="bi bi-bell-fill"></i>
+                            Alertas
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- AUDITOR / LECTOR -->
+                {% if perms.organizations.view_zone or perms.devices.view_history %}
+                    <li class="sidebar-section">Consulta y auditoría</li>
+                {% endif %}
+
+                {% if perms.organizations.view_zone %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:zone_list' %}">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            Zonas
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if perms.devices.view_history %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'devices:history_list' %}">
+                            <i class="bi bi-clock-history"></i>
+                            Historial
+                        </a>
+                    </li>
+                {% endif %}
 
             </ul>
         </aside>
 
-        <!-- Contenido -->
-        <main class="col-md-10 p-4 eco-dashboard-content">
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="col-md-9 col-lg-10 p-4 eco-dashboard-content">
 
-            <!-- Encabezado usuario -->
+            <!-- BIENVENIDA -->
             <div class="card shadow-sm mb-4 border-0">
                 <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
 
@@ -160,33 +604,30 @@
                         </span>
 
                         <h4 class="mb-1 mt-1">
-                            Bienvenido, {{ request.user.first_name|default:request.user.username }}
+                            Bienvenido,
+                            {{ request.user.first_name|default:request.user.username }}
                         </h4>
 
                         <small class="text-muted">
                             {{ nombre_perfil }}
+
+                            {% if organization %}
+                                · {{ organization.comercial_name|default:organization.legal_name }}
+                            {% endif %}
                         </small>
                     </div>
 
                     <div class="d-flex align-items-center gap-3">
 
-                        {# Clase 9 --> PM: si el usuario subió una foto de perfil se muestra aquí; si no, queda lo de antes. #}
-                        {% if request.user.profile.avatar %}
+                        {% if avatar_url %}
                             <a href="{% url 'accounts:perfil' %}" title="Mi perfil">
-                                <img src="{{ request.user.profile.avatar.url }}"
+                                <img src="{{ avatar_url }}"
                                      alt="Foto de {{ request.user.username }}"
                                      class="rounded-circle border border-2 border-success"
                                      width="55"
                                      height="55"
                                      style="object-fit:cover;">
                             </a>
-                        {% elif foto_sesion %}
-                            <img src="{% static 'img/' %}{{ foto_sesion }}"
-                                 alt="Usuario"
-                                 class="rounded-circle border border-2 border-success"
-                                 width="55"
-                                 height="55"
-                                 style="object-fit:cover;">
                         {% else %}
                             <img src="{% static 'img/default.png' %}"
                                  alt="Usuario"
@@ -196,221 +637,474 @@
                                  style="object-fit:cover;">
                         {% endif %}
 
-                        {% if es_administrador %}
-                            <a href="{% url 'accounts:user_list' %}" class="btn btn-primary">
-                                <i class="bi bi-person-gear me-1"></i>
-                                Gestionar usuarios
-                            </a>
-                        {% endif %}
-
                     </div>
                 </div>
             </div>
 
-            {# ------------------------------------------------------------------ #}
-            {# Tarjetas según permisos, en orden de rol:                          #}
-            {# 1 Administrador de plataforma · 2 Administrador de organización ·   #}
-            {# 3 Jefatura · 4 Operador · 5 Auditor / lector                       #}
-            {# ------------------------------------------------------------------ #}
+            <!-- ESTADÍSTICAS GENERALES -->
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
 
-            {# 1 · ADMINISTRADOR DE PLATAFORMA (solo superusuario) #}
-            {% if user.is_superuser %}
+                <div>
+                    <h5 class="fw-bold mb-1">
+                        <i class="bi bi-graph-up-arrow me-2 text-success"></i>
+                        Resumen estadístico
+                    </h5>
 
-            <h2 class="h5 mt-4 mb-3 section-title">
-                <i class="bi bi-shield-lock-fill me-2"></i>
-                Administración de la plataforma
-            </h2>
+                    <small class="text-muted">
+                        Información correspondiente a los datos que puedes consultar.
+                    </small>
+                </div>
 
-            <div class="row g-3 mb-4">
-
-                {% url 'admin:index' as admin_url %}
-                {% include "dashboard/_card.html" with icon="bi-shield-lock-fill" title="Panel de administración" text="Django Admin: usuarios, grupos y permisos." url=admin_url %}
-
-                {% if perms.organizations.view_organization %}
-                    {% url 'organizations:organization_list' as organizations_url %}
-                    {% include "dashboard/_card.html" with icon="bi-buildings-fill" title="Organizaciones cliente" text="Empresas cliente y su estado." url=organizations_url %}
-                {% endif %}
-
-                {% if perms.devices.view_catalog %}
-                    {% url 'devices:category_list' as catalog_url %}
-                    {% include "dashboard/_card.html" with icon="bi-journal-bookmark-fill" title="Catálogo global" text="Categorías de equipos energéticos del catálogo global." url=catalog_url %}
-                {% endif %}
-
-                {% if perms.devices.view_product %}
-                    {% url 'devices:product_list' as products_url %}
-                    {% include "dashboard/_card.html" with icon="bi-box-seam-fill" title="Productos" text="Productos del catálogo global por categoría." url=products_url %}
-                {% endif %}
-
-            </div>
-            {% endif %}
-
-            {# 2 · ADMINISTRADOR DE ORGANIZACIÓN #}
-            {% if perms.accounts.view_userprofile or perms.organizations.view_department or perms.organizations.view_zone %}
-
-            <h2 class="h5 mt-4 mb-3 section-title">
-                <i class="bi bi-buildings me-2"></i>
-                Gestión de la organización
-            </h2>
-
-            <div class="row g-3 mb-4">
-
-                {% if perms.accounts.view_userprofile %}
-                    {% url 'accounts:user_list' as users_url %}
-                    {% include "dashboard/_card.html" with icon="bi-people-fill" title="Usuarios y perfiles" text="Personas de tu organización y sus roles." url=users_url %}
-                {% endif %}
-
-                {% if perms.organizations.view_department %}
-                    {% url 'organizations:department_list' as departments_url %}
-                    {% include "dashboard/_card.html" with icon="bi-diagram-3-fill" title="Departamentos" text="Unidades internas y jefaturas." url=departments_url %}
-                {% endif %}
-
-                {% if perms.organizations.view_zone %}
-                    {% url 'organizations:zone_list' as physical_zones_url %}
-                    {% include "dashboard/_card.html" with icon="bi-pin-map-fill" title="Zonas físicas" text="Salas, bodegas y oficinas." url=physical_zones_url %}
-                {% endif %}
-
-            </div>
-            {% endif %}
-
-            {# 3 · JEFATURA DE DEPARTAMENTO #}
-            {% if perms.devices.view_maintenancerequest or perms.devices.view_measurement %}
-
-            <h2 class="h5 mt-4 mb-3 section-title">
-                <i class="bi bi-clipboard-data me-2"></i>
-                Supervisión
-            </h2>
-
-            <div class="row g-3 mb-4">
-
-                {% if perms.devices.view_measurement %}
-                    {% url 'dashboard:indicators' as indicators_url %}
-                    {% include "dashboard/_card.html" with icon="bi-bar-chart-fill" title="Indicadores de consumo" text="Consumo por período, departamento y zona." url=indicators_url %}
-                {% endif %}
-
-                {% if perms.devices.view_maintenancerequest %}
-                    {% url 'devices:maintenance_list' as maintenance_url %}
-                    {% include "dashboard/_card.html" with icon="bi-tools" title="Mantenimiento" text="Solicitudes preventivas y correctivas." url=maintenance_url %}
-                {% endif %}
-
-            </div>
-            {% endif %}
-
-            {# 4 · OPERADOR #}
-            {% if perms.devices.view_device or perms.devices.view_measurement or perms.devices.add_measurement or perms.devices.view_alertevent %}
-
-            <h2 class="h5 mt-4 mb-3 section-title">
-                <i class="bi bi-activity me-2"></i>
-                Operación diaria
-            </h2>
-
-            <div class="row g-3 mb-4">
-
-                {% if perms.devices.view_device %}
-                    {% url 'devices:device_list' as devices_url %}
-                    {% include "dashboard/_card.html" with icon="bi-cpu-fill" title="Dispositivos" text="Equipos instalados en tu organización." url=devices_url %}
-                {% endif %}
-
-                {% if perms.devices.view_measurement %}
-                    {% url 'devices:measurement_list' as measurements_url %}
-                    {% include "dashboard/_card.html" with icon="bi-speedometer2" title="Mediciones" text="Lecturas por dispositivo y período." url=measurements_url %}
-                {% endif %}
-
-                {% if perms.devices.view_alertevent %}
-                    {% url 'devices:alert_list' as alerts_url %}
-                    {% include "dashboard/_card.html" with icon="bi-bell-fill" title="Alertas" text="Eventos fuera de rango y su atención." url=alerts_url %}
-                {% endif %}
-
-            </div>
-            {% endif %}
-
-            {# 5 · AUDITOR / LECTOR #}
-            <h2 class="h5 mt-4 mb-3 section-title">
-                <i class="bi bi-search me-2"></i>
-                Consulta y auditoría
-            </h2>
-
-            <div class="row g-3 mb-4">
-
-                {% url 'devices:zone_list' as zones_url %}
-                {% include "dashboard/_card.html" with icon="bi-geo-alt-fill" title="Zonas" text="Consumo por zona y estado." url=zones_url %}
-
-                {% if perms.devices.view_history %}
-                    {% url 'devices:history_list' as history_url %}
-                    {% include "dashboard/_card.html" with icon="bi-clock-history" title="Historial" text="Cambios y trazabilidad de los registros." url=history_url %}
-                {% endif %}
+                <span class="badge bg-light text-secondary border">
+                    <i class="bi bi-clock me-1"></i>
+                    Sesión actual
+                </span>
 
             </div>
 
-            <!-- Tabla de últimos registros -->
-            <div class="card shadow-sm border-0 mt-4">
+            <div class="row g-3 mb-4">
 
-                <div class="card-header eco-card-header d-flex align-items-center gap-2">
-                    <i class="bi bi-clock-history"></i>
-                    Últimos registros
+                <!-- USUARIOS -->
+                {% if mostrar_usuarios %}
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <small class="text-muted fw-semibold">
+                                        Usuarios registrados
+                                    </small>
+
+                                    <h2 class="fw-bold mt-2 mb-0">
+                                        {{ usuarios_total|default:0 }}
+                                    </h2>
+                                </div>
+
+                                <div class="dashboard-stat-icon bg-primary-subtle text-primary">
+                                    <i class="bi bi-people-fill"></i>
+                                </div>
+                            </div>
+
+                            <small class="text-muted d-block mt-3">
+                                Perfiles visibles
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- PRODUCTOS / DISPOSITIVOS -->
+                {% if mostrar_dispositivos %}
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <small class="text-muted fw-semibold">
+                                        Productos instalados
+                                    </small>
+
+                                    <h2 class="fw-bold mt-2 mb-0">
+                                        {{ dispositivos_total|default:0 }}
+                                    </h2>
+                                </div>
+
+                                <div class="dashboard-stat-icon bg-success-subtle text-success">
+                                    <i class="bi bi-box-seam-fill"></i>
+                                </div>
+                            </div>
+
+                            <small class="text-muted d-block mt-3">
+                                Unidades distribuidas en zonas
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- PROMEDIO DE CONSUMO -->
+                {% if mostrar_mediciones %}
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <small class="text-muted fw-semibold">
+                                        Consumo promedio
+                                    </small>
+
+                                    <h2 class="fw-bold mt-2 mb-0">
+                                        {{ consumo_promedio|default:0|floatformat:2 }}
+                                    </h2>
+                                </div>
+
+                                <div class="dashboard-stat-icon bg-warning-subtle text-warning">
+                                    <i class="bi bi-lightning-charge-fill"></i>
+                                </div>
+                            </div>
+
+                            <small class="text-muted d-block mt-3">
+                                Consumo energético en kWh
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- ALERTAS -->
+                {% if mostrar_alertas %}
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <small class="text-muted fw-semibold">
+                                        Alertas registradas
+                                    </small>
+
+                                    <h2 class="fw-bold mt-2 mb-0">
+                                        {{ alertas_total|default:0 }}
+                                    </h2>
+                                </div>
+
+                                <div class="dashboard-stat-icon bg-danger-subtle text-danger">
+                                    <i class="bi bi-bell-fill"></i>
+                                </div>
+                            </div>
+
+                            <small class="text-muted d-block mt-3">
+                                Eventos visibles
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- GRÁFICOS ECOENERGY -->
+            <div class="mb-4">
+
+                <div class="mb-3">
+                    <h4 class="fw-bold mb-1">
+                        <i class="bi bi-graph-up-arrow text-success me-2"></i>
+                        Monitoreo energético
+                    </h4>
+
+                    <p class="text-muted small mb-0">
+                        Análisis de consumo, dispositivos, alertas y mantenimiento.
+                    </p>
+                </div>
+
+                <div class="row g-3" id="dashboardCharts">
+
+                    {% if mostrar_mediciones %}
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Consumo histórico</h6>
+                                <p class="text-muted small">
+                                    Consumo diario registrado en kWh.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartConsumoHistorico"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Consumo por departamento</h6>
+                                <p class="text-muted small">
+                                    Comparación de consumo energético.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartDepartamento"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Consumo por zona</h6>
+                                <p class="text-muted small">
+                                    Participación del consumo energético.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartZona"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Top dispositivos</h6>
+                                <p class="text-muted small">
+                                    Cinco equipos con mayor consumo.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartTopDispositivos"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Demanda horaria</h6>
+                                <p class="text-muted small">
+                                    Lecturas según hora del día.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartDemanda"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
+
+                    {% if mostrar_dispositivos %}
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Estado de dispositivos</h6>
+                                <p class="text-muted small">
+                                    Distribución de unidades instaladas.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartEstadoDispositivos"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if mostrar_alertas %}
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Estado de alertas</h6>
+                                <p class="text-muted small">
+                                    Eventos abiertos, reconocidos y resueltos.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartEstadoAlertas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if mostrar_mantenimientos %}
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100 dashboard-chart-card">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Mantenimientos</h6>
+                                <p class="text-muted small">
+                                    Distribución según estado de solicitudes.
+                                </p>
+                                <div class="dashboard-chart-container">
+                                    <canvas id="chartEstadoMantenimientos"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <!-- ESTILOS DE GRÁFICOS COMPACTOS -->
+            <style>
+                #dashboardCharts .dashboard-chart-card {
+                    border-radius: 12px;
+                    min-width: 0;
+                    transition: transform .2s ease, box-shadow .2s ease;
+                }
+
+                #dashboardCharts .dashboard-chart-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 16px rgba(0,0,0,.08) !important;
+                }
+
+                #dashboardCharts .card-body {
+                    padding: 14px;
+                }
+
+                #dashboardCharts h6 {
+                    font-size: .88rem;
+                    margin-bottom: 5px;
+                    min-height: 34px;
+                }
+
+                #dashboardCharts p {
+                    font-size: .72rem;
+                    line-height: 1.4;
+                    min-height: 32px;
+                    margin-bottom: 8px;
+                }
+
+                #dashboardCharts .dashboard-chart-container {
+                    position: relative;
+                    width: 100%;
+                    height: 175px;
+                }
+
+                #dashboardCharts canvas {
+                    max-width: 100%;
+                }
+
+                @media (max-width: 991.98px) {
+                    #dashboardCharts .dashboard-chart-container {
+                        height: 185px;
+                    }
+                }
+
+                @media (max-width: 575.98px) {
+                    #dashboardCharts .dashboard-chart-container {
+                        height: 195px;
+                    }
+
+                    #dashboardCharts .card-body {
+                        padding: 12px;
+                    }
+                }
+            </style>
+
+            <!-- ÚLTIMOS REGISTROS -->
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-header eco-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                    <div>
+                        <i class="bi bi-clock-history me-2"></i>
+                        Últimos registros
+                    </div>
+
+                    <span class="badge bg-light text-dark">
+                        Últimas 15 operaciones
+                    </span>
+
                 </div>
 
                 <div class="card-body">
 
+                    <p class="text-muted small mb-3">
+                        Creaciones, modificaciones y eliminaciones realizadas
+                        en los módulos que tienes autorizados.
+                    </p>
+
                     <div class="table-responsive">
+
                         <table class="table table-hover align-middle">
 
-                            <thead>
+                            <thead class="table-light">
                                 <tr>
-                                    {% if es_administrador %}
-                                    <th>Foto</th>
-                                    {% endif %}
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Correo</th>
-                                    <th>Estado</th>
+                                    <th>Fecha y hora</th>
+                                    <th>Módulo</th>
+                                    <th>Operación</th>
+                                    <th>Registro afectado</th>
+                                    <th>Responsable</th>
+                                    <th>Organización</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <!-- Iteramos sobre la lista de usuarios enviada desde la vista -->
-                                {% for usuario in usuarios %}
+
+                                {% for registro in actividad %}
                                 <tr>
 
-                                    {% if es_administrador %}
+                                    <td class="text-nowrap">
+                                        <small>
+                                            {{ registro.created_at|date:"d/m/Y" }}
+                                        </small>
+                                        <br>
+                                        <small class="text-muted">
+                                            {{ registro.created_at|date:"H:i" }}
+                                        </small>
+                                    </td>
+
                                     <td>
-                                        {% if usuario.foto %}
-                                            <img src="{% static 'img/' %}{{ usuario.foto }}"
-                                                 alt="Foto"
-                                                 class="rounded-circle"
-                                                 width="40"
-                                                 height="40"
-                                                 style="object-fit:cover">
-                                        {% else %}
-                                            <img src="{% static 'img/default.png' %}"
-                                                 alt="Foto"
-                                                 class="rounded-circle"
-                                                 width="40"
-                                                 height="40"
-                                                 style="object-fit:cover">
+                                        <span class="badge bg-light text-dark border">
+                                            {{ registro.get_module_display }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {% if registro.action == "creado" %}
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-plus-circle me-1"></i>
+                                                Creación
+                                            </span>
+                                        {% elif registro.action == "actualizado" %}
+                                            <span class="badge bg-primary">
+                                                <i class="bi bi-pencil-square me-1"></i>
+                                                Modificación
+                                            </span>
+                                        {% elif registro.action == "eliminado" %}
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-trash me-1"></i>
+                                                Eliminación
+                                            </span>
                                         {% endif %}
                                     </td>
-                                    {% endif %}
-
-                                    <td>{{ usuario.id }}</td>
-                                    <td>{{ usuario.nombre }}</td>
-                                    <td>{{ usuario.email }}</td>
 
                                     <td>
-                                        {% if usuario.estado == '1' or usuario.estado == True %}
-                                            <span class="badge bg-success">Activo</span>
+                                        <strong>{{ registro.object_label }}</strong>
+                                        <br>
+                                        <small class="text-muted">
+                                            {{ registro.object_type }}
+                                            · ID: {{ registro.object_pk }}
+                                        </small>
+                                    </td>
+
+                                    <td>
+                                        <i class="bi bi-person-circle me-1 text-secondary"></i>
+                                        {{ registro.actor_name|default:"Usuario no disponible" }}
+                                    </td>
+
+                                    <td>
+                                        {% if registro.organization %}
+                                            {{ registro.organization.comercial_name|default:registro.organization.legal_name }}
                                         {% else %}
-                                            <span class="badge bg-danger">Inactivo</span>
+                                            <span class="badge bg-secondary-subtle text-secondary">
+                                                Global
+                                            </span>
                                         {% endif %}
                                     </td>
 
                                 </tr>
+
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-5">
+                                        <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                                        No existen operaciones registradas
+                                        para los módulos que puedes consultar.
+                                    </td>
+                                </tr>
                                 {% endfor %}
+
                             </tbody>
-
                         </table>
-                    </div>
 
+                    </div>
                 </div>
+            </div>
+
+            <!-- INFORMACIÓN DE SESIÓN -->
+            <div class="text-muted small text-end mb-3">
+                <i class="bi bi-eye me-1"></i>
+                Información filtrada según tu organización y permisos.
             </div>
 
         </main>
@@ -419,6 +1113,409 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- DATOS DE LOS GRÁFICOS GENERADOS POR DJANGO -->
+{{ charts|json_script:"dashboard-chart-data" }}
+
+<!-- LIBRERÍA CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* ==========================================
+       GRÁFICOS DEL DASHBOARD
+    ========================================== */
+
+    const dataElement = document.getElementById("dashboard-chart-data");
+
+    if (dataElement) {
+        const charts = JSON.parse(dataElement.textContent);
+
+        const palette = [
+            "#087C68",
+            "#16A085",
+            "#58BFA5",
+            "#F0B429",
+            "#3498DB",
+            "#E67E22",
+            "#9B59B6",
+            "#D9534F"
+        ];
+
+        function crearGrafico(id, tipo, datos, etiqueta) {
+
+            const canvas = document.getElementById(id);
+
+            if (!canvas || !datos) return;
+
+            if (!datos.labels || datos.labels.length === 0) {
+                const parent = canvas.parentElement;
+
+                parent.innerHTML = `
+                    <div class="h-100 d-flex flex-column
+                                align-items-center justify-content-center
+                                text-muted">
+                        <i class="bi bi-bar-chart fs-2 mb-2"></i>
+                        <span class="small">
+                            No existen datos disponibles para este gráfico.
+                        </span>
+                    </div>
+                `;
+
+                return;
+            }
+
+            const circular = tipo === "doughnut";
+
+            new Chart(canvas, {
+                type: tipo,
+
+                data: {
+                    labels: datos.labels,
+
+                    datasets: [{
+                        label: etiqueta,
+                        data: datos.values,
+
+                        backgroundColor: circular
+                            ? palette
+                            : "rgba(8, 124, 104, 0.18)",
+
+                        borderColor: circular
+                            ? "#ffffff"
+                            : "#087C68",
+
+                        borderWidth: 2,
+                        borderRadius: tipo === "bar" ? 6 : 0,
+                        fill: tipo === "line",
+                        tension: 0.35,
+                        pointRadius: tipo === "line" ? 4 : 0,
+                        pointBackgroundColor: "#087C68"
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                        legend: {
+                            display: circular,
+                            position: "bottom"
+                        },
+
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+
+                    scales: circular ? {} : {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: "rgba(0,0,0,0.05)"
+                            }
+                        },
+
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        crearGrafico(
+            "chartConsumoHistorico",
+            "line",
+            charts.consumo_historico,
+            "Consumo kWh"
+        );
+
+        crearGrafico(
+            "chartDepartamento",
+            "bar",
+            charts.consumo_departamento,
+            "Consumo kWh"
+        );
+
+        crearGrafico(
+            "chartZona",
+            "doughnut",
+            charts.consumo_zona,
+            "Consumo kWh"
+        );
+
+        crearGrafico(
+            "chartTopDispositivos",
+            "bar",
+            charts.top_dispositivos,
+            "Consumo kWh"
+        );
+
+        crearGrafico(
+            "chartDemanda",
+            "line",
+            charts.demanda_horaria,
+            "Consumo kWh"
+        );
+
+        crearGrafico(
+            "chartEstadoDispositivos",
+            "doughnut",
+            charts.estado_dispositivos,
+            "Dispositivos"
+        );
+
+        crearGrafico(
+            "chartEstadoAlertas",
+            "doughnut",
+            charts.estado_alertas,
+            "Alertas"
+        );
+
+        crearGrafico(
+            "chartEstadoMantenimientos",
+            "doughnut",
+            charts.estado_mantenimientos,
+            "Mantenimientos"
+        );
+    }
+
+
+    /* ==========================================
+       NOTIFICACIONES EN TIEMPO REAL - WEBSOCKET
+    ========================================== */
+
+    const notificationList = document.getElementById("notificationList");
+    const notificationCount = document.getElementById("notificationCount");
+    const notificationDropdown = document.getElementById("notificationDropdown");
+    const clearNotifications = document.getElementById("clearNotifications");
+
+    if (!notificationList || !notificationCount || !notificationDropdown) {
+        return;
+    }
+
+    let unreadNotifications = 0;
+    const MAX_NOTIFICATIONS = 15;
+
+    function actualizarContador() {
+        if (unreadNotifications > 0) {
+            notificationCount.textContent =
+                unreadNotifications > 99 ? "99+" : unreadNotifications;
+
+            notificationCount.classList.remove("d-none");
+        } else {
+            notificationCount.classList.add("d-none");
+        }
+    }
+
+    function crearElemento(tag, className, content) {
+        const element = document.createElement(tag);
+
+        if (className) {
+            element.className = className;
+        }
+
+        if (content !== undefined && content !== null) {
+            element.textContent = content;
+        }
+
+        return element;
+    }
+
+    function obtenerFecha(fecha) {
+        if (!fecha) {
+            return new Date().toLocaleString("es-CL");
+        }
+
+        const parsed = new Date(fecha);
+
+        if (Number.isNaN(parsed.getTime())) {
+            return fecha;
+        }
+
+        return parsed.toLocaleString("es-CL");
+    }
+
+    function agregarNotificacion(data) {
+
+        const emptyMessage = document.getElementById("notificationEmpty");
+
+        if (emptyMessage) {
+            emptyMessage.remove();
+        }
+
+        const item = crearElemento(
+            "div",
+            "eco-notification-item is-new"
+        );
+
+        const moduleName =
+            data.module_display || data.module || "Registro";
+
+        const actionName =
+            data.action_display || traducirAccion(data.action);
+
+        const title = crearElemento(
+            "div",
+            "eco-notification-title",
+            moduleName + " · " + actionName
+        );
+
+        const detail = crearElemento(
+            "div",
+            "eco-notification-detail"
+        );
+
+        const objectLabel = crearElemento(
+            "strong",
+            "",
+            data.object_label || "Registro actualizado"
+        );
+
+        const objectInfo = crearElemento(
+            "div",
+            "",
+            (data.object_type || "Registro") +
+            " · ID: " + (data.object_pk || "—")
+        );
+
+        const actorInfo = crearElemento(
+            "div",
+            "",
+            "Responsable: " + (data.actor_name || "Usuario no disponible")
+        );
+
+        const organizationInfo = crearElemento(
+            "div",
+            "",
+            "Organización: " + (data.organization_name || "Global")
+        );
+
+        const meta = crearElemento(
+            "div",
+            "eco-notification-meta",
+            obtenerFecha(data.created_at)
+        );
+
+        const clockIcon = document.createElement("i");
+        clockIcon.className = "bi bi-clock me-1";
+        meta.prepend(clockIcon);
+
+        detail.appendChild(objectLabel);
+        detail.appendChild(objectInfo);
+        detail.appendChild(actorInfo);
+        detail.appendChild(organizationInfo);
+
+        item.appendChild(title);
+        item.appendChild(detail);
+        item.appendChild(meta);
+
+        notificationList.prepend(item);
+
+        /* Mantener máximo 15 notificaciones visibles */
+        while (notificationList.children.length > MAX_NOTIFICATIONS) {
+            notificationList.lastElementChild.remove();
+        }
+
+        unreadNotifications++;
+        actualizarContador();
+    }
+
+    function traducirAccion(action) {
+        const acciones = {
+            "creado": "Creación",
+            "actualizado": "Modificación",
+            "eliminado": "Eliminación",
+            "created": "Creación",
+            "updated": "Modificación",
+            "deleted": "Eliminación"
+        };
+
+        return acciones[action] || action || "Operación";
+    }
+
+    /* Marcar notificaciones como leídas */
+    clearNotifications.addEventListener("click", function () {
+
+        unreadNotifications = 0;
+        actualizarContador();
+
+        document.querySelectorAll(".eco-notification-item.is-new")
+            .forEach(function (item) {
+                item.classList.remove("is-new");
+            });
+    });
+
+    /* Al abrir la campanita se consideran leídas */
+    notificationDropdown.addEventListener("shown.bs.dropdown", function () {
+
+        unreadNotifications = 0;
+        actualizarContador();
+
+        document.querySelectorAll(".eco-notification-item.is-new")
+            .forEach(function (item) {
+                item.classList.remove("is-new");
+            });
+    });
+
+    /* Conexión WebSocket */
+    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+    const socketUrl = protocol + window.location.host + "/ws/chat/";
+
+    let socket = null;
+    let reconnectTimeout = null;
+
+    function conectarWebSocket() {
+
+        socket = new WebSocket(socketUrl);
+
+        socket.onopen = function () {
+            console.log("WebSocket del dashboard conectado.");
+        };
+
+        socket.onmessage = function (event) {
+
+            let data;
+
+            try {
+                data = JSON.parse(event.data);
+            } catch (error) {
+                console.error("No se pudo interpretar el mensaje WebSocket:", error);
+                return;
+            }
+
+            if (data.type === "crud_update") {
+
+                console.log("Nueva operación CRUD recibida:", data);
+
+                agregarNotificacion(data);
+            }
+        };
+
+        socket.onclose = function () {
+            console.warn("WebSocket desconectado. Reintentando conexión...");
+
+            clearTimeout(reconnectTimeout);
+
+            reconnectTimeout = setTimeout(function () {
+                conectarWebSocket();
+            }, 3000);
+        };
+
+        socket.onerror = function (error) {
+            console.error("Error en WebSocket:", error);
+            socket.close();
+        };
+    }
+
+    conectarWebSocket();
+
+});
+</script>
 {# Clase 11 --> PM: burbuja de chat y conexión WebSocket también en el panel. #}
 {% if request.user.is_authenticated %}
     {% include "_chat_widget.html" %}
